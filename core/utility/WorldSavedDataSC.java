@@ -3,13 +3,18 @@ package spacecraft.core.utility;
 import java.util.HashMap;
 import java.util.Map;
 
+import spacecraft.core.world.WorldLinkInfo;
+import spacecraft.core.world.WorldSeparationInfo;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 
 public class WorldSavedDataSC extends WorldSavedData {
-	public static String dataId = "spacecraft.worlddata";
+	public static final String dataId = "spacecraft.worlddata";
+	public static final String DATALINKINFO = "link";
+	public static final String DATASEPARATION = "separation";
 
 	public String debugString = "";
 	private Map<String, ISavedData> dataMap = new HashMap<String, ISavedData>();
@@ -29,9 +34,15 @@ public class WorldSavedDataSC extends WorldSavedData {
 		WorldSavedDataSC result = (WorldSavedDataSC)storage.loadData(WorldSavedDataSC.class, dataId);
 		if (result == null) {
 			result = new WorldSavedDataSC();
+			result.init();
 			storage.setData(dataId, result);
 		}
 		return result;
+	}
+	
+	private void init() {
+		setData(DATALINKINFO, new WorldLinkInfo());
+		setData(DATASEPARATION, new WorldSeparationInfo());
 	}
 	
 	@Override

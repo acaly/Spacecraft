@@ -51,17 +51,6 @@ public class BlockTeleporter extends BlockPortal {
 			if (par5Entity instanceof EntityPlayerMP)
 			{
 				TeleportManager.teleport((EntityPlayerMP) par5Entity, par1World, par2, par3, par4);
-				/*
-				EntityPlayerMP thePlayer = (EntityPlayerMP) par5Entity;
-				if (par5Entity.dimension != Tutorial.dimension)
-				{
-					thePlayer.mcServer.getConfigurationManager().transferPlayerToDimension(thePlayer, Tutorial.dimension, new TeleporterTutorial(thePlayer.mcServer.worldServerForDimension(Tutorial.dimension)));
-				}
-				else
-				{
-					thePlayer.mcServer.getConfigurationManager().transferPlayerToDimension(thePlayer, 0, new TeleporterTutorial(thePlayer.mcServer.worldServerForDimension(0)));
-				}
-				*/
 			}
         }
     }
