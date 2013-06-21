@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
 public class TeleportManager {
-	public static TeleportManager INSTANCE = new TeleportManager(); 
+	public static final TeleportManager INSTANCE = new TeleportManager(); 
 	static {
 		INSTANCE.teleporterTypes.put(0, new ITeleporterType(){
 			public boolean available(World worldFrom, EntityPlayerMP player, int type, int x, int y, int z) {

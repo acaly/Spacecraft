@@ -56,6 +56,7 @@ public class BlockPortalSC extends BlockPortal {
         {
 			if (par5Entity instanceof EntityPlayerMP)
 			{
+				//TODO count down before teleported
 				TeleportManager.teleport((EntityPlayerMP) par5Entity, par1World, par2, par3, par4);
 			}
         }

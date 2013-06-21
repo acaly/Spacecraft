@@ -38,6 +38,7 @@ public class RegistryHelper {
 	private Map<RegistryType,RegInfo> regInfo;
 	private Map<Class<?>, RegistryType> regInfoClassType = new HashMap<Class<?>, RegistryType>();
 	private Map<Class<?>, String> regInfoClassName = new HashMap<Class<?>, String>();
+	private Map<Class<?>, Integer> regInfoClassId;
 	
 	private RegistryHelper() {
 		regInfo = new HashMap<RegistryType,RegInfo>();
@@ -86,20 +87,33 @@ public class RegistryHelper {
 		INSTANCE.regInfo.get(type).setDef(name);	
 	}
 	
-	public static void setClassForId(RegistryType type, String name, Class<?> c) {
+	public static void setClassDefId(RegistryType type, String name, Class<?> c) {
+		setDefId(type, name);
 		INSTANCE.regInfoClassType.put(c, type);
 		INSTANCE.regInfoClassName.put(c, name);
 	}
 	
-	//TODO save class-id in a new map
 	public static int getId(Class<?> c) {
-		return INSTANCE.regInfo.get(INSTANCE.regInfoClassType.get(c))
-				.getId(INSTANCE.regInfoClassName.get(c));
+		return INSTANCE.regInfoClassId.get(c);
 	}
 
 	public static void registerWorld() {
 		int id = getId(WorldProviderSC.class);
 		DimensionManager.registerProviderType(id, WorldProviderSC.class, false);
 		DimensionManager.registerDimension(id, id);
+	}
+	
+	public static void finishLoading() {
+		INSTANCE.regInfoClassId = new HashMap();
+		for (Class i : INSTANCE.regInfoClassName.keySet()) {
+			INSTANCE.regInfoClassId.put(i,
+					INSTANCE.regInfo.get(INSTANCE.regInfoClassType.get(i))
+					.getId(INSTANCE.regInfoClassName.get(i))
+					);
+		}
+		INSTANCE.regInfoClassType.clear();
+		INSTANCE.regInfoClassType = null;
+		INSTANCE.regInfoClassName.clear();
+		INSTANCE.regInfoClassName = null;
 	}
 }

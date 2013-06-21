@@ -44,6 +44,7 @@ public class WorldLinkInfo implements ISavedData {
 			keyList = (Integer[]) i.getKey().toArray();
 			item.setIntArray("key", new int[]{keyList[0], keyList[1], keyList[2]});
 			item.setCompoundTag("value", i.getValue().writeToNBT());
+			map.appendTag(item);
 		}
 		nbttagcompound.setTag("map", map);
 		dirty = false;

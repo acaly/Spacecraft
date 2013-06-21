@@ -27,23 +27,24 @@ public class mod_SpaceCraft {
     public void load(FMLInitializationEvent evt) {
     	INSTANCE = this;
     	
-    	RegistryHelper.setClassForId(RegistryType.Item, "DebugText", ItemDebugText.class);
     	itemDebugText = new ItemDebugText();
-    	RegistryHelper.setClassForId(RegistryType.Block, "PortalSC", BlockPortalSC.class);
     	blockPortalSC = new BlockPortalSC();
-    	RegistryHelper.setClassForId(RegistryType.Dimension, "SpecialSpace", WorldProviderSC.class);
     	RegistryHelper.registerWorld();
     }
 
     @Mod.PreInit
     public void preInit(FMLPreInitializationEvent event) {
-    	RegistryHelper.setDefId(RegistryType.Item, "DebugText");
-    	RegistryHelper.setDefId(RegistryType.Block, "PortalSC");
-    	RegistryHelper.setDefId(RegistryType.Dimension, "SpecialSpace");
+    	//RegistryHelper.setDefId(RegistryType.Item, "DebugText");
+    	//RegistryHelper.setDefId(RegistryType.Block, "PortalSC");
+    	//RegistryHelper.setDefId(RegistryType.Dimension, "SpecialSpace");
+    	RegistryHelper.setClassDefId(RegistryType.Item, "DebugText", ItemDebugText.class);
+    	RegistryHelper.setClassDefId(RegistryType.Block, "PortalSC", BlockPortalSC.class);
+    	RegistryHelper.setClassDefId(RegistryType.Dimension, "SpecialSpace", WorldProviderSC.class);
     	
     	ConfigManager.init(event.getSuggestedConfigurationFile());
     	RegistryHelper.readFromConfig();
     	//ConfigManager.SaveConfig();
+    	RegistryHelper.finishLoading();
     }
 
     @Mod.PostInit
