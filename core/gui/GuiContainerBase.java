@@ -6,7 +6,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 
 public abstract class GuiContainerBase extends GuiContainer {
-	private static final String PATH_PREFIX = "mods/spacecraft/textures/gui/";
+	private static final String PATH_PREFIX = "/mods/spacecraft/textures/gui/";
 	private static final String PATH_SUFFIX = ".png";
 	
 

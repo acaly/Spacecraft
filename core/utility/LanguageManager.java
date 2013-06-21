@@ -52,10 +52,10 @@ public final class LanguageManager {
 	}
 	
 	private String forClass(Class c) {
-		if (c.isAssignableFrom(Item.class)) {
+		if (Item.class.isAssignableFrom(c)) {
 			return "item." + RegistryHelper.getName(c) + ".name";
-		} else {// if (c.isAssignableFrom(Block.class)) {
-			return "tile." + RegistryHelper.getName(c) + ".name";
+		} else {// if (Block.class.isAssignableFrom(c)) {
+			return "tile." + RegistryHelper.getName(c) + ".name";//TODO confirm if is .name
 		}
 	}
 	
