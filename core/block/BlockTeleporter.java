@@ -10,11 +10,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockTeleporter extends BlockContainer {
+public class BlockTeleporter extends BlockContainerBase {
 
 	public BlockTeleporter() {
-		super(RegistryHelper.getId(BlockTeleporter.class), Material.iron);
-        this.setCreativeTab(RegistryHelper.creativeTab);//TODO done by super class
+		super(BlockTeleporter.class, Material.iron);
 	}
 
 	@Override

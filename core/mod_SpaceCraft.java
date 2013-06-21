@@ -1,5 +1,7 @@
 package spacecraft.core;
 
+import java.io.File;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.src.ModLoader;
 import net.minecraftforge.common.DimensionManager;
@@ -8,6 +10,7 @@ import spacecraft.core.block.tile.*;
 import spacecraft.core.item.*;
 import spacecraft.core.utility.ConfigManager;
 import spacecraft.core.utility.GuiHandler;
+import spacecraft.core.utility.LanguageManager;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RegistryHelper.RegistryType;
 import spacecraft.core.world.WorldProviderSC;
@@ -69,6 +72,8 @@ public class mod_SpaceCraft {
     	ConfigManager.init(event.getSuggestedConfigurationFile());
     	RegistryHelper.readFromConfig();
     	//ConfigManager.SaveConfig();
+    	
+    	LanguageManager.init(new File(event.getModConfigurationDirectory().getPath(), "spacecraft.lang"));
     }
 
     @Mod.PostInit
