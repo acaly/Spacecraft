@@ -9,6 +9,7 @@ public class ContainerTeleporter extends ContainerBase {
 
 	public ContainerTeleporter(World world, EntityPlayer player, int x, int y, int z) {
 		super(world, player);
+		this.addPlayerSlots(player);
 	}
 
 	@Override

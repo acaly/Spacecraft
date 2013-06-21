@@ -2,16 +2,19 @@ package spacecraft.core.block;
 
 import spacecraft.core.mod_SpaceCraft;
 import spacecraft.core.block.tile.TileEntityTeleporter;
+import spacecraft.core.utility.RegistryHelper;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class BlockTeleporter extends BlockContainer {
 
-	protected BlockTeleporter(int par1, Material par2Material) {
-		super(par1, Material.iron);
+	public BlockTeleporter() {
+		super(RegistryHelper.getId(BlockTeleporter.class), Material.iron);
+        this.setCreativeTab(RegistryHelper.creativeTab);//TODO done by super class
 	}
 
 	@Override

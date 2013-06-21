@@ -11,11 +11,13 @@ public abstract class ItemBase extends Item {
 	public ItemBase(Class<? extends ItemBase> c) {
 		super(RegistryHelper.getId(c));
 		this.setUnlocalizedName(RegistryHelper.getName(c));
+		this.setCreativeTab(RegistryHelper.creativeTab);
 	}
 	
 	public ItemBase(String name) {
 		super(RegistryHelper.getId(RegistryType.Item, name));
 		this.setUnlocalizedName(name);
+		this.setCreativeTab(RegistryHelper.creativeTab);
 	}
 	
 	public NBTTagCompound getOrCreateNBT(ItemStack itemStack) {

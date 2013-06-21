@@ -4,7 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.src.ModLoader;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.DimensionManager;
+import spacecraft.core.mod_SpaceCraft;
 import spacecraft.core.world.WorldProviderSC;
 
 public class RegistryHelper {
@@ -16,8 +21,7 @@ public class RegistryHelper {
 	public enum RegistryType {
 		Block,
 		Item,
-		Dimension,
-		WorldProvider
+		Dimension
 	}
 	
 	private class RegInfo {
@@ -36,16 +40,16 @@ public class RegistryHelper {
 	}
 	
 	private Map<RegistryType,RegInfo> regInfo;
-	private Map<Class<?>, RegistryType> regInfoClassType = new HashMap<Class<?>, RegistryType>();
-	private Map<Class<?>, String> regInfoClassName = new HashMap<Class<?>, String>();
+	private Map<Class<?>, RegistryType> regInfoClassType = new HashMap();
+	private Map<Class<?>, String> regInfoClassName = new HashMap();
 	private Map<Class<?>, Integer> regInfoClassId;
+	private Map<Class<?>, Class<? extends TileEntity>> tileEntityMap = new HashMap();;//only before reg process finished
 	
 	private RegistryHelper() {
 		regInfo = new HashMap<RegistryType,RegInfo>();
 		regInfo.put(RegistryType.Block, new RegInfo(300));
 		regInfo.put(RegistryType.Item, new RegInfo(14000));
 		regInfo.put(RegistryType.Dimension, new RegInfo(5));
-		regInfo.put(RegistryType.WorldProvider, new RegInfo(5));
 	}
 	
 	public static void readFromConfig() {
@@ -69,11 +73,6 @@ public class RegistryHelper {
 				i.setValue(Integer.parseInt(ConfigManager.GetGeneralProperties("Reg.Dimension" + i.getKey(), i.getValue().toString())));
 			}
 			
-			//worldprovider
-			info = INSTANCE.regInfo.get(RegistryType.WorldProvider);
-			for (Entry<String, Integer> i : info.idMap.entrySet()) {
-				i.setValue(Integer.parseInt(ConfigManager.GetGeneralProperties("Reg.WorldProvider" + i.getKey(), i.getValue().toString())));
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -93,6 +92,22 @@ public class RegistryHelper {
 		INSTANCE.regInfoClassName.put(c, name);
 	}
 	
+	public static void setItemDefId(String name, Class<?> c) {
+		setClassDefId(RegistryType.Item, name, c);
+	}
+	
+	public static void setBlockDefId(String name, Class<?> c) {
+		setClassDefId(RegistryType.Block, name, c);
+	}
+	
+	public static void setBlockDefId(String name, Class<?> block, Class<? extends TileEntity> tileEntity) {
+		setClassDefId(RegistryType.Block, name, block);
+	}
+	
+	public static void setDimensionDefId(String name, Class<?> c) {
+		setClassDefId(RegistryType.Dimension, name, c);
+	}
+	
 	public static int getId(Class<?> c) {
 		return INSTANCE.regInfoClassId.get(c);
 	}
@@ -101,21 +116,48 @@ public class RegistryHelper {
 		return INSTANCE.regInfoClassName.get(c);
 	}
 
-	public static void registerWorld() {
-		int id = getId(WorldProviderSC.class);
-		DimensionManager.registerProviderType(id, WorldProviderSC.class, false);
+	public static void registerWorld(Class c, int id) {
+		DimensionManager.registerProviderType(id, c, false);
 		DimensionManager.registerDimension(id, id);
 	}
 	
-	public static void finishLoading() {
-		INSTANCE.regInfoClassId = new HashMap();
-		for (Class i : INSTANCE.regInfoClassName.keySet()) {
-			INSTANCE.regInfoClassId.put(i,
-					INSTANCE.regInfo.get(INSTANCE.regInfoClassType.get(i))
-					.getId(INSTANCE.regInfoClassName.get(i))
-					);
-		}
-		INSTANCE.regInfoClassType.clear();
-		INSTANCE.regInfoClassType = null;
+	public static void registerBlock(Class c) {
+		
 	}
+	
+	public void finishLoading() {
+		regInfoClassId = new HashMap();
+		RegistryType type;
+		int id;
+		String name;
+		for (Class i : regInfoClassName.keySet()) {
+			type = regInfoClassType.get(i);
+			name = regInfoClassName.get(i);
+			id = regInfo.get(type).getId(name);
+			
+			regInfoClassId.put(i, id);
+			if (type == RegistryType.Item) {
+				
+			} else if (type == RegistryType.Block) {
+				//TODO reg block automatically
+				if (tileEntityMap.containsKey(i)) {
+					ModLoader.registerTileEntity((Class<? extends TileEntity>) tileEntityMap.get(i), name);
+				}
+			} else if (type == RegistryType.Dimension) {
+				registerWorld(i, id);
+			}
+		}
+		regInfoClassType.clear();
+		regInfoClassType = null;
+		tileEntityMap.clear();
+		tileEntityMap = null;
+	}
+	
+	//TODO lang here
+	public static CreativeTabs creativeTab = new CreativeTabs("Space Craft") {
+		@Override
+	    public Item getTabIconItem() {
+	    	return mod_SpaceCraft.INSTANCE.itemLocator;
+	    }
+	};
 }

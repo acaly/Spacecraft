@@ -1,10 +1,11 @@
 package spacecraft.core;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.src.ModLoader;
 import net.minecraftforge.common.DimensionManager;
-import spacecraft.core.block.BlockPortalSC;
-import spacecraft.core.item.ItemDebugText;
-import spacecraft.core.item.ItemLocator;
+import spacecraft.core.block.*;
+import spacecraft.core.block.tile.*;
+import spacecraft.core.item.*;
 import spacecraft.core.utility.ConfigManager;
 import spacecraft.core.utility.GuiHandler;
 import spacecraft.core.utility.RegistryHelper;
@@ -26,31 +27,48 @@ public class mod_SpaceCraft {
 
 	public ItemDebugText itemDebugText;
 	public ItemLocator itemLocator;
+	
 	public BlockPortalSC blockPortalSC;
+	public BlockTeleporter blockTeleporter;
 	
     @Mod.Init
     public void load(FMLInitializationEvent evt) {
     	INSTANCE = this;
+    	RegistryHelper.INSTANCE.finishLoading();
     	
     	itemDebugText = new ItemDebugText();
     	itemLocator = new ItemLocator();
+    	
     	blockPortalSC = new BlockPortalSC();
-    	RegistryHelper.registerWorld();
+    	blockTeleporter = new BlockTeleporter();
+    	
+    	//RegistryHelper.registerWorld();
     	
     	NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+
+        //ModLoader.registerTileEntity(TileEntityTeleporter.class, "TileEntityTeleporter");
+        ModLoader.registerBlock(blockPortalSC);
+        ModLoader.registerBlock(blockTeleporter);
     }
 
     @Mod.PreInit
     public void preInit(FMLPreInitializationEvent event) {
+    	/*
     	RegistryHelper.setClassDefId(RegistryType.Item, "DebugText", ItemDebugText.class);
     	RegistryHelper.setClassDefId(RegistryType.Item, "Locator", ItemLocator.class);
     	RegistryHelper.setClassDefId(RegistryType.Block, "PortalSC", BlockPortalSC.class);
+    	RegistryHelper.setClassDefId(RegistryType.Block, "Teleporter", BlockTeleporter.class);
     	RegistryHelper.setClassDefId(RegistryType.Dimension, "SpecialSpace", WorldProviderSC.class);
+    	*/
+    	RegistryHelper.setItemDefId("DebugText", ItemDebugText.class);
+    	RegistryHelper.setItemDefId("Locator", ItemLocator.class);
+    	RegistryHelper.setBlockDefId("PortalSC", BlockPortalSC.class);
+    	RegistryHelper.setBlockDefId("Teleporter", BlockTeleporter.class, TileEntityTeleporter.class);
+    	RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
     	
     	ConfigManager.init(event.getSuggestedConfigurationFile());
     	RegistryHelper.readFromConfig();
     	//ConfigManager.SaveConfig();
-    	RegistryHelper.finishLoading();
     }
 
     @Mod.PostInit
