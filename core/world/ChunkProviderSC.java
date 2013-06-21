@@ -74,7 +74,7 @@ public class ChunkProviderSC implements IChunkProvider {
 
 	@Override
 	public String makeString() {
-		return "Chunk Provider for Special Space";
+		return ChunkProviderSC.class.getName();
 	}
 
 	@Override

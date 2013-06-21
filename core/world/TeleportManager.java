@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import spacecraft.core.utility.LanguageManager;
 import spacecraft.core.utility.NetworkHelper;
 import spacecraft.core.utility.WorldSavedDataSC;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -11,6 +12,8 @@ import net.minecraft.world.World;
 
 public class TeleportManager {
 	public static final TeleportManager INSTANCE = new TeleportManager(); 
+	public static final String MSG = "sc.teleporter.notallowed";
+	
 	static {
 		INSTANCE.teleporterTypes.put(0, new ITeleporterType(){
 			public boolean available(World worldFrom, EntityPlayerMP player, int type, int x, int y, int z) {
@@ -36,7 +39,7 @@ public class TeleportManager {
 						new TeleporterSC(SpaceManager.getWorldForServer(teleporter.dimension), teleporter));
 			}
 		} else {
-			NetworkHelper.sendPlayerMessage(player, "You're not allowed to use this teleporter!");
+			NetworkHelper.sendPlayerMessage(player, LanguageManager.translate(MSG));
 		}
 	}
 	

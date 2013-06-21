@@ -44,6 +44,13 @@ public final class ConfigManager {
 		return INSTANCE.config.get("general", PropertyName, DefaultValue).getString();
 	}
 	
+	public static int GetGeneralProperties(String PropertyName, int DefaultValue) throws Exception {
+		if (INSTANCE == null) {
+			throw new Exception("Not initialized!");
+		}
+		return INSTANCE.config.get("general", PropertyName, DefaultValue).getInt();
+	}
+	
 	public static int GetItemID(String ItemName, int DefaultValue) throws Exception {
 		if (INSTANCE == null) {
 			throw new Exception("Not initialized!");

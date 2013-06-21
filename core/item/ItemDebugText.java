@@ -22,7 +22,6 @@ public class ItemDebugText extends ItemBase {
 
 	public ItemDebugText() {
 		super(ItemDebugText.class);
-		this.setUnlocalizedName("DebugText");
 	}
 	
 	@Override

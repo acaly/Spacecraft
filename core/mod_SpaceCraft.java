@@ -45,24 +45,14 @@ public class mod_SpaceCraft {
 		blockPortalSC = new BlockPortalSC();
 		blockTeleporter = new BlockTeleporter();
 		
-		//RegistryHelper.registerWorld();
-		
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
-
-		//ModLoader.registerTileEntity(TileEntityTeleporter.class, "TileEntityTeleporter");
+		
 		ModLoader.registerBlock(blockPortalSC);
 		ModLoader.registerBlock(blockTeleporter);
 	}
 
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent event) {
-		/*
-		RegistryHelper.setClassDefId(RegistryType.Item, "DebugText", ItemDebugText.class);
-		RegistryHelper.setClassDefId(RegistryType.Item, "Locator", ItemLocator.class);
-		RegistryHelper.setClassDefId(RegistryType.Block, "PortalSC", BlockPortalSC.class);
-		RegistryHelper.setClassDefId(RegistryType.Block, "Teleporter", BlockTeleporter.class);
-		RegistryHelper.setClassDefId(RegistryType.Dimension, "SpecialSpace", WorldProviderSC.class);
-		*/
 		RegistryHelper.setItemDefId("DebugText", ItemDebugText.class);
 		RegistryHelper.setItemDefId("Locator", ItemLocator.class);
 		RegistryHelper.setBlockDefId("PortalSC", BlockPortalSC.class);
@@ -71,7 +61,7 @@ public class mod_SpaceCraft {
 		
 		ConfigManager.init(event.getSuggestedConfigurationFile());
 		RegistryHelper.readFromConfig();
-		//ConfigManager.SaveConfig();
+		ConfigManager.SaveConfig();
 		
 		LanguageManager.init(new File(event.getModConfigurationDirectory().getPath(), "spacecraft.lang"));
 	}

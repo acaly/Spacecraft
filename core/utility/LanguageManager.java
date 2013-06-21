@@ -3,22 +3,33 @@ package spacecraft.core.utility;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Properties;
+
+import spacecraft.core.block.tile.TileEntityTeleporter;
+import spacecraft.core.world.TeleportManager;
+import spacecraft.core.world.WorldProviderSC;
+
+import net.minecraft.util.StringTranslate;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class LanguageManager {
+public final class LanguageManager {
 	public static LanguageManager INSTANCE = new LanguageManager();
+	private static final String HEADER = "Language file for Spacecraft.";
 	private Properties table;
+	
+	public static String translate(String str) {
+		return StringTranslate.getInstance().translateKey(str);
+	}
 	
 	public static void init(File langFile) {
 		INSTANCE.table = new Properties();
-		FileInputStream is;
 		try {
 			if (!langFile.exists()) {
 				langFile.createNewFile();
 			}
-			is = new FileInputStream(langFile);
+			FileInputStream is = new FileInputStream(langFile);
 			INSTANCE.table.load(is);
 			is.close();
 		} catch (Exception e) {
@@ -26,6 +37,13 @@ public class LanguageManager {
 		}
 		INSTANCE.fillTable();
 		LanguageRegistry.instance().addStringLocalization(INSTANCE.table);
+		try {
+			FileOutputStream os = new FileOutputStream(langFile);
+			INSTANCE.table.store(os, HEADER);
+			os.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void fillTable() {
@@ -35,7 +53,13 @@ public class LanguageManager {
 		//Block
 		table.setProperty("tile.PortalSC.name", "传送方块");
 		table.setProperty("tile.Teleporter.name", "传送器");
+		//inventory
+		table.setProperty(TileEntityTeleporter.INVENTORY, "传送器");
 		//CreativeTab
-		table.setProperty("itemGroup.SpaceCraft", "SpaceCraft");
+		table.setProperty(RegistryHelper.CREATIVEPAGENAME_UNL, "SpaceCraft");
+		//dimension
+		table.setProperty(WorldProviderSC.DIMENSION, "异空间");
+		//printed text
+		table.setProperty(TeleportManager.MSG, "You're not allowed to use this teleporter!");
 	}
 }

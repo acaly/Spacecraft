@@ -14,6 +14,9 @@ public class TeleporterInfo {
 	public int x, y, z;		//target
 	public String owner;
 	
+	private static final String DATA = "data";
+	private static final String OWNER = "owner";
+	
 	public void placeEntity(Entity entity, World world) {
 		int x = this.x, y = this.y, z = this.z;
 		if (world.getBlockId(x, y, z) != 0) {
@@ -36,22 +39,22 @@ public class TeleporterInfo {
 	
 	public static TeleporterInfo readFromNBT(NBTTagCompound nbttagcompound) {
 		TeleporterInfo r = new TeleporterInfo();
-		int[] data = nbttagcompound.getIntArray("data");
+		int[] data = nbttagcompound.getIntArray(DATA);
 		r.type = data[0];
 		r.dimension = data[1];
 		r.x = data[2];
 		r.y = data[3];
 		r.z = data[4];
-		r.owner = nbttagcompound.getString("owner");
+		r.owner = nbttagcompound.getString(OWNER);
 		return r;
 	}
 
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound r = new NBTTagCompound();
-		r.setIntArray("data", new int[]{
+		r.setIntArray(DATA, new int[]{
 				type, dimension, x, y, z 
 				});
-		r.setString("owner", owner);
+		r.setString(OWNER, owner);
 		return r;
 	}
 }

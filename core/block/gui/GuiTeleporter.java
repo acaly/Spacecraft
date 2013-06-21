@@ -8,6 +8,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
 
 public class GuiTeleporter extends GuiContainerBase {
+	private static final String BACKGROUND = "Teleporter";
 
 	public GuiTeleporter(World world, EntityPlayer player, int x, int y, int z) {
 		super(new ContainerTeleporter(world, player, x, y, z));
@@ -15,7 +16,7 @@ public class GuiTeleporter extends GuiContainerBase {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		this.mc.renderEngine.bindTexture("/PamCookMachine/GUI_CookMachine.png");
+		this.mc.renderEngine.bindTexture(makeTexturePath(BACKGROUND));
 		this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 }

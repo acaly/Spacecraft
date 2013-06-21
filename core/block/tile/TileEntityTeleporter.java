@@ -5,9 +5,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class TileEntityTeleporter extends TileEntityInventory {
+	public static final String INVENTORY = "container.teleporter";
 
 	public TileEntityTeleporter() {
-		super("Teleporter", 1);
+		super(INVENTORY, 1);
 	}
 
 }

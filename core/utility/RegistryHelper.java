@@ -12,8 +12,13 @@ import net.minecraftforge.common.DimensionManager;
 import spacecraft.core.mod_SpaceCraft;
 import spacecraft.core.world.WorldProviderSC;
 
-public class RegistryHelper {
+public final class RegistryHelper {
 	public static final RegistryHelper INSTANCE;
+	
+	private static final String DIMENSIONPREFIX = "ID.Dimension.";
+	private static final String CREATIVEPAGENAME = "SpaceCraft";
+	public static final String CREATIVEPAGENAME_UNL = "itemGroup." + CREATIVEPAGENAME;
+	
 	static {
 		INSTANCE = new RegistryHelper();
 	}
@@ -70,7 +75,7 @@ public class RegistryHelper {
 			//dimension
 			info = INSTANCE.regInfo.get(RegistryType.Dimension);
 			for (Entry<String, Integer> i : info.idMap.entrySet()) {
-				i.setValue(Integer.parseInt(ConfigManager.GetGeneralProperties("Reg.Dimension" + i.getKey(), i.getValue().toString())));
+				i.setValue(ConfigManager.GetGeneralProperties(DIMENSIONPREFIX + i.getKey(), i.getValue()));
 			}
 			
 		} catch (Exception e) {
@@ -154,7 +159,7 @@ public class RegistryHelper {
 	}
 	
 	//TODO lang here
-	public static CreativeTabs creativeTab = new CreativeTabs("SpaceCraft") {
+	public static CreativeTabs creativeTab = new CreativeTabs(CREATIVEPAGENAME) {
 		@Override
 		public Item getTabIconItem() {
 			return mod_SpaceCraft.INSTANCE.itemLocator;

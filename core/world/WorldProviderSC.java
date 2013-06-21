@@ -1,5 +1,6 @@
 package spacecraft.core.world;
 
+import spacecraft.core.utility.LanguageManager;
 import spacecraft.core.utility.RegistryHelper;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -7,6 +8,7 @@ import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldProviderSC extends WorldProvider {
+	public static final String DIMENSION = "dimension.specialspace.name";
 
 	public void registerWorldChunkManager() {
 		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.beach, 0.8F, 0.0F);
@@ -15,7 +17,7 @@ public class WorldProviderSC extends WorldProvider {
 
 	@Override
 	public String getDimensionName()  {
-		return "Special Space";
+		return LanguageManager.translate(DIMENSION);
 	}
 
 	@Override
@@ -60,7 +62,7 @@ public class WorldProviderSC extends WorldProvider {
 	
 	@Override
 	public double getVoidFogYFactor() {
-		return 0.99;
+		return 1.0;
 	}
 
 }

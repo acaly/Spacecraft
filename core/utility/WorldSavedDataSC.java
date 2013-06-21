@@ -21,6 +21,9 @@ public class WorldSavedDataSC extends WorldSavedData {
 	public String debugString = "";
 	private Map<String, ISavedData> dataMap = new HashMap<String, ISavedData>();
 	
+	private static final String DATA = "data";
+	private static final String DEBUG = "debug";
+	
 	public WorldSavedDataSC() {
 		super(dataId);
 	}
@@ -52,8 +55,8 @@ public class WorldSavedDataSC extends WorldSavedData {
 		dataMap.clear();
 		init();
 		
-		debugString = nbttagcompound.getString("debug");
-		NBTTagCompound list = nbttagcompound.getCompoundTag("data");
+		debugString = nbttagcompound.getString(DEBUG);
+		NBTTagCompound list = nbttagcompound.getCompoundTag(DATA);
 		for (Entry<String, ISavedData> i : dataMap.entrySet()) {
 			if (list.hasKey(i.getKey()))
 				i.getValue().readFromNBT(list.getCompoundTag(i.getKey()));
@@ -62,7 +65,7 @@ public class WorldSavedDataSC extends WorldSavedData {
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound.setString("debug", debugString);
+		nbttagcompound.setString(DEBUG, debugString);
 		
 		NBTTagCompound list = new NBTTagCompound();
 		NBTTagCompound item;
@@ -71,7 +74,7 @@ public class WorldSavedDataSC extends WorldSavedData {
 			i.getValue().writeToNBT(item);
 			list.setCompoundTag(i.getKey(), item);
 		}
-		nbttagcompound.setCompoundTag("data", list);
+		nbttagcompound.setCompoundTag(DATA, list);
 	}
 	
 	public void setData(String key, ISavedData data) {

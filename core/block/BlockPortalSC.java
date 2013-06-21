@@ -50,12 +50,9 @@ public class BlockPortalSC extends BlockPortal {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
-	{
-		if (par5Entity.ridingEntity == null && par5Entity.riddenByEntity == null)
-		{
-			if (par5Entity instanceof EntityPlayerMP)
-			{
+	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity) {
+		if (par5Entity.ridingEntity == null && par5Entity.riddenByEntity == null) {
+			if (par5Entity instanceof EntityPlayerMP) {
 				//TODO count down before teleported
 				TeleportManager.teleport((EntityPlayerMP) par5Entity, par1World, par2, par3, par4);
 			}
