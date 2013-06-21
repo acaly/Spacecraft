@@ -59,4 +59,8 @@ public class WorldLinkInfo implements ISavedData {
 		teleporterMap.put(Arrays.asList(x, y, z), info);
 		dirty = true;
 	}
+	
+	public void remove(int x, int y, int z) {
+		teleporterMap.remove(Arrays.asList(x, y, z));
+	}
 }

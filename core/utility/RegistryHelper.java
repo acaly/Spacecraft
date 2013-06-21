@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraftforge.common.DimensionManager;
+import spacecraft.core.world.WorldProviderSC;
+
 public class RegistryHelper {
 	public static final RegistryHelper INSTANCE;
 	static {
@@ -88,8 +91,15 @@ public class RegistryHelper {
 		INSTANCE.regInfoClassName.put(c, name);
 	}
 	
+	//TODO save class-id in a new map
 	public static int getId(Class<?> c) {
 		return INSTANCE.regInfo.get(INSTANCE.regInfoClassType.get(c))
 				.getId(INSTANCE.regInfoClassName.get(c));
+	}
+
+	public static void registerWorld() {
+		int id = getId(WorldProviderSC.class);
+		DimensionManager.registerProviderType(id, WorldProviderSC.class, false);
+		DimensionManager.registerDimension(id, id);
 	}
 }

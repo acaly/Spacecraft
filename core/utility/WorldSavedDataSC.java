@@ -2,11 +2,13 @@ package spacecraft.core.utility;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import spacecraft.core.world.WorldLinkInfo;
 import spacecraft.core.world.WorldSeparationInfo;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
@@ -47,12 +49,29 @@ public class WorldSavedDataSC extends WorldSavedData {
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		dataMap.clear();
+		init();
+		
 		debugString = nbttagcompound.getString("debug");
+		NBTTagCompound list = nbttagcompound.getCompoundTag("data");
+		for (Entry<String, ISavedData> i : dataMap.entrySet()) {
+			if (list.hasKey(i.getKey()))
+				i.getValue().readFromNBT(list.getCompoundTag(i.getKey()));
+		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setString("debug", debugString);
+		
+		NBTTagCompound list = new NBTTagCompound();
+		NBTTagCompound item;
+		for (Entry<String, ISavedData> i : dataMap.entrySet()) {
+			item = new NBTTagCompound();
+			i.getValue().writeToNBT(item);
+			list.setCompoundTag(i.getKey(), item);
+		}
+		nbttagcompound.setCompoundTag("data", list);
 	}
 	
 	public void setData(String key, ISavedData data) {

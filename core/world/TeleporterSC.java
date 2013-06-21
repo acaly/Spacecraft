@@ -18,6 +18,8 @@ public class TeleporterSC extends Teleporter {
 	@Override
 	public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8) {
 		info.placeEntity(par1Entity, world);
+		par1Entity.motionX = par1Entity.motionY = par1Entity.motionZ = 0.0D;
+		//TODO see code of ender eye
 	}
 	
 	@Override

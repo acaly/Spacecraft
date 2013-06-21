@@ -1,58 +1,41 @@
 package spacecraft.core.block;
 
-import java.util.Random;
-
-import spacecraft.core.world.TeleportManager;
-import tutorial.TeleporterTutorial;
-import tutorial.Tutorial;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockPortal;
+import spacecraft.core.mod_SpaceCraft;
+import spacecraft.core.block.tile.TileEntityTeleporter;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockTeleporter extends BlockPortal {
+public class BlockTeleporter extends BlockContainer {
 
-	public BlockTeleporter(int par1) {
-		super(par1);
-	}
-
-	@Override
-    public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
-		//Do nothing
-	}
-	
-	@Override
-    public boolean tryToCreatePortal(World par1World, int par2, int par3, int par4) {
-		return false;
-	}
-	
-	@Override
-    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {}
-	
-	@Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
-		return true;
+	protected BlockTeleporter(int par1, Material par2Material) {
+		super(par1, Material.iron);
 	}
 
 	@Override
-    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
-    {
-        if (par5Entity.ridingEntity == null && par5Entity.riddenByEntity == null)
+	public TileEntity createNewTileEntity(World world) {
+		return new TileEntityTeleporter();
+	}
+
+
+    @Override
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4,
+    		EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
+        if (par1World.isRemote)
         {
-			if (par5Entity instanceof EntityPlayerMP)
-			{
-				TeleportManager.teleport((EntityPlayerMP) par5Entity, par1World, par2, par3, par4);
-			}
+            return true;
+        }
+        else
+        {
+        	TileEntityTeleporter var10 = (TileEntityTeleporter)par1World.getBlockTileEntity(par2, par3, par4);
+        	//TODO check if the user is allowed to use the gui
+            if (var10 != null)
+            {
+                par5EntityPlayer.openGui(mod_SpaceCraft.INSTANCE, 10, par1World, par2, par3, par4);
+            }
+            return true;
         }
     }
-	
 }
