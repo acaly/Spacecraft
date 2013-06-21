@@ -96,6 +96,10 @@ public class RegistryHelper {
 	public static int getId(Class<?> c) {
 		return INSTANCE.regInfoClassId.get(c);
 	}
+	
+	public static String getName(Class<?> c) {
+		return INSTANCE.regInfoClassName.get(c);
+	}
 
 	public static void registerWorld() {
 		int id = getId(WorldProviderSC.class);
@@ -113,7 +117,5 @@ public class RegistryHelper {
 		}
 		INSTANCE.regInfoClassType.clear();
 		INSTANCE.regInfoClassType = null;
-		INSTANCE.regInfoClassName.clear();
-		INSTANCE.regInfoClassName = null;
 	}
 }

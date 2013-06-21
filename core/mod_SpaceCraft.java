@@ -1,8 +1,10 @@
 package spacecraft.core;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.DimensionManager;
 import spacecraft.core.block.BlockPortalSC;
 import spacecraft.core.item.ItemDebugText;
+import spacecraft.core.item.ItemLocator;
 import spacecraft.core.utility.ConfigManager;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RegistryHelper.RegistryType;
@@ -21,6 +23,7 @@ public class mod_SpaceCraft {
 	public static mod_SpaceCraft INSTANCE;
 
 	public ItemDebugText itemDebugText;
+	public ItemLocator itemLocator;
 	public BlockPortalSC blockPortalSC;
 	
     @Mod.Init
@@ -28,16 +31,15 @@ public class mod_SpaceCraft {
     	INSTANCE = this;
     	
     	itemDebugText = new ItemDebugText();
+    	itemLocator = new ItemLocator();
     	blockPortalSC = new BlockPortalSC();
     	RegistryHelper.registerWorld();
     }
 
     @Mod.PreInit
     public void preInit(FMLPreInitializationEvent event) {
-    	//RegistryHelper.setDefId(RegistryType.Item, "DebugText");
-    	//RegistryHelper.setDefId(RegistryType.Block, "PortalSC");
-    	//RegistryHelper.setDefId(RegistryType.Dimension, "SpecialSpace");
     	RegistryHelper.setClassDefId(RegistryType.Item, "DebugText", ItemDebugText.class);
+    	RegistryHelper.setClassDefId(RegistryType.Item, "Locator", ItemLocator.class);
     	RegistryHelper.setClassDefId(RegistryType.Block, "PortalSC", BlockPortalSC.class);
     	RegistryHelper.setClassDefId(RegistryType.Dimension, "SpecialSpace", WorldProviderSC.class);
     	
