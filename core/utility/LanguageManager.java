@@ -6,17 +6,22 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
+import spacecraft.core.block.BlockPortalSC;
+import spacecraft.core.block.BlockTeleporter;
 import spacecraft.core.block.tile.TileEntityTeleporter;
+import spacecraft.core.item.ItemDebugText;
+import spacecraft.core.item.ItemLocator;
 import spacecraft.core.world.TeleportManager;
 import spacecraft.core.world.WorldProviderSC;
-
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.util.StringTranslate;
-
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public final class LanguageManager {
 	public static LanguageManager INSTANCE = new LanguageManager();
 	private static final String HEADER = "Language file for Spacecraft.";
+	
 	private Properties table;
 	
 	public static String translate(String str) {
@@ -46,13 +51,21 @@ public final class LanguageManager {
 		}
 	}
 	
+	private String forClass(Class c) {
+		if (c.isAssignableFrom(Item.class)) {
+			return "item." + RegistryHelper.getName(c) + ".name";
+		} else {// if (c.isAssignableFrom(Block.class)) {
+			return "tile." + RegistryHelper.getName(c) + ".name";
+		}
+	}
+	
 	private void fillTable() {
 		//Item
-		table.setProperty("item.DebugText.name", "测试物品");
-		table.setProperty("item.Locator", "定位器");
+		table.setProperty(forClass(ItemDebugText.class), "测试物品");
+		table.setProperty(forClass(ItemLocator.class), "定位器");
 		//Block
-		table.setProperty("tile.PortalSC.name", "传送方块");
-		table.setProperty("tile.Teleporter.name", "传送器");
+		table.setProperty(forClass(BlockPortalSC.class), "传送方块");
+		table.setProperty(forClass(BlockTeleporter.class), "传送器");
 		//inventory
 		table.setProperty(TileEntityTeleporter.INVENTORY, "传送器");
 		//CreativeTab
