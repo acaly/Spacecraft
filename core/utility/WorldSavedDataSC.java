@@ -83,7 +83,7 @@ public class WorldSavedDataSC extends WorldSavedData {
 	}
 	
 	@Override
-    public boolean isDirty() {
+	public boolean isDirty() {
 		boolean r = false;
 		for (ISavedData i : dataMap.values()) {
 			r = r || i.isDirty();

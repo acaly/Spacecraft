@@ -156,8 +156,8 @@ public class RegistryHelper {
 	//TODO lang here
 	public static CreativeTabs creativeTab = new CreativeTabs("SpaceCraft") {
 		@Override
-	    public Item getTabIconItem() {
-	    	return mod_SpaceCraft.INSTANCE.itemLocator;
-	    }
+		public Item getTabIconItem() {
+			return mod_SpaceCraft.INSTANCE.itemLocator;
+		}
 	};
 }

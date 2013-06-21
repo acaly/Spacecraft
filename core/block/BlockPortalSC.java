@@ -31,36 +31,36 @@ public class BlockPortalSC extends BlockPortal {
 	}
 
 	@Override
-    public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
+	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 		//Do nothing
 	}
 	
 	@Override
-    public boolean tryToCreatePortal(World par1World, int par2, int par3, int par4) {
+	public boolean tryToCreatePortal(World par1World, int par2, int par3, int par4) {
 		return false;
 	}
 	
 	@Override
-    public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {}
+	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {}
 	
 	@Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
+	@SideOnly(Side.CLIENT)
+	public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
 		return true;
 	}
 
 	@Override
-    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
-    {
-        if (par5Entity.ridingEntity == null && par5Entity.riddenByEntity == null)
-        {
+	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
+	{
+		if (par5Entity.ridingEntity == null && par5Entity.riddenByEntity == null)
+		{
 			if (par5Entity instanceof EntityPlayerMP)
 			{
 				//TODO count down before teleported
 				TeleportManager.teleport((EntityPlayerMP) par5Entity, par1World, par2, par3, par4);
 			}
-        }
-    }
+		}
+	}
 	
 	//always use this method to set a portal in a world
 	public static void setPortalBlock(World world, int x, int y, int z, TeleporterInfo info) {
@@ -73,7 +73,7 @@ public class BlockPortalSC extends BlockPortal {
 	//TODO test if this method is always called when a portal is destroyed. 
 	//If not, there must be a step to check useless info when loading a world
 	@Override
-    public void onBlockDestroyedByPlayer(World par1World, int par2, int par3, int par4, int par5) {
+	public void onBlockDestroyedByPlayer(World par1World, int par2, int par3, int par4, int par5) {
 		super.onBlockDestroyedByPlayer(par1World, par2, par3, par4, par5);
 		WorldLinkInfo linkInfo = (WorldLinkInfo) WorldSavedDataSC.forWorld(par1World)
 				.getData(WorldSavedDataSC.DATALINKINFO);

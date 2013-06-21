@@ -22,16 +22,16 @@ public class TeleporterSC extends Teleporter {
 	}
 	
 	@Override
-    public boolean placeInExistingPortal(Entity par1Entity, double par2, double par4, double par6, float par8) {
+	public boolean placeInExistingPortal(Entity par1Entity, double par2, double par4, double par6, float par8) {
 		info.placeEntity(par1Entity, world);
 		return true;
 	}
 	
 	@Override
-    public boolean makePortal(Entity par1Entity) {
+	public boolean makePortal(Entity par1Entity) {
 		return false;
 	}
 	
 	@Override
-    public void removeStalePortalLocations(long par1) {}
+	public void removeStalePortalLocations(long par1) {}
 }

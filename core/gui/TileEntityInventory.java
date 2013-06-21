@@ -98,7 +98,7 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	}
 
 	@Override
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
+	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
 		NBTTagList list = new NBTTagList();
 		readInventoryFromNBT(list, inventory);
@@ -106,7 +106,7 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	}
 	
 	@Override
-    public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
+	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
 		writeInventoryToNBT(par1NBTTagCompound.getTagList(INVENTORY), inventory);
 	}

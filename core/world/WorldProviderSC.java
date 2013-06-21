@@ -29,7 +29,7 @@ public class WorldProviderSC extends WorldProvider {
 	}
 
 	@Override
-    public boolean isSurfaceWorld() {
+	public boolean isSurfaceWorld() {
 		return false;
 	}
 	
@@ -39,27 +39,27 @@ public class WorldProviderSC extends WorldProvider {
 	}
 	
 	@Override
-    public int getAverageGroundLevel() {
+	public int getAverageGroundLevel() {
 		return 2;
 	}
 	
 	@Override
-    public double getHorizon() {
+	public double getHorizon() {
 		return 2;
 	}
 	
 	@Override
-    public float calculateCelestialAngle(long par1, float par3) {
+	public float calculateCelestialAngle(long par1, float par3) {
 		return 0.0f;
 	}
 	
 	@Override
-    public boolean getWorldHasVoidParticles() {
+	public boolean getWorldHasVoidParticles() {
 		return true;
 	}
 	
 	@Override
-    public double getVoidFogYFactor() {
+	public double getVoidFogYFactor() {
 		return 0.99;
 	}
 
