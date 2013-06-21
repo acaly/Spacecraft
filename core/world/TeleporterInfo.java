@@ -28,7 +28,8 @@ public class TeleporterInfo {
 			}
 		}
 		if (entity instanceof EntityPlayerMP) {
-			//((EntityPlayerMP) entity).setPositionAndUpdate((double) x, (double) y, (double) z);
+			((EntityPlayerMP) entity).setPositionAndUpdate((double) x, (double) y, (double) z);
+			/*
 			EntityPlayerMP playerMP = (EntityPlayerMP) entity;
 
             EnderTeleportEvent event = new EnderTeleportEvent(playerMP, (double) x, (double) y, (double) z, 5);
@@ -37,6 +38,7 @@ public class TeleporterInfo {
             	playerMP.fallDistance = 0.0F;
             	playerMP.attackEntityFrom(DamageSource.fall, event.attackDamage);
             }
+            */
 		} else {
 			entity.setLocationAndAngles((double) x, (double) y, (double) z, entity.rotationYaw, 0.0f);
 		}

@@ -6,10 +6,15 @@ import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.WorldSavedDataSC;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class SpaceManager {
-	public static World getSpecialWorldForServer() {
+	public static WorldServer getSpecialWorldForServer() {
 		return MinecraftServer.getServer().worldServerForDimension(RegistryHelper.getId(WorldProviderSC.class));
+	}
+	
+	public static WorldServer getWorldForServer(int dimension) {
+		return MinecraftServer.getServer().worldServerForDimension(dimension);
 	}
 	
 	public static TeleporterInfo createDebugSpaceAndTeleporter() {

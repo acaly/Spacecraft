@@ -26,9 +26,15 @@ public class TeleportManager {
 		if (teleporter == null) return;
 		if (INSTANCE.teleporterTypes.get(teleporter.type)
 				.available(worldFrom, player, teleporter.type, x, y, z)) {
-			player.mcServer.getConfigurationManager().transferPlayerToDimension(
-					player, teleporter.dimension,
-					new TeleporterSC(player.mcServer.worldServerForDimension(teleporter.dimension), teleporter));
+			if (teleporter.dimension == worldFrom.provider.dimensionId) {
+				//teleport immediately
+				teleporter.placeEntity(player, SpaceManager.getWorldForServer(teleporter.dimension));
+			} else {
+				//inter-dimension transfer
+				player.mcServer.getConfigurationManager().transferPlayerToDimension(
+						player, teleporter.dimension,
+						new TeleporterSC(SpaceManager.getWorldForServer(teleporter.dimension), teleporter));
+			}
 		} else {
 			NetworkHelper.sendPlayerMessage(player, "You're not allowed to use this teleporter!");
 		}
