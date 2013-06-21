@@ -1,4 +1,4 @@
-package spacecraft.core.block.gui;
+package spacecraft.core.gui;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -12,7 +12,7 @@ public abstract class ContainerBase extends Container {
 	protected World world;
 	protected EntityPlayer player;
 	
-	protected ContainerBase(World world, EntityPlayer player) {
+	public ContainerBase(World world, EntityPlayer player) {
 		this.world = world;
 		this.player = player;
 	}

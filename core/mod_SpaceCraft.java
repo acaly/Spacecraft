@@ -6,6 +6,7 @@ import spacecraft.core.block.BlockPortalSC;
 import spacecraft.core.item.ItemDebugText;
 import spacecraft.core.item.ItemLocator;
 import spacecraft.core.utility.ConfigManager;
+import spacecraft.core.utility.GuiHandler;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RegistryHelper.RegistryType;
 import spacecraft.core.world.WorldProviderSC;
@@ -14,6 +15,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = "SpaceCraftMod", name = "Space Craft Mod", version = "0.0.0")
@@ -34,6 +36,8 @@ public class mod_SpaceCraft {
     	itemLocator = new ItemLocator();
     	blockPortalSC = new BlockPortalSC();
     	RegistryHelper.registerWorld();
+    	
+    	NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
     }
 
     @Mod.PreInit
