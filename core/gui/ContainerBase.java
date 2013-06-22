@@ -1,17 +1,25 @@
 package spacecraft.core.gui;
 
+import java.util.Iterator;
+
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import spacecraft.core.utility.NetworkHelper;
 import spacecraft.core.utility.PacketContainerEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.world.World;
 
 public abstract class ContainerBase extends Container {
 	protected World world;
 	protected EntityPlayer player;
+	protected int progress[];
+	private int lastProgress[];
+	private int progressCount;
 	
 	public ContainerBase(World world, EntityPlayer player) {
 		this.world = world;
@@ -60,6 +68,46 @@ public abstract class ContainerBase extends Container {
 				this.addSlotToContainer(new Slot(par1Player.inventory, var3, 8 + var3 * 18 + x, 142 + y));
 			else
 				this.addSlotToContainer(new Slot(par1Player.inventory, var3, 8 + var3 * 18 + x, 142 + y));
+		}
+	}
+	
+	protected void initProgress(int count) {
+		progress = new int[count];
+		lastProgress = new int[count];
+		this.progressCount = count;
+	}
+	
+	protected abstract void refreshProgress();
+	
+	@Override
+	public void addCraftingToCrafters(ICrafting par1ICrafting) {
+		super.addCraftingToCrafters(par1ICrafting);
+		refreshProgress();
+		for (int i = 0; i < progressCount; ++i) {
+			par1ICrafting.sendProgressBarUpdate(this, i, progress[i]);
+		}
+	}
+	
+	@Override
+	public abstract void updateProgressBar(int id, int value);
+	
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		refreshProgress();
+		Iterator i = this.crafters.iterator();
+		int j;
+		while (i.hasNext()) {
+			ICrafting craft = (ICrafting)i.next();
+			for (j = 0; j < progressCount; ++j) {
+				if (progress[j] != lastProgress[j]) {
+					craft.sendProgressBarUpdate(this, j, progress[j]);
+				}
+			}
+		}
+		
+		for (j = 0; j < progressCount; ++j) {
+			lastProgress[j] = progress[j];
 		}
 	}
 }

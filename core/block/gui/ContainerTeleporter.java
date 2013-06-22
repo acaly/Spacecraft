@@ -16,6 +16,8 @@ public class ContainerTeleporter extends ContainerBase {
 		
 		this.addPlayerSlots(player);
 		this.addSlotToContainer(new Slot(tile, 0, 80, 57));
+		
+		initProgress(1);
 	}
 
 	@Override
@@ -26,11 +28,24 @@ public class ContainerTeleporter extends ContainerBase {
 
 	@Override
 	public void onGuiEvent(int param) {
-		
+		if (param == GuiTeleporter.BUTTONEMIT) {
+			tile.emit = 1 - tile.emit;
+		}
 	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return true;
 	}
+
+	@Override
+	protected void refreshProgress() {
+		progress[0] = tile.emit;
+	}
+
+	@Override
+	public void updateProgressBar(int par1, int par2) {
+		tile.emit = par2;
+	}
+
 }

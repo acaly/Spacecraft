@@ -48,7 +48,7 @@ public abstract class GuiContainerBase extends GuiContainer {
 	@Override
 	protected void actionPerformed(GuiButton par1GuiButton) {
 		if (!handleButtonEvent) return;
-		((ContainerBase) inventorySlots).onGuiEvent(par1GuiButton.id);
+		((ContainerBase) inventorySlots).sendGuiEvent(par1GuiButton.id);
 	}
 
 	private void drawItem(ItemStack item, int x, int y) {

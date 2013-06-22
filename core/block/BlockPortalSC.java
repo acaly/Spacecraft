@@ -67,13 +67,17 @@ public class BlockPortalSC extends BlockPortal {
 		linkInfo.append(x, y, z, info);
 	}
 	
+	public static void removePortalBlock(World world, int x, int y, int z) {
+		WorldLinkInfo linkInfo = (WorldLinkInfo) WorldSavedDataSC.forWorld(world)
+				.getData(WorldSavedDataSC.DATALINKINFO);
+		linkInfo.remove(x, y, z);
+	}
+	
 	//TODO test if this method is always called when a portal is destroyed. 
 	//If not, there must be a step to check useless info when loading a world
 	@Override
 	public void onBlockDestroyedByPlayer(World par1World, int par2, int par3, int par4, int par5) {
 		super.onBlockDestroyedByPlayer(par1World, par2, par3, par4, par5);
-		WorldLinkInfo linkInfo = (WorldLinkInfo) WorldSavedDataSC.forWorld(par1World)
-				.getData(WorldSavedDataSC.DATALINKINFO);
-		linkInfo.remove(par2, par3, par4);
+		removePortalBlock(par1World, par2, par3, par4);
 	}
 }
