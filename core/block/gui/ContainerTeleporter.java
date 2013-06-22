@@ -15,7 +15,7 @@ public class ContainerTeleporter extends ContainerBase {
 		this.tile = (TileEntityTeleporter) world.getBlockTileEntity(x, y, z);
 		
 		this.addPlayerSlots(player);
-		//this.addSlotToContainer(new Slot(tile, 0, 80, 57));
+		this.addSlotToContainer(new Slot(tile, 0, 80, 57));
 	}
 
 	@Override

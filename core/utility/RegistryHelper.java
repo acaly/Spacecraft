@@ -107,6 +107,7 @@ public final class RegistryHelper {
 	
 	public static void setBlockDefId(String name, Class<?> block, Class<? extends TileEntity> tileEntity) {
 		setClassDefId(RegistryType.Block, name, block);
+		INSTANCE.tileEntityMap.put(block, tileEntity);
 	}
 	
 	public static void setDimensionDefId(String name, Class<?> c) {

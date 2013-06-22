@@ -12,6 +12,7 @@ import net.minecraft.util.Direction;
 
 public abstract class TileEntityInventory extends TileEntity implements IInventory, ISidedInventory {
 	public static final String INVENTORY = "inventory";
+	private static final String SLOT = "slot";
 	
 	protected InventoryBasic inventory;
 	protected int[] availableSide;
@@ -100,30 +101,43 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
-		NBTTagList list = new NBTTagList();
-		readInventoryFromNBT(list, inventory);
-		par1NBTTagCompound.setTag(INVENTORY, list);
+		readInventoryFromNBT(par1NBTTagCompound.getTagList(INVENTORY), inventory);
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
-		writeInventoryToNBT(par1NBTTagCompound.getTagList(INVENTORY), inventory);
+		NBTTagList list = new NBTTagList();
+		writeInventoryToNBT(list, inventory);
+		par1NBTTagCompound.setTag(INVENTORY, list);
 	}
 	
 	public static void readInventoryFromNBT(NBTTagList nbt, IInventory inventory) {
 		int count = inventory.getSizeInventory();
+		int slot;
+		NBTTagCompound item;
+		ItemStack itemStack;
 		for (int i = 0; i < count; ++i) {
-			inventory.setInventorySlotContents(i, ItemStack.loadItemStackFromNBT((NBTTagCompound) nbt.tagAt(i)));
+			item = (NBTTagCompound) nbt.tagAt(i);
+			slot = item.getByte(SLOT);
+			itemStack = ItemStack.loadItemStackFromNBT(item);
+			if (itemStack != null) {
+				inventory.setInventorySlotContents(slot, itemStack);
+			}
 		}
 	}
 	
 	public static void writeInventoryToNBT(NBTTagList nbt, IInventory inventory) {
 		int count = inventory.getSizeInventory();
 		NBTTagCompound item;
+		ItemStack itemStack;
 		for (int i = 0; i < count; ++i) {
 			item = new NBTTagCompound();
-			inventory.getStackInSlot(i).writeToNBT(item);
+			itemStack = inventory.getStackInSlot(i);
+			if (itemStack != null) {
+				item.setByte(SLOT, (byte) i);
+				itemStack.writeToNBT(item);
+			}
 			nbt.appendTag(item);
 		}
 	}

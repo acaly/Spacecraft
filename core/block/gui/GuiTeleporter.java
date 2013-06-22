@@ -24,6 +24,7 @@ public class GuiTeleporter extends GuiContainerBase {
 	
 	@Override
 	public void initGui() {
-		//buttonList.add(new GuiButtonBase(0, guiLeft, guiTop, 20, 20, "X"));
+		super.initGui();
+		buttonList.add(new GuiButtonBase(0, guiLeft, guiTop, 20, 20, "X"));
 	}
 }

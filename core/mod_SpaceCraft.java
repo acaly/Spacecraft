@@ -58,7 +58,7 @@ public class mod_SpaceCraft {
 		RegistryHelper.setItemDefId("DebugText", ItemDebugText.class);
 		RegistryHelper.setItemDefId("Locator", ItemLocator.class);
 		RegistryHelper.setBlockDefId("PortalSC", BlockPortalSC.class);
-		RegistryHelper.setBlockDefId("Teleporter", BlockTeleporter.class, TileEntityTeleporter.class);
+		RegistryHelper.setBlockDefId("TeleporterSC", BlockTeleporter.class, TileEntityTeleporter.class);
 		RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
 		
 		ConfigManager.init(event.getSuggestedConfigurationFile());

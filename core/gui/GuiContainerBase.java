@@ -28,12 +28,12 @@ public abstract class GuiContainerBase extends GuiContainer {
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-		//GuiButtonBase i;
-		//for (Object button : buttonList) {
-		//	i = (GuiButtonBase) button;
-		//	if (i.item != null)
-		//		drawItem(i.item, i.iconLeft - guiLeft, i.iconTop - guiTop);
-		//}
+		GuiButtonBase i;
+		for (Object button : buttonList) {
+			i = (GuiButtonBase) button;
+			if (i.item != null)
+				drawItem(i.item, i.iconLeft - guiLeft, i.iconTop - guiTop);
+		}
 	}
 	
 	@Override

@@ -48,18 +48,18 @@ public abstract class ContainerBase extends Container {
 	
 	protected void addPlayerSlots(EntityPlayer par1Player, int startFrom, int x, int y, boolean useStatic) {
 		int var3, var4;
-		for (var3 = 0; var3 < 1; ++var3) {
+		for (var3 = 0; var3 < 3; ++var3) {
 			for (var4 = 0; var4 < 9; ++var4) {
 				this.addSlotToContainer(new Slot(par1Player.inventory, var4 + var3 * 9 + 9, 8 + var4 * 18 + x, 84 + var3 * 18 + y));
 			}
 		}
 
 		for (var3 = 0; var3 < 9; ++var3) {
-			//if (useStatic && var3 == par1Player.inventory.currentItem)
+			if (useStatic && var3 == par1Player.inventory.currentItem)
 				//TODO create SlotStatic if necessary
-			//	this.addSlotToContainer(new Slot(par1Player.inventory, var3, 8 + var3 * 18 + x, 142 + y));
-			//else
-			//	this.addSlotToContainer(new Slot(par1Player.inventory, var3, 8 + var3 * 18 + x, 142 + y));
+				this.addSlotToContainer(new Slot(par1Player.inventory, var3, 8 + var3 * 18 + x, 142 + y));
+			else
+				this.addSlotToContainer(new Slot(par1Player.inventory, var3, 8 + var3 * 18 + x, 142 + y));
 		}
 	}
 }
