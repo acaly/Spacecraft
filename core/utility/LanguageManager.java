@@ -62,7 +62,7 @@ public final class LanguageManager {
 	private void fillTable() {
 		//Item
 		table.setProperty(forClass(ItemDebugText.class), "测试物品");
-		table.setProperty(forClass(ItemLocator.class), "定位器");
+		table.setProperty(forClass(ItemLocator.class), "定位仪");
 		//Block
 		table.setProperty(forClass(BlockPortalSC.class), "传送方块");
 		table.setProperty(forClass(BlockTeleporter.class), "传送器");
