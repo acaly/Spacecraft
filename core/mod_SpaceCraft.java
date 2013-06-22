@@ -11,6 +11,7 @@ import spacecraft.core.item.*;
 import spacecraft.core.utility.ConfigManager;
 import spacecraft.core.utility.GuiHandler;
 import spacecraft.core.utility.LanguageManager;
+import spacecraft.core.utility.NetworkHelper;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RegistryHelper.RegistryType;
 import spacecraft.core.world.WorldProviderSC;
@@ -23,7 +24,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = "SpaceCraftMod", name = "Space Craft Mod", version = "0.0.0")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
+@NetworkMod(clientSideRequired = true, serverSideRequired = false,
+		channels={NetworkHelper.CHANNEL}, packetHandler = NetworkHelper.class)
 
 public class mod_SpaceCraft {
 	public static mod_SpaceCraft INSTANCE;

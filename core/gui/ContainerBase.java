@@ -2,6 +2,7 @@ package spacecraft.core.gui;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import spacecraft.core.utility.NetworkHelper;
 import spacecraft.core.utility.PacketContainerEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -15,6 +16,13 @@ public abstract class ContainerBase extends Container {
 	public ContainerBase(World world, EntityPlayer player) {
 		this.world = world;
 		this.player = player;
+	}
+	
+	public abstract void onGuiEvent(int param);
+	public void sendGuiEvent(int param) {
+		if (world.isRemote) {
+			sendNetworkEvent(PacketContainerEvent.createPacket(player, NetworkHelper.GUIEVENT, param));
+		}
 	}
 	
 	public abstract void onServerNetworkEvent(PacketContainerEvent packet);

@@ -2,6 +2,7 @@ package spacecraft.core.block;
 
 import spacecraft.core.mod_SpaceCraft;
 import spacecraft.core.block.tile.TileEntityTeleporter;
+import spacecraft.core.utility.GuiHandler;
 import spacecraft.core.utility.RegistryHelper;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -30,7 +31,7 @@ public class BlockTeleporter extends BlockContainerBase {
 			TileEntityTeleporter var10 = (TileEntityTeleporter)par1World.getBlockTileEntity(par2, par3, par4);
 			//TODO check if the user is allowed to use the gui
 			if (var10 != null) {
-				par5EntityPlayer.openGui(mod_SpaceCraft.INSTANCE, 10, par1World, par2, par3, par4); }
+				par5EntityPlayer.openGui(mod_SpaceCraft.INSTANCE, GuiHandler.BLOCKTELEPORTER, par1World, par2, par3, par4); }
 			return true;
 		}
 	}
