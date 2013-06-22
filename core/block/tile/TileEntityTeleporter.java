@@ -1,6 +1,9 @@
 package spacecraft.core.block.tile;
 
+import spacecraft.core.block.BlockPortalSC;
 import spacecraft.core.gui.TileEntityInventory;
+import spacecraft.core.item.ItemLocator;
+import spacecraft.core.world.TeleporterInfo;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -26,5 +29,22 @@ public class TileEntityTeleporter extends TileEntityInventory {
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger(EMIT, emit);
+	}
+	
+	public void setEmit(int value) {
+		if (emit != value) {
+			emit = value;
+			if (emit > 0) {
+				TeleporterInfo info = null;
+				if (this.getStackInSlot(0) != null) {
+					info = ItemLocator.getTeleporterInfo(this.getStackInSlot(0));
+					if (info != null) {
+						BlockPortalSC.setPortalBlock(worldObj, xCoord, yCoord + 1, zCoord, info);
+					}
+				}
+			} else {
+				BlockPortalSC.removePortalBlock(worldObj, xCoord, yCoord + 1, zCoord, false);
+			}
+		}
 	}
 }

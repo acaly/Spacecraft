@@ -74,7 +74,7 @@ public class ItemLocator extends ItemBase {
 		NetworkHelper.sendPlayerMessage(par3EntityPlayer, "Get location!");
 	}
 	
-	public TeleporterInfo getTeleporterInfo(ItemStack itemStack) {
+	public static TeleporterInfo getTeleporterInfo(ItemStack itemStack) {
 		NBTTagCompound tag = itemStack.stackTagCompound;
 		if (tag == null || !tag.hasKey(LOCATION)) {
 			return null;

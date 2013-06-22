@@ -67,7 +67,10 @@ public class BlockPortalSC extends BlockPortal {
 		linkInfo.append(x, y, z, info);
 	}
 	
-	public static void removePortalBlock(World world, int x, int y, int z) {
+	public static void removePortalBlock(World world, int x, int y, int z, boolean removed) {
+		if (!removed) {
+			world.setBlockToAir(x, y, z);
+		}
 		WorldLinkInfo linkInfo = (WorldLinkInfo) WorldSavedDataSC.forWorld(world)
 				.getData(WorldSavedDataSC.DATALINKINFO);
 		linkInfo.remove(x, y, z);
@@ -78,6 +81,6 @@ public class BlockPortalSC extends BlockPortal {
 	@Override
 	public void onBlockDestroyedByPlayer(World par1World, int par2, int par3, int par4, int par5) {
 		super.onBlockDestroyedByPlayer(par1World, par2, par3, par4, par5);
-		removePortalBlock(par1World, par2, par3, par4);
+		removePortalBlock(par1World, par2, par3, par4, true);
 	}
 }

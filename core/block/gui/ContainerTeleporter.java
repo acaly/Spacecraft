@@ -9,6 +9,7 @@ import spacecraft.core.utility.PacketContainerEvent;
 
 public class ContainerTeleporter extends ContainerBase {
 	private TileEntityTeleporter tile;
+	private static final int EMITID = 0;
 
 	public ContainerTeleporter(World world, EntityPlayer player, int x, int y, int z) {
 		super(world, player);
@@ -29,7 +30,7 @@ public class ContainerTeleporter extends ContainerBase {
 	@Override
 	public void onGuiEvent(int param) {
 		if (param == GuiTeleporter.BUTTONEMIT) {
-			tile.emit = 1 - tile.emit;
+			tile.setEmit(1 - tile.emit);
 		}
 	}
 
@@ -40,12 +41,15 @@ public class ContainerTeleporter extends ContainerBase {
 
 	@Override
 	protected void refreshProgress() {
-		progress[0] = tile.emit;
+		progress[EMITID] = tile.emit;
 	}
 
 	@Override
-	public void updateProgressBar(int par1, int par2) {
-		tile.emit = par2;
+	public void updateProgressBar(int id, int value) {
+		if (id == EMITID) {
+			//tile.setEmit(par2);
+			tile.emit = value;
+		}
 	}
 
 }
