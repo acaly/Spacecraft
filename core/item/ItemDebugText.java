@@ -84,7 +84,7 @@ public class ItemDebugText extends ItemBase {
 		info.z = var15;
 		
 		//TeleporterInfo info = SpaceManager.createDebugSpaceAndTeleporter();
-		BlockPortalSC.setPortalBlock(par2World, var13, var14, var15, info);
+		//BlockPortalSC.setPortalBlock(par2World, var13, var14, var15, info);
 		return true;
 	}
 }

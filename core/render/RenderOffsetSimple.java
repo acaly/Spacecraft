@@ -6,6 +6,7 @@ import spacecraft.core.world.TeleporterInfo;
 import spacecraft.core.world.WorldLinkInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -24,7 +25,7 @@ public class RenderOffsetSimple implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block,
 			int modelId, RenderBlocks renderer) {
-		WorldLinkInfo info = (WorldLinkInfo) WorldSavedDataSC.forWorld((World) world).getData(WorldSavedDataSC.DATALINKINFO);
+		WorldLinkInfo info = (WorldLinkInfo) WorldSavedDataSC.forChunkCache((ChunkCache) renderer.blockAccess).getData(WorldSavedDataSC.DATALINKINFO);
 		TeleporterInfo tele = info.getTeleporter(x, y, z);
 		if (world.getBlockId(tele.x, tele.y, tele.z) == 0) return false;
 		

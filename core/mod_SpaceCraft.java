@@ -11,6 +11,7 @@ import spacecraft.core.item.*;
 import spacecraft.core.render.RenderOffsetSimple;
 import spacecraft.core.render.RenderOffsetSpecial;
 import spacecraft.core.utility.ConfigManager;
+import spacecraft.core.utility.ConnectionHandlerWorldData;
 import spacecraft.core.utility.GuiHandler;
 import spacecraft.core.utility.LanguageManager;
 import spacecraft.core.utility.NetworkHelper;
@@ -58,6 +59,7 @@ public class mod_SpaceCraft {
 		blockMonitor = new BlockMonitor();
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+		NetworkRegistry.instance().registerConnectionHandler(new ConnectionHandlerWorldData());
 		
 		ModLoader.registerBlock(blockPortalSC);
 		ModLoader.registerBlock(blockTeleporter);

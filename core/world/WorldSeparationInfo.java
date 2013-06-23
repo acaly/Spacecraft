@@ -54,4 +54,9 @@ public class WorldSeparationInfo implements ISavedData {
 		return dirty;
 	}
 
+	@Override
+	public void onPacketRecieved(int method, int id, NBTTagCompound nbt) {
+		// TODO data sync as WorldLinkInfo, if necessary
+	}
+
 }

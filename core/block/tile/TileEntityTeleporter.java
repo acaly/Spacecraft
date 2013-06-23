@@ -5,6 +5,7 @@ import spacecraft.core.block.BlockPortalSC;
 import spacecraft.core.gui.TileEntityInventory;
 import spacecraft.core.item.ItemLocator;
 import spacecraft.core.world.TeleporterInfo;
+import spacecraft.core.world.WorldLinkInfo;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -29,10 +30,10 @@ public class TileEntityTeleporter extends TileEntityInventory {
 				info = ItemLocator.getTeleporterInfo(this.getStackInSlot(0));
 				if (info == null) return;
 				//TODO consider facing
-				BlockPortalSC.setPortalBlock(worldObj, xCoord, yCoord + 1, zCoord, info);
+				WorldLinkInfo.addToWorld(worldObj, xCoord, yCoord + 1, zCoord, info, BlockPortalSC.class);
 				setWrenchEnabled(false);
 			} else {
-				BlockPortalSC.removePortalBlock(worldObj, xCoord, yCoord + 1, zCoord, false);
+				WorldLinkInfo.removeFromWorld(worldObj, xCoord, yCoord + 1, zCoord, false);
 				setWrenchEnabled(true);
 			}
 		}

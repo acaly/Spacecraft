@@ -59,29 +59,12 @@ public class BlockPortalSC extends BlockPortal {
 		}
 	}
 	
-	//always use this method to set a portal in a world
-	public static void setPortalBlock(World world, int x, int y, int z, TeleporterInfo info) {
-		world.setBlock(x, y, z, RegistryHelper.getId(BlockPortalSC.class), 0, 3);
-		WorldLinkInfo linkInfo = (WorldLinkInfo) WorldSavedDataSC.forWorld(world)
-				.getData(WorldSavedDataSC.DATALINKINFO);
-		linkInfo.append(x, y, z, info);
-	}
-	
-	public static void removePortalBlock(World world, int x, int y, int z, boolean removed) {
-		if (!removed) {
-			world.setBlockToAir(x, y, z);
-		}
-		WorldLinkInfo linkInfo = (WorldLinkInfo) WorldSavedDataSC.forWorld(world)
-				.getData(WorldSavedDataSC.DATALINKINFO);
-		linkInfo.remove(x, y, z);
-	}
-	
 	//XTODO test if this method is always called when a portal is destroyed. 
 	//If not, there must be a step to check useless info when loading a world
 	//TODO event when tile entity is removed?
 	@Override
 	public void onBlockDestroyedByPlayer(World par1World, int par2, int par3, int par4, int par5) {
 		super.onBlockDestroyedByPlayer(par1World, par2, par3, par4, par5);
-		removePortalBlock(par1World, par2, par3, par4, true);
+		WorldLinkInfo.removeFromWorld(par1World, par2, par3, par4, true);
 	}
 }
