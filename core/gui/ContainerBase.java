@@ -15,7 +15,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public abstract class ContainerBase<T extends TileEntity> extends Container {
+public abstract class ContainerBase<T extends TileEntityInventory> extends Container {
 	protected World world;
 	protected EntityPlayer player;
 	protected T tileEntity;
@@ -27,6 +27,7 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
 		this.world = world;
 		this.player = player;
 		tileEntity = (T) world.getBlockTileEntity(x, y, z);
+		initProgress();
 	}
 	
 	public abstract void onGuiEvent(int param);
@@ -74,13 +75,19 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
 		}
 	}
 	
-	protected void initProgress(int count) {
+	protected void initProgress() {
+		int count = tileEntity.vars.length;
 		progress = new int[count];
 		lastProgress = new int[count];
 		this.progressCount = count;
 	}
 	
-	protected abstract void refreshProgress();
+	protected void refreshProgress() {
+		int count = progressCount;
+		for (int i = 0; i < count; ++i) {
+			progress[i] = tileEntity.vars[i];
+		}
+	}
 	
 	@Override
 	public void addCraftingToCrafters(ICrafting par1ICrafting) {
@@ -92,7 +99,9 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
 	}
 	
 	@Override
-	public abstract void updateProgressBar(int id, int value);
+	public void updateProgressBar(int id, int value) {
+		tileEntity.setVar(id, value);
+	}
 	
 	@Override
 	public void detectAndSendChanges() {
@@ -112,5 +121,10 @@ public abstract class ContainerBase<T extends TileEntity> extends Container {
 		for (j = 0; j < progressCount; ++j) {
 			lastProgress[j] = progress[j];
 		}
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer entityplayer) {
+		return true;
 	}
 }

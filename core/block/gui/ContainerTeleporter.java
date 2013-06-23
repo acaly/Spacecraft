@@ -3,6 +3,7 @@ package spacecraft.core.block.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.world.World;
+import spacecraft.core.block.tile.TileEntityMonitor;
 import spacecraft.core.block.tile.TileEntityTeleporter;
 import spacecraft.core.gui.ContainerBase;
 import spacecraft.core.utility.PacketContainerEvent;
@@ -15,32 +16,13 @@ public class ContainerTeleporter extends ContainerBase<TileEntityTeleporter> {
 		
 		this.addPlayerSlots(player);
 		this.addSlotToContainer(new Slot(tileEntity, 0, 80, 57));
-		
-		initProgress(1);
 	}
 	
 	@Override
 	public void onGuiEvent(int param) {
 		if (param == GuiTeleporter.BUTTONEMIT) {
-			tileEntity.setEmit(1 - tileEntity.emit);
+			tileEntity.setVar(TileEntityMonitor.EMITID, 1 - tileEntity.getVar(TileEntityMonitor.EMITID));
 		}
-	}
-
-	@Override
-	protected void refreshProgress() {
-		progress[EMITID] = tileEntity.emit;
-	}
-
-	@Override
-	public void updateProgressBar(int id, int value) {
-		if (id == EMITID) {
-			tileEntity.setEmit(value);
-		}
-	}
-
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return true;
 	}
 
 }

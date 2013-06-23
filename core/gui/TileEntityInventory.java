@@ -15,6 +15,7 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	public static final String INVENTORY = "inventory";
 	private static final String SLOT = "slot";
 	private static final String FACING = "facing";
+	private static final String VARS = "vars";
 	
 	protected InventoryBasic inventory;
 	protected int[] availableSide;
@@ -24,13 +25,19 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	private boolean wrenchEnabled = false;
 	private int facing = 5;
 	
-	public TileEntityInventory(String name, int count) {
-		inventory = new InventoryBasic(name, false, count);
+	//vars
+	protected int[] vars;
+	
+	public TileEntityInventory(String name, int inventorySize, int varCount) {
 		this.name = name;
-		availableSide = new int[count];
-		for (int i = 0; i < count; ++i) {
+		
+		inventory = new InventoryBasic(name, false, inventorySize);
+		availableSide = new int[inventorySize];
+		for (int i = 0; i < inventorySize; ++i) {
 			availableSide[i] = i;
 		}
+		
+		vars = new int[varCount];
 	}
 	
 	@Override
@@ -108,7 +115,11 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
 		readInventoryFromNBT(par1NBTTagCompound.getTagList(INVENTORY), inventory);
-		par1NBTTagCompound.setShort(FACING, (short) facing);
+		int [] varsNBT = par1NBTTagCompound.getIntArray(VARS);
+		facing = par1NBTTagCompound.getShort(FACING);
+		if (vars.length == varsNBT.length) {
+			vars = varsNBT;
+		}
 	}
 	
 	@Override
@@ -117,7 +128,8 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 		NBTTagList list = new NBTTagList();
 		writeInventoryToNBT(list, inventory);
 		par1NBTTagCompound.setTag(INVENTORY, list);
-		facing = par1NBTTagCompound.getShort(FACING);
+		par1NBTTagCompound.setShort(FACING, (short) facing);
+		par1NBTTagCompound.setIntArray(VARS, vars);
 	}
 	
 	public static void readInventoryFromNBT(NBTTagList nbt, IInventory inventory) {
@@ -184,5 +196,17 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	public ItemStack getWrenchDrop(EntityPlayer entityPlayer) {
 		return new ItemStack(this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord), 1,
 				this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+	}
+	
+	protected abstract void onVarChanged(int id, int value);
+	
+	public void setVar(int id, int value) {
+		if (vars[id] == value) return;
+		vars[id] = value;
+		onVarChanged(id, value);
+	}
+	
+	public int getVar(int id) {
+		return vars[id];
 	}
 }
