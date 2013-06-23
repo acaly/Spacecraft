@@ -85,7 +85,7 @@ public class WorldLinkInfo implements ISavedData {
 			world.setBlock(x, y, z, RegistryHelper.getId(block), 0, 3);
 			
 			NBTTagCompound data = new NBTTagCompound();
-			data.setIntArray("cord", new int[]{x, y, z});
+			data.setIntArray(COORD, new int[]{x, y, z});
 			data.setTag(LINK, info.writeToNBT());
 			worldData.onDataChanged(WorldSavedDataSC.DATALINKINFO, WorldSavedDataSC.METHODAPPEND,
 					-1, data);
@@ -101,7 +101,7 @@ public class WorldLinkInfo implements ISavedData {
 		linkInfo.remove(x, y, z);
 		if (!world.isRemote) {
 			NBTTagCompound data = new NBTTagCompound();
-			data.setIntArray("cord", new int[]{x, y, z});
+			data.setIntArray(COORD, new int[]{x, y, z});
 			worldData.onDataChanged(WorldSavedDataSC.DATALINKINFO, WorldSavedDataSC.METHODREMOVE,
 					-1, data);
 		}
@@ -112,6 +112,9 @@ public class WorldLinkInfo implements ISavedData {
 		if (method == WorldSavedDataSC.METHODAPPEND) {
 			int coord[] = nbt.getIntArray(COORD);
 			append(coord[0], coord[1], coord[2], TeleporterInfo.readFromNBT(nbt.getCompoundTag(LINK)));
+		} else {
+			int coord[] = nbt.getIntArray(COORD);
+			remove(coord[0], coord[1], coord[2]);
 		}
 	}
 

@@ -80,7 +80,7 @@ public final class BlockAccessOffset implements IBlockAccess {
 
 	@Override
 	public boolean isBlockOpaqueCube(int i, int j, int k) {
-		return parent.isBlockOpaqueCube(i + x, j + y, k + z);
+		return false;//parent.isBlockOpaqueCube(i + x, j + y, k + z);
 	}
 
 	@Override

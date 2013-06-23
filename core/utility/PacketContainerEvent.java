@@ -19,7 +19,6 @@ public class PacketContainerEvent extends Packet250CustomPayload {
 	}
 
 	public static PacketContainerEvent createPacket(EntityPlayer par1Player, int type, int param) {
-		PacketContainerEvent r;
 		try {
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			DataOutputStream os = new DataOutputStream(buffer);

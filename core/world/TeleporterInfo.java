@@ -15,7 +15,7 @@ public class TeleporterInfo {
 	public String owner;
 	
 	private static final String DATA = "data";
-	private static final String OWNER = "owner";
+	private static final String OWNER = "owner_";//owner will be put against data...
 	
 	public void placeEntity(Entity entity, World world) {
 		int x = this.x, y = this.y, z = this.z;

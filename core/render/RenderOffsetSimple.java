@@ -27,7 +27,7 @@ public class RenderOffsetSimple implements ISimpleBlockRenderingHandler {
 			int modelId, RenderBlocks renderer) {
 		WorldLinkInfo info = (WorldLinkInfo) WorldSavedDataSC.forChunkCache((ChunkCache) renderer.blockAccess).getData(WorldSavedDataSC.DATALINKINFO);
 		TeleporterInfo tele = info.getTeleporter(x, y, z);
-		if (world.getBlockId(tele.x, tele.y, tele.z) == 0) return false;
+		if (tele == null || world.getBlockId(tele.x, tele.y, tele.z) == 0) return false;
 		
 		this.world.setParent(renderer.blockAccess);
 		this.world.setStartPoint(x, y, z);

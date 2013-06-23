@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -14,9 +16,11 @@ import spacecraft.core.world.WorldSeparationInfo;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapStorage;
 
 public class WorldSavedDataSC extends WorldSavedData {
@@ -24,6 +28,9 @@ public class WorldSavedDataSC extends WorldSavedData {
 	public static final String DATALINKINFO = "link";
 	public static final String DATASEPARATION = "separation";
 	public static final String DATADIMENSION = "dim";
+	public static final String PACKETDATAID = "id";
+	public static final String PACKETHEAD = "head";
+	public static final String PACKETDATA = "data";
 
 	public String debugString = "";
 	private Map<String, ISavedData> dataMap = new HashMap<String, ISavedData>();
@@ -47,6 +54,7 @@ public class WorldSavedDataSC extends WorldSavedData {
 	
 	public WorldSavedDataSC() {
 		super(dataId);
+		init();
 	}
 	
 	//used by MapStorage
@@ -57,7 +65,13 @@ public class WorldSavedDataSC extends WorldSavedData {
 	public static WorldSavedDataSC forWorld(World world) {
 		if (world == null) return null;
 		if (world.isRemote) {
-			return null;
+			//return null;
+			WorldSavedDataSC r = worldDataMap.get(world.provider.dimensionId);
+			if (r == null) {
+				r = new WorldSavedDataSC();
+				worldDataMap.put(world.provider.dimensionId, r);
+			}
+			return r;
 		} else {
 			MapStorage storage = world.perWorldStorage;
 			WorldSavedDataSC result = (WorldSavedDataSC)storage.loadData(WorldSavedDataSC.class, dataId);
@@ -134,22 +148,44 @@ public class WorldSavedDataSC extends WorldSavedData {
 	
 	//data sync
 	public static void sendDataToPlayer(EntityPlayerMP player) {
-		//TODO send all data
+		WorldServer[] worlds = MinecraftServer.getServer().worldServers;
+		NBTTagCompound worldNBT;
+		for (WorldServer world : worlds) {
+			worldNBT = new NBTTagCompound();
+			WorldSavedDataSC.forWorld(world).writeToNBT(worldNBT);
+			PacketDispatcher.sendPacketToPlayer(
+					PacketSendWorldData.createPacket(PacketSendWorldData.WORLDDATA, world.provider.dimensionId, worldNBT),
+					(Player) player);
+		}
 	}
 	
 	public void onDataChanged(String id, int method, int dataId, NBTTagCompound data) {
-		//TODO send part of the data
+		NBTTagCompound packetNBT = new NBTTagCompound();
+		packetNBT.setString(PACKETDATAID, id);
+		packetNBT.setIntArray(PACKETHEAD, new int[]{method, dataId});
+		packetNBT.setTag(PACKETDATA, data);
+		PacketDispatcher.sendPacketToAllPlayers(
+				PacketSendWorldData.createPacket(PacketSendWorldData.CHANGEDATA, dimension, packetNBT));
 	}
 	
 	//client storage
 	@SideOnly(Side.CLIENT)
-	private HashMap<Integer, WorldSavedDataSC> worldDataMap;
-	
-	public static void onReceivedData(int dimension, String id, int method, int dataId, NBTTagCompound data) {
-		//TODO client received data
-	}
+	private static HashMap<Integer, WorldSavedDataSC> worldDataMap = new HashMap();
 	
 	public static void onReceivedWorldData(int dimension, NBTTagCompound data) {
-		//TODO receive data
+		if (worldDataMap.containsKey(dimension)) {
+			worldDataMap.remove(dimension);
+		}
+		WorldSavedDataSC worldData = new WorldSavedDataSC();
+		worldData.readFromNBT(data);
+		worldData.dimension = dimension;
+		worldDataMap.put(dimension, worldData);
+	}
+	
+	public static void onReceivedData(int dimension, NBTTagCompound data) {
+		String id = data.getString(PACKETDATAID);
+		int[] head = data.getIntArray(PACKETHEAD);
+		NBTTagCompound nbt = data.getCompoundTag(PACKETDATA);
+		worldDataMap.get(dimension).dataMap.get(id).onPacketRecieved(head[0], head[1], nbt);
 	}
 }

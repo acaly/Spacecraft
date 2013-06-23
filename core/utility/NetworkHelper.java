@@ -47,6 +47,10 @@ public class NetworkHelper implements IPacketHandler {
 						getConfigurationManager().getPlayerForUsername(containerPacket.player).openContainer;
 				container.onGuiEvent(containerPacket.param);
 			}
+		} else if (packet instanceof PacketSendWorldData) {
+			PacketSendWorldData dataPacket = (PacketSendWorldData) packet;
+			dataPacket.readData();
+			dataPacket.sendToWorld();
 		}
 	}
 }
