@@ -8,6 +8,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -26,4 +27,5 @@ public class BlockTeleporter extends BlockContainerBase {
 	protected int openGui(World par1World, TileEntity tile, EntityPlayer player) {
 		return GuiHandler.BLOCKTELEPORTER;
 	}
+
 }

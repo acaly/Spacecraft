@@ -1,5 +1,6 @@
 package spacecraft.core.gui;
 
+import ic2.api.tile.IWrenchable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -10,13 +11,18 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
-public abstract class TileEntityInventory extends TileEntity implements IInventory, ISidedInventory {
+public abstract class TileEntityInventory extends TileEntity implements IInventory, ISidedInventory, IWrenchable {
 	public static final String INVENTORY = "inventory";
 	private static final String SLOT = "slot";
+	private static final String FACING = "facing";
 	
 	protected InventoryBasic inventory;
 	protected int[] availableSide;
 	private String name;
+	
+	//IWrenchable
+	private boolean wrenchEnabled = false;
+	private int facing = 5;
 	
 	public TileEntityInventory(String name, int count) {
 		inventory = new InventoryBasic(name, false, count);
@@ -102,6 +108,7 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
 		readInventoryFromNBT(par1NBTTagCompound.getTagList(INVENTORY), inventory);
+		par1NBTTagCompound.setShort(FACING, (short) facing);
 	}
 	
 	@Override
@@ -110,6 +117,7 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 		NBTTagList list = new NBTTagList();
 		writeInventoryToNBT(list, inventory);
 		par1NBTTagCompound.setTag(INVENTORY, list);
+		facing = par1NBTTagCompound.getShort(FACING);
 	}
 	
 	public static void readInventoryFromNBT(NBTTagList nbt, IInventory inventory) {
@@ -140,5 +148,41 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 			}
 			nbt.appendTag(item);
 		}
+	}
+	
+
+	protected void setWrenchEnabled(boolean value) {
+		this.wrenchEnabled = value;
+	}
+	
+	@Override
+	public boolean wrenchCanSetFacing(EntityPlayer entityPlayer, int side) {
+		return wrenchEnabled && side != facing;
+	}
+
+	@Override
+	public short getFacing() {
+		return (short) facing;
+	}
+
+	@Override
+	public void setFacing(short facing) {
+		this.facing = facing; 
+	}
+
+	@Override
+	public boolean wrenchCanRemove(EntityPlayer entityPlayer) {
+		return false;
+	}
+
+	@Override
+	public float getWrenchDropRate() {
+		return 1.0f;
+	}
+
+	@Override
+	public ItemStack getWrenchDrop(EntityPlayer entityPlayer) {
+		return new ItemStack(this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord), 1,
+				this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 	}
 }

@@ -6,11 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
-import spacecraft.core.block.BlockPortalSC;
-import spacecraft.core.block.BlockTeleporter;
+import spacecraft.core.block.*;
 import spacecraft.core.block.tile.TileEntityTeleporter;
-import spacecraft.core.item.ItemDebugText;
-import spacecraft.core.item.ItemLocator;
+import spacecraft.core.item.*;
 import spacecraft.core.world.TeleportManager;
 import spacecraft.core.world.WorldProviderSC;
 import net.minecraft.block.Block;
@@ -66,6 +64,8 @@ public final class LanguageManager {
 		//Block
 		table.setProperty(forClass(BlockPortalSC.class), "传送方块");
 		table.setProperty(forClass(BlockTeleporter.class), "传送器");
+		table.setProperty(forClass(BlockScreen.class), "屏幕");
+		table.setProperty(forClass(BlockMonitor.class), "显示器");
 		//inventory
 		table.setProperty(TileEntityTeleporter.INVENTORY, "传送器");
 		//CreativeTab

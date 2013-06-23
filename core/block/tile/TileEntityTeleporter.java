@@ -1,5 +1,6 @@
 package spacecraft.core.block.tile;
 
+import ic2.api.Direction;
 import spacecraft.core.block.BlockPortalSC;
 import spacecraft.core.gui.TileEntityInventory;
 import spacecraft.core.item.ItemLocator;
@@ -15,6 +16,7 @@ public class TileEntityTeleporter extends TileEntityInventory {
 	
 	public TileEntityTeleporter() {
 		super(INVENTORY, 1);
+		setWrenchEnabled(true);
 	}
 
 	@Override
@@ -32,6 +34,10 @@ public class TileEntityTeleporter extends TileEntityInventory {
 	}
 	
 	public void setEmit(int value) {
+		if (worldObj.isRemote) {
+			emit = value;
+			return;
+		}
 		if (emit != value) {
 			emit = value;
 			if (emit > 0) {
@@ -39,11 +45,16 @@ public class TileEntityTeleporter extends TileEntityInventory {
 				if (this.getStackInSlot(0) != null) {
 					info = ItemLocator.getTeleporterInfo(this.getStackInSlot(0));
 					if (info != null) {
+						//TODO consider facing
 						BlockPortalSC.setPortalBlock(worldObj, xCoord, yCoord + 1, zCoord, info);
+						setWrenchEnabled(false);
+						return;
 					}
 				}
+				emit = 0;
 			} else {
 				BlockPortalSC.removePortalBlock(worldObj, xCoord, yCoord + 1, zCoord, false);
+				setWrenchEnabled(true);
 			}
 		}
 	}

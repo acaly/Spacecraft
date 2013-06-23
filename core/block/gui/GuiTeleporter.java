@@ -13,19 +13,11 @@ import net.minecraft.world.World;
 public class GuiTeleporter extends GuiContainerBase {
 	private static final String BACKGROUND = "Teleporter";
 	public static final int BUTTONEMIT = 0;
-	private TileEntityTeleporter tileEntity;
 
 	public GuiTeleporter(World world, EntityPlayer player, int x, int y, int z) {
-		super(new ContainerTeleporter(world, player, x, y, z));
-		tileEntity = (TileEntityTeleporter) world.getBlockTileEntity(x, y, z);
+		super(new ContainerTeleporter(world, player, x, y, z), world, player, x, y, z);
+		setBackground(BACKGROUND);
 		handleButtonEvent();
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		super.drawGuiContainerBackgroundLayer(f, i, j);
-		this.mc.renderEngine.bindTexture(makeTexturePath(BACKGROUND));
-		this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 	
 	@Override

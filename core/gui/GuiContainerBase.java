@@ -4,26 +4,36 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
-public abstract class GuiContainerBase extends GuiContainer {
+public abstract class GuiContainerBase<T extends TileEntity> extends GuiContainer {
 	private static final String PATH_PREFIX = "/mods/spacecraft/textures/gui/";
 	private static final String PATH_SUFFIX = ".png";
 	private boolean preventExchange = false;
 	private boolean handleButtonEvent = false;
-	
+	protected T tileEntity;
+	protected String BACKGROUND;
 
-	public GuiContainerBase(ContainerBase par1Container) {
+	public GuiContainerBase(ContainerBase par1Container, World world, EntityPlayer player, int x, int y, int z) {
 		super(par1Container);
+		tileEntity = (T) world.getBlockTileEntity(x, y, z);
+	}
+	
+	protected void setBackground(String value) {
+		BACKGROUND = value;
 	}
 
-	//TODO useless?
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.guiLeft = (this.width - this.xSize) / 2;
 		this.guiTop = (this.height - this.ySize) / 2;
+		this.mc.renderEngine.bindTexture(makeTexturePath(BACKGROUND));
+		this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 	
 	@Override

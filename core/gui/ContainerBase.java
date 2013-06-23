@@ -12,18 +12,21 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public abstract class ContainerBase extends Container {
+public abstract class ContainerBase<T extends TileEntity> extends Container {
 	protected World world;
 	protected EntityPlayer player;
+	protected T tileEntity;
 	protected int progress[];
 	private int lastProgress[];
 	private int progressCount;
 	
-	public ContainerBase(World world, EntityPlayer player) {
+	public ContainerBase(World world, EntityPlayer player, int x, int y, int z) {
 		this.world = world;
 		this.player = player;
+		tileEntity = (T) world.getBlockTileEntity(x, y, z);
 	}
 	
 	public abstract void onGuiEvent(int param);
@@ -33,8 +36,8 @@ public abstract class ContainerBase extends Container {
 		}
 	}
 	
-	public abstract void onServerNetworkEvent(PacketContainerEvent packet);
-	public abstract void onClientNetworkEvent(PacketContainerEvent packet);
+	public void onServerNetworkEvent(PacketContainerEvent packet){}
+	public void onClientNetworkEvent(PacketContainerEvent packet){}
 	
 	public void sendNetworkEvent(PacketContainerEvent packet) {
 		if (world.isRemote)

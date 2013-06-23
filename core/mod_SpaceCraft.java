@@ -8,12 +8,15 @@ import net.minecraftforge.common.DimensionManager;
 import spacecraft.core.block.*;
 import spacecraft.core.block.tile.*;
 import spacecraft.core.item.*;
+import spacecraft.core.render.RenderOffsetSimple;
+import spacecraft.core.render.RenderOffsetSpecial;
 import spacecraft.core.utility.ConfigManager;
 import spacecraft.core.utility.GuiHandler;
 import spacecraft.core.utility.LanguageManager;
 import spacecraft.core.utility.NetworkHelper;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RegistryHelper.RegistryType;
+import spacecraft.core.utility.RenderRegistryHelper;
 import spacecraft.core.world.WorldProviderSC;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -35,22 +38,32 @@ public class mod_SpaceCraft {
 	
 	public BlockPortalSC blockPortalSC;
 	public BlockTeleporter blockTeleporter;
+	public BlockScreen blockScreen;
+	public BlockMonitor blockMonitor;
 	
 	@Mod.Init
 	public void load(FMLInitializationEvent evt) {
 		INSTANCE = this;
 		RegistryHelper.INSTANCE.finishLoading();
 		
+		RenderRegistryHelper.regBlockHandler(BlockScreen.class, new RenderOffsetSimple());
+		RenderRegistryHelper.regTileEntityHandler(TileEntityScreen.class, new RenderOffsetSpecial());
+		
 		itemDebugText = new ItemDebugText();
 		itemLocator = new ItemLocator();
 		
 		blockPortalSC = new BlockPortalSC();
 		blockTeleporter = new BlockTeleporter();
+		blockScreen = new BlockScreen();
+		blockMonitor = new BlockMonitor();
 		
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		
 		ModLoader.registerBlock(blockPortalSC);
 		ModLoader.registerBlock(blockTeleporter);
+		ModLoader.registerBlock(blockScreen);
+		ModLoader.registerBlock(blockMonitor);
+		
 	}
 
 	@Mod.PreInit
@@ -59,6 +72,8 @@ public class mod_SpaceCraft {
 		RegistryHelper.setItemDefId("Locator", ItemLocator.class);
 		RegistryHelper.setBlockDefId("PortalSC", BlockPortalSC.class);
 		RegistryHelper.setBlockDefId("TeleporterSC", BlockTeleporter.class, TileEntityTeleporter.class);
+		RegistryHelper.setBlockDefId("Screen", BlockScreen.class, TileEntityScreen.class);
+		RegistryHelper.setBlockDefId("Monitor", BlockMonitor.class, TileEntityMonitor.class);
 		RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
 		
 		ConfigManager.init(event.getSuggestedConfigurationFile());
