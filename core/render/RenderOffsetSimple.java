@@ -1,5 +1,7 @@
 package spacecraft.core.render;
 
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
 import spacecraft.core.block.BlockScreen;
@@ -10,6 +12,7 @@ import spacecraft.core.world.TeleporterInfo;
 import spacecraft.core.world.WorldLinkInfo;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -17,6 +20,8 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class RenderOffsetSimple implements ISimpleBlockRenderingHandler {
 	private int renderId;
+	private Random random = new Random();
+	public static final float SKIPRATE = 0.12f;
 	
 	public RenderOffsetSimple() {
 		renderId = RenderRegistryHelper.getRenderId(RenderOffsetSimple.class);
@@ -34,7 +39,8 @@ public class RenderOffsetSimple implements ISimpleBlockRenderingHandler {
 		Block blockToRender = tile.getBlock();
 		boolean result = false;
 		if (blockToRender != null && !(blockToRender instanceof BlockScreen)) {
-			result = renderer.renderBlockByRenderType(blockToRender, x, y, z);
+			if (random.nextFloat() > SKIPRATE )
+				result = renderer.renderBlockByRenderType(blockToRender, x, y, z);
 		}
 		renderer.blockAccess = backup;
 		return result;
