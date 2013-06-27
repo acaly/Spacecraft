@@ -14,9 +14,27 @@ public class TeleportManager {
 	public static final TeleportManager INSTANCE = new TeleportManager(); 
 	public static final String MSG = "sc.teleporter.notallowed";
 	
+	//teleporter info type
+	public static final int NONE = 0;
+	public static final int TELEPORT = 1;
+	public static final int MONITOR = 2;
+	
 	static {
-		INSTANCE.teleporterTypes.put(0, new ITeleporterType(){
+		INSTANCE.teleporterTypes.put(TELEPORT, new ITeleporterType(){
 			public boolean available(World worldFrom, EntityPlayerMP player, int type, int x, int y, int z) {
+				return true;
+			}
+			@Override
+			public boolean needCheck() {
+				return false;
+			}
+		});
+		INSTANCE.teleporterTypes.put(MONITOR, new ITeleporterType(){
+			public boolean available(World worldFrom, EntityPlayerMP player, int type, int x, int y, int z) {
+				return true;
+			}
+			@Override
+			public boolean needCheck() {
 				return true;
 			}
 		});
@@ -27,8 +45,9 @@ public class TeleportManager {
 		WorldLinkInfo link = (WorldLinkInfo) data.getData("link");
 		TeleporterInfo teleporter = link.getTeleporter(x, y, z);
 		if (teleporter == null) return;
-		if (INSTANCE.teleporterTypes.get(teleporter.type)
-				.available(worldFrom, player, teleporter.type, x, y, z)) {
+		//if (INSTANCE.teleporterTypes.get(teleporter.type)
+		//		.available(worldFrom, player, teleporter.type, x, y, z)) {
+		if (teleporter.getType().available(worldFrom, player, teleporter.type, x, y, z)) {
 			if (teleporter.dimension == worldFrom.provider.dimensionId) {
 				//teleport immediately
 				teleporter.placeEntity(player, SpaceManager.getWorldForServer(teleporter.dimension));
@@ -43,6 +62,6 @@ public class TeleportManager {
 		}
 	}
 	
-	private Map<Integer, ITeleporterType> teleporterTypes = new HashMap();
+	public Map<Integer, ITeleporterType> teleporterTypes = new HashMap();
 	
 }

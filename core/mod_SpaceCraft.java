@@ -5,6 +5,7 @@ import java.io.File;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.src.ModLoader;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import spacecraft.core.block.*;
 import spacecraft.core.block.tile.*;
 import spacecraft.core.item.*;
@@ -18,6 +19,7 @@ import spacecraft.core.utility.NetworkHelper;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RegistryHelper.RegistryType;
 import spacecraft.core.utility.RenderRegistryHelper;
+import spacecraft.core.world.WorldLinkInfo;
 import spacecraft.core.world.WorldProviderSC;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -66,6 +68,7 @@ public class mod_SpaceCraft {
 		ModLoader.registerBlock(blockScreen);
 		ModLoader.registerBlock(blockMonitor);
 		
+		MinecraftForge.EVENT_BUS.register(new WorldLinkInfo.ChunkEventHandler());
 	}
 
 	@Mod.PreInit

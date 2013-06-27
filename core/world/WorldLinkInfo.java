@@ -8,7 +8,11 @@ import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.ChunkEvent;
+import spacecraft.core.block.BlockMonitor;
 import spacecraft.core.block.BlockPortalSC;
 import spacecraft.core.utility.ISavedData;
 import spacecraft.core.utility.RegistryHelper;
@@ -26,6 +30,14 @@ public class WorldLinkInfo implements ISavedData {
 	
 	public TeleporterInfo getTeleporter(int x, int y, int z) {
 		return teleporterMap.get(Arrays.asList(x, y, z));
+	}
+	
+	public static WorldLinkInfo forWorld(World world) {
+		return (WorldLinkInfo) WorldSavedDataSC.forWorld(world).getData(WorldSavedDataSC.DATALINKINFO);
+	}
+	
+	public static WorldLinkInfo forChunkCache(ChunkCache chunk) {
+		return (WorldLinkInfo) WorldSavedDataSC.forChunkCache(chunk).getData(WorldSavedDataSC.DATALINKINFO);
 	}
 
 	@Override
@@ -77,11 +89,22 @@ public class WorldLinkInfo implements ISavedData {
 		teleporterMap.remove(Arrays.asList(x, y, z));
 	}
 	
+	private static int getTeleporterTypeFromBlock(Class block) {
+		if (block.equals(BlockPortalSC.class)) {
+			return TeleportManager.TELEPORT;
+		} else if (block.equals(BlockMonitor.class)) {
+			return TeleportManager.MONITOR;
+		} else {
+			return 0;
+		}
+	}
+	
 	public static void addToWorld(World world, int x, int y, int z, TeleporterInfo info, Class block) {
 		WorldSavedDataSC worldData =  WorldSavedDataSC.forWorld(world);
 		WorldLinkInfo linkInfo = (WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO);
 		linkInfo.append(x, y, z, info);
 		if (!world.isRemote) {
+			info.type = getTeleporterTypeFromBlock(block);
 			world.setBlock(x, y, z, RegistryHelper.getId(block), 0, 3);
 			
 			NBTTagCompound data = new NBTTagCompound();
@@ -117,5 +140,35 @@ public class WorldLinkInfo implements ISavedData {
 			remove(coord[0], coord[1], coord[2]);
 		}
 	}
+	
+	public void onWorldChunkLoad(int x, int z) {
+		int blockX, blockZ;
+		for (Entry<List, TeleporterInfo> i : teleporterMap.entrySet()) {
+			blockX = (Integer) i.getKey().get(0);
+			blockZ = (Integer) i.getKey().get(2);
+			if (blockX >> 4 == x && blockZ >> 4 == z) {
+				
+			}
+		}
+	}
 
+	public void onWorldChunkUnload(int x, int z) {
+		
+	}
+	
+	public static class ChunkEventHandler {
+		@ForgeSubscribe
+		public void onChunkLoad(ChunkEvent.Load event) {
+			if (event.world.isRemote) return;
+			WorldLinkInfo.forWorld(event.world)
+					.onWorldChunkLoad(event.getChunk().xPosition, event.getChunk().zPosition);
+		}
+		
+		@ForgeSubscribe
+		public void onChunkUnload(ChunkEvent.Unload event) {
+			if (event.world.isRemote) return;
+			WorldLinkInfo.forWorld(event.world)
+					.onWorldChunkUnload(event.getChunk().xPosition, event.getChunk().zPosition);
+		}
+	}
 }

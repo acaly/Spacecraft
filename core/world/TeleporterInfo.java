@@ -14,6 +14,8 @@ public class TeleporterInfo {
 	public int x, y, z;		//target
 	public String owner;
 	
+	public boolean available;
+	
 	private static final String DATA = "data";
 	private static final String OWNER = "owner_";//owner will be put against data...
 	
@@ -56,5 +58,9 @@ public class TeleporterInfo {
 				});
 		r.setString(OWNER, owner);
 		return r;
+	}
+	
+	public ITeleporterType getType() {
+		return TeleportManager.INSTANCE.teleporterTypes.get(this.type);
 	}
 }
