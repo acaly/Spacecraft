@@ -34,9 +34,7 @@ public class RenderOffsetSimple implements ISimpleBlockRenderingHandler {
 		Block blockToRender = tile.getBlock();
 		boolean result = false;
 		if (blockToRender != null && !(blockToRender instanceof BlockScreen)) {
-			GL11.glScalef(0.5f, 0.5f, 0.5f);
 			result = renderer.renderBlockByRenderType(blockToRender, x, y, z);
-			GL11.glScalef(2.0f, 2.0f, 2.0f);
 		}
 		renderer.blockAccess = backup;
 		return result;

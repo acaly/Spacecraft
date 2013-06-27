@@ -1,6 +1,7 @@
 package spacecraft.core.block;
 
 import spacecraft.core.block.tile.TileEntityScreen;
+import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RenderRegistryHelper;
 import spacecraft.core.world.SpaceManager;
 import spacecraft.core.world.TeleporterInfo;
@@ -99,5 +100,12 @@ public class BlockScreen extends BlockContainerBase {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		return null;
+	}
+	
+	@Override
+	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
+		if (par1World.getBlockId(par2, par3, par4) != RegistryHelper.getId(BlockMonitor.class)) {
+			WorldLinkInfo.removeFromWorld(par1World, par2, par3, par4, false);
+		}
 	}
 }

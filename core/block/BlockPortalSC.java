@@ -41,7 +41,12 @@ public class BlockPortalSC extends BlockPortal {
 	}
 	
 	@Override
-	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {}
+	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
+		if (!par1World.isRemote && 
+				par1World.getBlockId(par2, par3, par4) != RegistryHelper.getId(BlockTeleporter.class)) {
+			WorldLinkInfo.forWorld(par1World).removeFromWorld(par1World, par2, par3, par4, false);
+		}
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -67,4 +72,5 @@ public class BlockPortalSC extends BlockPortal {
 		super.onBlockDestroyedByPlayer(par1World, par2, par3, par4, par5);
 		WorldLinkInfo.removeFromWorld(par1World, par2, par3, par4, true);
 	}
+	
 }
