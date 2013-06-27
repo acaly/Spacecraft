@@ -5,6 +5,7 @@ import spacecraft.core.utility.RenderRegistryHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -13,8 +14,9 @@ public class BlockScreen extends BlockContainerBase {
 	private int renderId;
 	
 	public BlockScreen() {
-		super(BlockScreen.class, Material.portal);
+		super(BlockScreen.class);
 		renderId = RenderRegistryHelper.getRenderId(BlockScreen.class);
+		this.setBlockUnbreakable();
 	}
 	
 	@Override
@@ -63,4 +65,8 @@ public class BlockScreen extends BlockContainerBase {
 		return 0;
 	}
 
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+		return null;
+	}
 }

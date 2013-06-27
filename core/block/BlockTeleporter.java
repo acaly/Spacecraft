@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 public class BlockTeleporter extends BlockContainerBase {
 
 	public BlockTeleporter() {
-		super(BlockTeleporter.class, Material.iron);
+		super(BlockTeleporter.class);
 	}
 
 	@Override

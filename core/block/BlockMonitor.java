@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 public class BlockMonitor extends BlockContainerBase {
 	
 	public BlockMonitor() {
-		super(BlockMonitor.class, Material.iron);
+		super(BlockMonitor.class);
 	}
 
 	@Override

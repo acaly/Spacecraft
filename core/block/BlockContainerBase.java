@@ -5,6 +5,7 @@ import spacecraft.core.mod_SpaceCraft;
 import spacecraft.core.utility.GuiHandler;
 import spacecraft.core.utility.RegistryHelper;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,10 +14,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public abstract class BlockContainerBase extends BlockContainer {
+	private static class MaterialSpaceMachine extends Material{
+		public MaterialSpaceMachine() {
+			super(MapColor.ironColor);
+			this.setImmovableMobility();
+			this.setRequiresTool();
+		}
+	}
+	public static final Material MATERIAL = new MaterialSpaceMachine();
 	
 	//TODO custom material
-	public BlockContainerBase(Class c, Material par2Material) {
-		super(RegistryHelper.getId(c), par2Material);
+	public BlockContainerBase(Class c) {
+		super(RegistryHelper.getId(c), MATERIAL);
 		this.setCreativeTab(RegistryHelper.creativeTab);
 		this.setUnlocalizedName(RegistryHelper.getName(c));
 	}
