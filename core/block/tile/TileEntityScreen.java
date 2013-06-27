@@ -29,6 +29,7 @@ public class TileEntityScreen extends TileEntity {
 	private static final String DATA_ID = "id";
 	private static final String DATA_META = "meta";
 	private static final int ACTIONTYPE = 10;	//used in Packet132TileEntityData
+	private static final int UPDATETICK = 5;
 	
 	private TileEntity tileEntityAim;
 	private LinkBlockInfo blockInfoAim;
@@ -40,8 +41,9 @@ public class TileEntityScreen extends TileEntity {
 	//Server side only
 	private Collection<EntityPlayerMP> playerList = new ArrayDeque();
 	
+	private int ticks;
 	public void updateEntity() {
-		//TODO ticks
+		
 		if (worldObj.isRemote) {
 			//client side, update renderer
 			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
@@ -59,6 +61,9 @@ public class TileEntityScreen extends TileEntity {
 				sendDataToPlayers();
 			} else {
 				//check update
+				if (++ticks < UPDATETICK) return;
+				ticks = 0;
+				
 				LinkBlockInfo newInfo = makeData();
 				if (!newInfo.equals(blockInfoAim)) {
 					blockInfoAim = newInfo;

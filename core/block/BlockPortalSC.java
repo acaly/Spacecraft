@@ -57,9 +57,6 @@ public class BlockPortalSC extends BlockContainerBase {
 		}
 	}
 	
-	//XTODO test if this method is always called when a portal is destroyed. 
-	//If not, there must be a step to check useless info when loading a world
-	//TODO event when tile entity is removed?
 	@Override
 	public void onBlockDestroyedByPlayer(World par1World, int par2, int par3, int par4, int par5) {
 		super.onBlockDestroyedByPlayer(par1World, par2, par3, par4, par5);

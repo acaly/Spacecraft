@@ -13,9 +13,8 @@ public class RenderOffsetSpecial extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double d0, double d1, double d2, float f) {
-		if (tile instanceof TileEntityScreen) return;
 		TileEntity toRender = ((TileEntityScreen) tile).getTileEntityInfo();
-		if (toRender == null) return;
+		if (toRender == null || toRender instanceof TileEntityScreen) return;
 		TileEntitySpecialRenderer renderer2 = TileEntityRenderer.instance.getSpecialRendererForEntity(toRender);
 		if (renderer2 == null) return;
 		renderer2.renderTileEntityAt(toRender, d0, d1, d2, f);

@@ -38,35 +38,35 @@ public class BlockAccessLink implements IBlockAccess {
 	private int index;
 	private boolean setPos(int x, int y, int z) {
 		if (tele == null) return false;
-		x = x - coordX + tele.x;
-		y = y - coordY + tele.y;
-		z = z - coordZ + tele.z;//TODO compare x - coordX with 0
-		if (x == tele.x) {
-			if (y == tele.y) {
-				if (z == tele.z) {
+		x = x - coordX;
+		y = y - coordY;
+		z = z - coordZ;
+		if (x == 0) {
+			if (y == 0) {
+				if (z == 0) {
 					index = 0;
 					return true;
-				} else if (z == tele.z + 1) {
+				} else if (z == 1) {
 					index = 5;
 					return true;
-				} else if (z == tele.z - 1) {
+				} else if (z == -1) {
 					index = 6;
 					return true;
 				}
-			} else if (y == tele.y + 1 && z == tele.z) {
+			} else if (y == 1 && z == 0) {
 				index = 3;
 				return true;
-			} else if (y == tele.y - 1 && z == tele.z) {
+			} else if (y == -1 && z == 0) {
 				index = 4;
 				return true;
 			}
-		} else if (x == tele.x + 1) {
-			if (y == tele.y && z == tele.z) {
+		} else if (x == 1) {
+			if (y == 0 && z == 0) {
 				index = 1;
 				return true;
 			}
-		} else if (x == tele.x - 1) {
-			if (y == tele.y && z == tele.z) {
+		} else if (x == -1) {
+			if (y == 0 && z == 0) {
 				index = 2;
 				return true;
 			}
