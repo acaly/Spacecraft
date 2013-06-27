@@ -32,8 +32,6 @@ public class PacketContainerEvent extends Packet250CustomPayload {
 		}
 	}
 	
-	//TODO packet with serializable data, if necessary
-	
 	public void readData() {
 		try {
 			ByteArrayInputStream buffer = new ByteArrayInputStream(data);

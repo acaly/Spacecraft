@@ -102,12 +102,12 @@ public class BlockAccessLink implements IBlockAccess {
 
 	@Override
 	public float getBrightness(int i, int j, int k, int l) {
-		return defaultWorld.getBrightness(i, j, k, l);//.provider.lightBrightnessTable[15];//14;//TODO
+		return defaultWorld.getBrightness(i, j, k, l);
 	}
 
 	@Override
 	public float getLightBrightness(int i, int j, int k) {
-		return defaultWorld.getLightBrightness(i, j, k);//defaultWorld.provider.lightBrightnessTable[15];//TODO
+		return defaultWorld.getLightBrightness(i, j, k);
 	}
 
 	@Override
@@ -159,7 +159,7 @@ public class BlockAccessLink implements IBlockAccess {
 
 	@Override
 	public int isBlockProvidingPowerTo(int i, int j, int k, int l) {
-		return 0;//TODO redstone render?
+		return 0;
 	}
 
 }

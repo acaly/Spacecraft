@@ -23,12 +23,18 @@ public abstract class BlockContainerBase extends BlockContainer {
 	}
 	public static final Material MATERIAL = new MaterialSpaceMachine();
 	
-	//TODO custom material
 	public BlockContainerBase(Class c) {
 		super(RegistryHelper.getId(c), MATERIAL);
 		this.setCreativeTab(RegistryHelper.creativeTab);
 		this.setUnlocalizedName(RegistryHelper.getName(c));
 	}
+	
+	public BlockContainerBase(Class c, CreativeTabs t) {
+		super(RegistryHelper.getId(c), MATERIAL);
+		if (t != null) this.setCreativeTab(t);
+		this.setUnlocalizedName(RegistryHelper.getName(c));
+	}
+
 	
 	//return 0 means not allowed to use the gui
 	protected abstract int openGui(World par1World, TileEntity tile, EntityPlayer player);

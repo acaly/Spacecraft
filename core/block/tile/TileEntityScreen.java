@@ -94,7 +94,6 @@ public class TileEntityScreen extends TileEntity {
 		if (info == null) return null;
 		if (!worldObj.blockExists(xCoord + 1, 0, zCoord) || !worldObj.blockExists(xCoord - 1, 0, zCoord) ||
 				!worldObj.blockExists(xCoord, 0, zCoord + 1) || !worldObj.blockExists(xCoord, 0, zCoord - 1)) {
-			//TODO check config file and load if it is told to do so
 			return null;
 		}
 		

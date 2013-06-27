@@ -1,5 +1,7 @@
 package spacecraft.core.block;
 
+import java.util.Random;
+
 import spacecraft.core.block.tile.TileEntityScreen;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RenderRegistryHelper;
@@ -19,7 +21,7 @@ public class BlockScreen extends BlockContainerBase {
 	private int renderId;
 	
 	public BlockScreen() {
-		super(BlockScreen.class);
+		super(BlockScreen.class, null);
 		renderId = RenderRegistryHelper.getRenderId(BlockScreen.class);
 		this.setBlockUnbreakable();
 	}
@@ -52,6 +54,11 @@ public class BlockScreen extends BlockContainerBase {
 	@Override
 	public boolean isBlockSolid(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
 		return false;
+	}
+	
+	@Override
+	public int quantityDropped(Random par1Random) {
+		return 0;
 	}
 	
 	@Override

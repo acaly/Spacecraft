@@ -1,15 +1,18 @@
 package spacecraft.core.utility;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.DimensionManager;
 import spacecraft.core.mod_SpaceCraft;
+import spacecraft.core.item.ItemLocator;
 import spacecraft.core.world.WorldProviderSC;
 
 public final class RegistryHelper {
@@ -145,7 +148,6 @@ public final class RegistryHelper {
 			if (type == RegistryType.Item) {
 				
 			} else if (type == RegistryType.Block) {
-				//TODO reg block automatically
 				if (tileEntityMap.containsKey(i)) {
 					ModLoader.registerTileEntity((Class<? extends TileEntity>) tileEntityMap.get(i), name);
 				}
@@ -153,17 +155,32 @@ public final class RegistryHelper {
 				registerWorld(i, id);
 			}
 		}
-		regInfoClassType.clear();
-		regInfoClassType = null;
 		tileEntityMap.clear();
 		tileEntityMap = null;
 	}
 	
-	//TODO lang here
+	public void createItemsAndBlocks() {
+		try {
+			RegistryType type;
+			for (Class i : regInfoClassName.keySet()) {
+				type = regInfoClassType.get(i);
+				if (type == RegistryType.Item) {
+					i.getConstructor().newInstance();
+				} else if (type == RegistryType.Block) {
+					ModLoader.registerBlock((Block) i.getConstructor().newInstance());
+				}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		regInfoClassType.clear();
+		regInfoClassType = null;
+	}
+	
 	public static CreativeTabs creativeTab = new CreativeTabs(CREATIVEPAGENAME) {
 		@Override
 		public Item getTabIconItem() {
-			return mod_SpaceCraft.INSTANCE.itemLocator;
+			return Item.itemsList[256 + getId(ItemLocator.class)];//mod_SpaceCraft.INSTANCE.itemLocator;
 		}
 	};
 }

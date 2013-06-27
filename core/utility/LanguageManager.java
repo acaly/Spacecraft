@@ -53,7 +53,7 @@ public final class LanguageManager {
 		if (Item.class.isAssignableFrom(c)) {
 			return "item." + RegistryHelper.getName(c) + ".name";
 		} else {// if (Block.class.isAssignableFrom(c)) {
-			return "tile." + RegistryHelper.getName(c) + ".name";//TODO confirm if is .name
+			return "tile." + RegistryHelper.getName(c) + ".name";
 		}
 	}
 	

@@ -35,14 +35,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class mod_SpaceCraft {
 	public static mod_SpaceCraft INSTANCE;
-
-	public ItemDebugText itemDebugText;
-	public ItemLocator itemLocator;
-	
-	public BlockPortalSC blockPortalSC;
-	public BlockTeleporter blockTeleporter;
-	public BlockScreen blockScreen;
-	public BlockMonitor blockMonitor;
 	
 	@Mod.Init
 	public void load(FMLInitializationEvent evt) {
@@ -52,21 +44,10 @@ public class mod_SpaceCraft {
 		RenderRegistryHelper.regBlockHandler(BlockScreen.class, new RenderOffsetSimple());
 		RenderRegistryHelper.regTileEntityHandler(TileEntityScreen.class, new RenderOffsetSpecial());
 		
-		itemDebugText = new ItemDebugText();
-		itemLocator = new ItemLocator();
-		
-		blockPortalSC = new BlockPortalSC();
-		blockTeleporter = new BlockTeleporter();
-		blockScreen = new BlockScreen();
-		blockMonitor = new BlockMonitor();
-		
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		NetworkRegistry.instance().registerConnectionHandler(new ConnectionHandlerWorldData());
-		
-		ModLoader.registerBlock(blockPortalSC);
-		ModLoader.registerBlock(blockTeleporter);
-		ModLoader.registerBlock(blockScreen);
-		ModLoader.registerBlock(blockMonitor);
+
+		RegistryHelper.INSTANCE.createItemsAndBlocks();
 		
 		MinecraftForge.EVENT_BUS.register(new WorldLinkInfo.ChunkEventHandler());
 	}
