@@ -45,8 +45,6 @@ public class TeleportManager {
 		WorldLinkInfo link = (WorldLinkInfo) data.getData("link");
 		TeleporterInfo teleporter = link.getTeleporter(x, y, z);
 		if (teleporter == null) return;
-		//if (INSTANCE.teleporterTypes.get(teleporter.type)
-		//		.available(worldFrom, player, teleporter.type, x, y, z)) {
 		if (teleporter.getType().available(worldFrom, player, teleporter.type, x, y, z)) {
 			if (teleporter.dimension == worldFrom.provider.dimensionId) {
 				//teleport immediately

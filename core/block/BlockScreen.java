@@ -2,6 +2,10 @@ package spacecraft.core.block;
 
 import spacecraft.core.block.tile.TileEntityScreen;
 import spacecraft.core.utility.RenderRegistryHelper;
+import spacecraft.core.world.SpaceManager;
+import spacecraft.core.world.TeleporterInfo;
+import spacecraft.core.world.WorldLinkInfo;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -61,8 +65,35 @@ public class BlockScreen extends BlockContainerBase {
 
 	@Override
 	protected int openGui(World par1World, TileEntity tile, EntityPlayer player) {
-		//TODO open the aim's gui
+		//on server side
+		TeleporterInfo info = WorldLinkInfo.forWorld(par1World)
+				.getTeleporter(tile.xCoord, tile.yCoord, tile.zCoord);
+		//if loaded
+		World worldAim = SpaceManager.getWorldForServer(info.dimension);
+		if (worldAim.blockExists(info.x, info.y, info.z)) {
+			Block.blocksList[worldAim.getBlockId(info.x, info.y, info.z)]
+					.onBlockActivated(par1World, info.x, info.y, info.z, player,
+					0, 0.0f, 0.0f, 0.0f);
+		}
 		return 0;
+	}
+
+	@Override
+	public boolean onBlockActivated(World par1World, int par2, int par3, int par4,
+			EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
+		if (par1World.isRemote) return true;
+
+		TileEntity tile = (TileEntity)par1World.getBlockTileEntity(par2, par3, par4);
+		TeleporterInfo info = WorldLinkInfo.forWorld(par1World)
+				.getTeleporter(tile.xCoord, tile.yCoord, tile.zCoord);
+		//if loaded
+		World worldAim = SpaceManager.getWorldForServer(info.dimension);
+		if (worldAim.blockExists(info.x, info.y, info.z)) {
+			Block.blocksList[worldAim.getBlockId(info.x, info.y, info.z)]
+					.onBlockActivated(par1World, info.x, info.y, info.z, par5EntityPlayer,
+					par6, par7, par8, par9);
+		}
+		return true;
 	}
 
 	@Override

@@ -156,23 +156,6 @@ public class WorldLinkInfo implements ISavedData {
 		return null;
 	}
 	
-	//chunk events
-	public void onWorldChunkLoad(int x, int z) {
-		/*
-		int blockX, blockZ;
-		for (Entry<List, TeleporterInfo> i : teleporterMap.entrySet()) {
-			blockX = (Integer) i.getKey().get(0);
-			blockZ = (Integer) i.getKey().get(2);
-			if (blockX >> 4 == x && blockZ >> 4 == z) {
-				
-			}
-		}*/
-	}
-
-	public void onWorldChunkUnload(int x, int z) {
-		
-	}
-	
 	public void onWorldChunkWatched(ChunkWatchEvent.Watch event) {
 		//find out all tileentities and tell screen to add player into the list
 		Chunk chunk = event.player.worldObj
@@ -195,20 +178,6 @@ public class WorldLinkInfo implements ISavedData {
 	}
 	
 	public static class ChunkEventHandler {
-		@ForgeSubscribe
-		public void onChunkLoad(ChunkEvent.Load event) {
-			//if (event.world.isRemote) return;
-			//WorldLinkInfo.forWorld(event.world)
-			//		.onWorldChunkLoad(event.getChunk().xPosition, event.getChunk().zPosition);
-		}
-		
-		@ForgeSubscribe
-		public void onChunkUnload(ChunkEvent.Unload event) {
-			//if (event.world.isRemote) return;
-			//WorldLinkInfo.forWorld(event.world)
-			//		.onWorldChunkUnload(event.getChunk().xPosition, event.getChunk().zPosition);
-		}
-		
 		@ForgeSubscribe
 		public void onChunkWatched(ChunkWatchEvent.Watch event) {
 			WorldSavedDataSC worldData = WorldSavedDataSC.forWorld(event.player.worldObj);
