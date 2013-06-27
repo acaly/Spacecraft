@@ -19,6 +19,7 @@ public class RenderOffsetSpecial extends TileEntitySpecialRenderer {
 		//TeleporterInfo teleporter = info.getTeleporter(tile.xCoord, tile.yCoord, tile.zCoord);
 		//if (teleporter != null) {
 			//TileEntity toRender = world.getBlockTileEntity(teleporter.x, teleporter.y, teleporter.z);
+		//TODO check if is a screen
 			TileEntity toRender = ((TileEntityScreen) tile).getTileEntityInfo();
 			if (toRender == null) return;
 			TileEntitySpecialRenderer renderer2 = TileEntityRenderer.instance.getSpecialRendererForEntity(toRender);

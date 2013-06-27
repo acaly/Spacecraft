@@ -1,5 +1,6 @@
 package spacecraft.core.render;
 
+import spacecraft.core.block.BlockScreen;
 import spacecraft.core.block.tile.TileEntityScreen;
 import spacecraft.core.utility.RenderRegistryHelper;
 import spacecraft.core.utility.WorldSavedDataSC;
@@ -42,7 +43,7 @@ public class RenderOffsetSimple implements ISimpleBlockRenderingHandler {
 		//		Block.blocksList[world.getBlockId(tele.x, tele.y, tele.z)], x, y, z);
 		Block blockToRender = tile.getBlock();
 		boolean result = false;
-		if (blockToRender != null) {
+		if (blockToRender != null && !(blockToRender instanceof BlockScreen)) {
 			result = renderer.renderBlockByRenderType(blockToRender, x, y, z);
 		}
 		renderer.blockAccess = backup;

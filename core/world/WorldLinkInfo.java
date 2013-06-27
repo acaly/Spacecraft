@@ -8,12 +8,18 @@ import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.ChunkWatchEvent;
 import spacecraft.core.block.BlockMonitor;
 import spacecraft.core.block.BlockPortalSC;
+import spacecraft.core.block.tile.TileEntityScreen;
+import spacecraft.core.render.LinkBlockInfo;
 import spacecraft.core.utility.ISavedData;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.WorldSavedDataSC;
@@ -105,13 +111,13 @@ public class WorldLinkInfo implements ISavedData {
 		linkInfo.append(x, y, z, info);
 		if (!world.isRemote) {
 			info.type = getTeleporterTypeFromBlock(block);
-			world.setBlock(x, y, z, RegistryHelper.getId(block), 0, 3);
-			
 			NBTTagCompound data = new NBTTagCompound();
 			data.setIntArray(COORD, new int[]{x, y, z});
 			data.setTag(LINK, info.writeToNBT());
 			worldData.onDataChanged(WorldSavedDataSC.DATALINKINFO, WorldSavedDataSC.METHODAPPEND,
 					-1, data);
+			
+			world.setBlock(x, y, z, RegistryHelper.getId(block), 0, 3);
 		}
 	}
 	
@@ -141,7 +147,18 @@ public class WorldLinkInfo implements ISavedData {
 		}
 	}
 	
+	//called by tileentity, only on server side
+	public TileEntity getLinkTileEntity(TeleporterInfo info) {
+		return null;
+	}
+	
+	public LinkBlockInfo getBlock(TeleporterInfo info) {
+		return null;
+	}
+	
+	//chunk events
 	public void onWorldChunkLoad(int x, int z) {
+		/*
 		int blockX, blockZ;
 		for (Entry<List, TeleporterInfo> i : teleporterMap.entrySet()) {
 			blockX = (Integer) i.getKey().get(0);
@@ -149,26 +166,59 @@ public class WorldLinkInfo implements ISavedData {
 			if (blockX >> 4 == x && blockZ >> 4 == z) {
 				
 			}
-		}
+		}*/
 	}
 
 	public void onWorldChunkUnload(int x, int z) {
 		
 	}
 	
+	public void onWorldChunkWatched(ChunkWatchEvent.Watch event) {
+		//find out all tileentities and tell screen to add player into the list
+		Chunk chunk = event.player.worldObj
+				.getChunkFromChunkCoords(event.chunk.chunkXPos, event.chunk.chunkZPos);
+		for (Object tile : chunk.chunkTileEntityMap.values()) {
+			if (tile instanceof TileEntityScreen) {
+				((TileEntityScreen) tile).addPlayerToList(event.player);
+			}
+		}
+	}
+	
+	public void onWorldChunkUnwatched(ChunkWatchEvent.UnWatch event) {
+		Chunk chunk = event.player.worldObj
+				.getChunkFromChunkCoords(event.chunk.chunkXPos, event.chunk.chunkZPos);
+		for (Object tile : chunk.chunkTileEntityMap.values()) {
+			if (tile instanceof TileEntityScreen) {
+				((TileEntityScreen) tile).removePlayerFromList(event.player);
+			}
+		}
+	}
+	
 	public static class ChunkEventHandler {
 		@ForgeSubscribe
 		public void onChunkLoad(ChunkEvent.Load event) {
-			if (event.world.isRemote) return;
-			WorldLinkInfo.forWorld(event.world)
-					.onWorldChunkLoad(event.getChunk().xPosition, event.getChunk().zPosition);
+			//if (event.world.isRemote) return;
+			//WorldLinkInfo.forWorld(event.world)
+			//		.onWorldChunkLoad(event.getChunk().xPosition, event.getChunk().zPosition);
 		}
 		
 		@ForgeSubscribe
 		public void onChunkUnload(ChunkEvent.Unload event) {
-			if (event.world.isRemote) return;
-			WorldLinkInfo.forWorld(event.world)
-					.onWorldChunkUnload(event.getChunk().xPosition, event.getChunk().zPosition);
+			//if (event.world.isRemote) return;
+			//WorldLinkInfo.forWorld(event.world)
+			//		.onWorldChunkUnload(event.getChunk().xPosition, event.getChunk().zPosition);
+		}
+		
+		@ForgeSubscribe
+		public void onChunkWatched(ChunkWatchEvent.Watch event) {
+			WorldSavedDataSC worldData = WorldSavedDataSC.forWorld(event.player.worldObj);
+			((WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO)).onWorldChunkWatched(event);
+		}
+		
+		@ForgeSubscribe
+		public void onChunkUnwatched(ChunkWatchEvent.UnWatch event) {
+			WorldSavedDataSC worldData = WorldSavedDataSC.forWorld(event.player.worldObj);
+			((WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO)).onWorldChunkUnwatched(event);
 		}
 	}
 }
