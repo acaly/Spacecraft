@@ -8,7 +8,7 @@ import spacecraft.core.block.tile.TileEntityMonitor;
 import spacecraft.core.block.tile.TileEntityTeleporter;
 import spacecraft.core.utility.PacketContainerEvent;
 
-public class ContainerTeleporter extends ContainerBase<TileEntityTeleporter> {
+public class ContainerTeleporter extends ContainerBase {
 	private static final int EMITID = 0;
 
 	public ContainerTeleporter(World world, EntityPlayer player, int x, int y, int z) {

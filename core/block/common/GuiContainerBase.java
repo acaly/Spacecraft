@@ -10,17 +10,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public abstract class GuiContainerBase<T extends TileEntity> extends GuiContainer {
+public abstract class GuiContainerBase extends GuiContainer {
 	private static final String PATH_PREFIX = "/mods/spacecraft/textures/gui/";
 	private static final String PATH_SUFFIX = ".png";
 	private boolean preventExchange = false;
 	private boolean handleButtonEvent = false;
-	protected T tileEntity;
+	protected TileEntity tileEntity;
 	protected String BACKGROUND;
 
 	public GuiContainerBase(ContainerBase par1Container, World world, EntityPlayer player, int x, int y, int z) {
 		super(par1Container);
-		tileEntity = (T) world.getBlockTileEntity(x, y, z);
+		tileEntity = (TileEntity) world.getBlockTileEntity(x, y, z);
 	}
 	
 	protected void setBackground(String value) {

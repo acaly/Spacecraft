@@ -60,6 +60,7 @@ public class mod_SpaceCraft {
 		RegistryHelper.setBlockDefId("TeleporterSC", BlockTeleporter.class, TileEntityTeleporter.class);
 		RegistryHelper.setBlockDefId("Screen", BlockScreen.class, TileEntityScreen.class);
 		RegistryHelper.setBlockDefId("Monitor", BlockMonitor.class, TileEntityMonitor.class);
+		RegistryHelper.setBlockDefId("SpaceWorkbench", BlockSpaceWorkbench.class);
 		RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
 		
 		ConfigManager.init(event.getSuggestedConfigurationFile());

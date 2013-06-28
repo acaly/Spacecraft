@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.WorldSavedDataSC;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -33,5 +34,9 @@ public class SpaceManager {
 	
 	public static boolean onCreateNewSpace(String owner, int xSize, int zSize) {
 		return xSize == 1 && zSize == 1;
+	}
+	
+	public static boolean onCraftingOnSpaceWorkbench(String player, ItemStack material) {
+		return true;
 	}
 }

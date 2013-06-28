@@ -46,11 +46,9 @@ public abstract class BlockContainerBase extends BlockContainer {
 			return true;
 		} else {
 			TileEntity var10 = (TileEntity)par1World.getBlockTileEntity(par2, par3, par4);
-			if (var10 != null) {
-				int id = openGui(par1World, var10, par5EntityPlayer);
-				if (id > 0) {
-					par5EntityPlayer.openGui(mod_SpaceCraft.INSTANCE, id, par1World, par2, par3, par4);
-				}
+			int id = openGui(par1World, var10, par5EntityPlayer);
+			if (id > 0) {
+				par5EntityPlayer.openGui(mod_SpaceCraft.INSTANCE, id, par1World, par2, par3, par4);
 			}
 			return true;
 		}

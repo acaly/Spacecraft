@@ -7,7 +7,7 @@ import spacecraft.core.block.common.ContainerBase;
 import spacecraft.core.block.tile.TileEntityMonitor;
 import spacecraft.core.utility.PacketContainerEvent;
 
-public class ContainerMonitor extends ContainerBase<TileEntityMonitor> {
+public class ContainerMonitor extends ContainerBase {
 	private static final int EMITID = 0;
 
 	public ContainerMonitor(World world, EntityPlayer player, int x, int y, int z) {

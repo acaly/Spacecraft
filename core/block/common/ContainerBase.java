@@ -15,10 +15,10 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public abstract class ContainerBase<T extends TileEntityInventory> extends Container {
+public abstract class ContainerBase extends Container {
 	protected World world;
 	protected EntityPlayer player;
-	protected T tileEntity;
+	protected TileEntityInventory tileEntity;
 	protected int progress[];
 	private int lastProgress[];
 	private int progressCount;
@@ -26,7 +26,7 @@ public abstract class ContainerBase<T extends TileEntityInventory> extends Conta
 	public ContainerBase(World world, EntityPlayer player, int x, int y, int z) {
 		this.world = world;
 		this.player = player;
-		tileEntity = (T) world.getBlockTileEntity(x, y, z);
+		tileEntity = (TileEntityInventory) world.getBlockTileEntity(x, y, z);
 		initProgress();
 	}
 	
@@ -76,6 +76,10 @@ public abstract class ContainerBase<T extends TileEntityInventory> extends Conta
 	}
 	
 	protected void initProgress() {
+		if (tileEntity == null) {
+			this.progressCount = 0;
+			return;
+		}
 		int count = tileEntity.vars.length;
 		progress = new int[count];
 		lastProgress = new int[count];
@@ -106,6 +110,7 @@ public abstract class ContainerBase<T extends TileEntityInventory> extends Conta
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
+		if (tileEntity == null) return;
 		refreshProgress();
 		Iterator i = this.crafters.iterator();
 		int j;

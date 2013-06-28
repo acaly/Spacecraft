@@ -177,10 +177,18 @@ public final class RegistryHelper {
 		regInfoClassType = null;
 	}
 	
+	public static Block getBlock(Class c) {
+		return Block.blocksList[getId(c)];
+	}
+	
+	public static Item getItem(Class c) {
+		return Item.itemsList[256 + getId(c)];
+	}
+	
 	public static CreativeTabs creativeTab = new CreativeTabs(CREATIVEPAGENAME) {
 		@Override
 		public Item getTabIconItem() {
-			return Item.itemsList[256 + getId(ItemLocator.class)];//mod_SpaceCraft.INSTANCE.itemLocator;
+			return getItem(ItemLocator.class);
 		}
 	};
 }

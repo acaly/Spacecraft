@@ -11,7 +11,6 @@ import spacecraft.core.block.tile.TileEntityMonitor;
 public class GuiMonitor extends GuiContainerBase {
 	private static final String BACKGROUND = "Monitor";
 	public static final int BUTTONEMIT = 0;
-	private TileEntityMonitor tileEntity;
 
 	public GuiMonitor(World world, EntityPlayer player, int x, int y, int z) {
 		super(new ContainerMonitor(world, player, x, y, z), world, player, x, y, z);
