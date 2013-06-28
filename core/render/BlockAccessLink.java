@@ -84,6 +84,9 @@ public class BlockAccessLink implements IBlockAccess {
 
 	@Override
 	public TileEntity getBlockTileEntity(int i, int j, int k) {
+		if (i == coordX && j == coordY && k == coordZ) {
+			return blocks.tileEntity;
+		}
 		return null;
 	}
 

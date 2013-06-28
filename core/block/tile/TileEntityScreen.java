@@ -28,8 +28,11 @@ import net.minecraft.world.World;
 public class TileEntityScreen extends TileEntity {
 	private static final String DATA_ID = "id";
 	private static final String DATA_META = "meta";
+	private static final String DATA_TILE = "tile";
 	private static final int ACTIONTYPE = 10;	//used in Packet132TileEntityData
+	
 	private static final int UPDATETICK = 5;
+	private static final int TILESYNCTICK = 100;
 	
 	private TileEntity tileEntityAim;
 	private LinkBlockInfo blockInfoAim;
@@ -41,7 +44,7 @@ public class TileEntityScreen extends TileEntity {
 	//Server side only
 	private Collection<EntityPlayerMP> playerList = new ArrayDeque();
 	
-	private int ticks;
+	private int ticksCheck, ticksTileCheck;
 	public void updateEntity() {
 		
 		if (worldObj.isRemote) {
@@ -61,13 +64,19 @@ public class TileEntityScreen extends TileEntity {
 				sendDataToPlayers();
 			} else {
 				//check update
-				if (++ticks < UPDATETICK) return;
-				ticks = 0;
-				
-				LinkBlockInfo newInfo = makeData();
-				if (!newInfo.equals(blockInfoAim)) {
-					blockInfoAim = newInfo;
-					sendDataToPlayers();
+				if (++ticksCheck >= UPDATETICK) {
+					ticksCheck = 0;
+					
+					LinkBlockInfo newInfo = makeData();
+					if (!newInfo.equals(blockInfoAim)) {
+						blockInfoAim = newInfo;
+						sendDataToPlayers();
+					}
+				}
+				if (++ticksTileCheck >= TILESYNCTICK) {
+					ticksTileCheck = 0;
+					
+					sendTileEntityToPlayers();
 				}
 			}
 		}
@@ -94,15 +103,33 @@ public class TileEntityScreen extends TileEntity {
 		}
 	}
 	
+	private void sendTileEntityToPlayer(EntityPlayerMP player) {
+		TeleporterInfo info = WorldLinkInfo.forWorld(worldObj).getTeleporter(xCoord, yCoord, zCoord);
+		if (info == null) return;
+		World worldAim = MinecraftServer.getServer().worldServerForDimension(info.dimension);
+		if (!worldAim.blockExists(info.x, info.y, info.z) ||
+				!worldAim.blockHasTileEntity(info.x, info.y, info.z)) return;
+		TileEntity tile = worldAim.getBlockTileEntity(info.x, info.y, info.z);
+		
+		NBTTagCompound data = new NBTTagCompound();
+		NBTTagCompound tileNBT = new NBTTagCompound();
+		tile.writeToNBT(tileNBT);
+		data.setCompoundTag(DATA_TILE, tileNBT);
+		Packet132TileEntityData packet = new Packet132TileEntityData(
+				xCoord, yCoord, zCoord, ACTIONTYPE, data);
+		PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
+	}
+	
 	private LinkBlockInfo makeData() {
 		TeleporterInfo info = WorldLinkInfo.forWorld(worldObj).getTeleporter(xCoord, yCoord, zCoord);
 		if (info == null) return null;
-		if (!worldObj.blockExists(xCoord + 1, 0, zCoord) || !worldObj.blockExists(xCoord - 1, 0, zCoord) ||
-				!worldObj.blockExists(xCoord, 0, zCoord + 1) || !worldObj.blockExists(xCoord, 0, zCoord - 1)) {
+		
+		World worldAim = MinecraftServer.getServer().worldServerForDimension(info.dimension);
+		if (!worldAim.blockExists(info.x + 1, 0, info.z) || !worldAim.blockExists(info.x - 1, 0, info.z) ||
+				!worldAim.blockExists(info.x, 0, info.z + 1) || !worldAim.blockExists(info.x, 0, info.z - 1)) {
 			return null;
 		}
 		
-		World worldAim = MinecraftServer.getServer().worldServerForDimension(info.dimension);
 		LinkBlockInfo result = new LinkBlockInfo();
 		result.id = new int[7];
 		result.metadata = new int[7];
@@ -138,8 +165,32 @@ public class TileEntityScreen extends TileEntity {
 	}
 	
 	private void sendDataToPlayers() {
+		NBTTagCompound data = new NBTTagCompound();
+		data.setIntArray(DATA_ID, blockInfoAim.id);
+		data.setIntArray(DATA_META, blockInfoAim.metadata);
+		Packet132TileEntityData packet = new Packet132TileEntityData(
+				xCoord, yCoord, zCoord, ACTIONTYPE, data);
 		for (EntityPlayerMP player : playerList) {
-			sendDataToPlayer(player);
+			PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
+		}
+	}
+	
+	private void sendTileEntityToPlayers() {
+		TeleporterInfo info = WorldLinkInfo.forWorld(worldObj).getTeleporter(xCoord, yCoord, zCoord);
+		if (info == null) return;
+		World worldAim = MinecraftServer.getServer().worldServerForDimension(info.dimension);
+		if (!worldAim.blockExists(info.x, info.y, info.z) ||
+				!worldAim.blockHasTileEntity(info.x, info.y, info.z)) return;
+		TileEntity tile = worldAim.getBlockTileEntity(info.x, info.y, info.z);
+		
+		NBTTagCompound data = new NBTTagCompound();
+		NBTTagCompound tileNBT = new NBTTagCompound();
+		tile.writeToNBT(tileNBT);
+		data.setCompoundTag(DATA_TILE, tileNBT);
+		Packet132TileEntityData packet = new Packet132TileEntityData(
+				xCoord, yCoord, zCoord, ACTIONTYPE, data);
+		for (EntityPlayerMP player : playerList) {
+			PacketDispatcher.sendPacketToPlayer(packet, (Player) player);
 		}
 	}
 	
@@ -156,6 +207,7 @@ public class TileEntityScreen extends TileEntity {
 	public void addPlayerToList(EntityPlayerMP player) {
 		playerList.add(player);
 		sendDataToPlayer(player);
+		sendTileEntityToPlayer(player);
 	}
 	
 	public void removePlayerFromList(EntityPlayerMP player) {
@@ -167,10 +219,24 @@ public class TileEntityScreen extends TileEntity {
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
 		if (pkt.actionType != ACTIONTYPE) return;
 		if (blockInfoAim == null) blockInfoAim = new LinkBlockInfo();
-		blockInfoAim.id = pkt.customParam1.getIntArray(DATA_ID);
-		blockInfoAim.metadata = pkt.customParam1.getIntArray(DATA_META);
-		
-		blockAccessAim.setBlockInfo(blockInfoAim);
+		if (pkt.customParam1.hasKey(DATA_ID)) {
+			blockInfoAim.id = pkt.customParam1.getIntArray(DATA_ID);
+			blockInfoAim.metadata = pkt.customParam1.getIntArray(DATA_META);
+			blockAccessAim.setBlockInfo(blockInfoAim);
+		} else {
+			if (tileEntityAim == null) {
+				Block block = Block.blocksList[blockInfoAim.id[0]];
+				if (block.hasTileEntity(blockInfoAim.metadata[0])) {
+					tileEntityAim = block.createTileEntity(worldObj, blockInfoAim.metadata[0]);
+					tileEntityAim.yCoord = -2;
+				} else {
+					return;
+				}
+				blockInfoAim.tileEntity = tileEntityAim;
+			}
+			tileEntityAim.readFromNBT(pkt.customParam1.getCompoundTag(DATA_TILE));
+			tileEntityAim.yCoord = -2;
+		}
 	}
 	
 	//called by renderer
@@ -183,7 +249,14 @@ public class TileEntityScreen extends TileEntity {
 			return worldObj.getBlockTileEntity(info.x, info.y, info.z);
 		} else {
 			Block block = Block.blocksList[blockInfoAim.id[0]];
-			return block.createTileEntity(worldObj, blockInfoAim.metadata[0]);
+			if (!block.hasTileEntity(blockInfoAim.metadata[0])) {
+				return null;
+			} else {
+				if (tileEntityAim == null) {
+					tileEntityAim = block.createTileEntity(worldObj, blockInfoAim.metadata[0]);
+				}
+				return tileEntityAim;
+			}
 		}
 	}
 	
