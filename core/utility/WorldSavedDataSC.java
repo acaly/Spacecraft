@@ -25,19 +25,25 @@ import net.minecraft.world.storage.MapStorage;
 
 public class WorldSavedDataSC extends WorldSavedData {
 	public static final String dataId = "spacecraft.worlddata";
-	public static final String DATALINKINFO = "link";
-	public static final String DATASEPARATION = "separation";
-	public static final String DATADIMENSION = "dim";
+	//public static final String DATALINKINFO = "link";
+	//public static final String DATASEPARATION = "separation";
+	public static final int DATASEPARATION = 0;
+	public static final int DATALINKINFO = 1;
+	
 	public static final String PACKETDATAID = "id";
 	public static final String PACKETHEAD = "head";
 	public static final String PACKETDATA = "data";
 
 	public String debugString = "";
-	private Map<String, ISavedData> dataMap = new HashMap<String, ISavedData>();
+	//private Map<String, ISavedData> dataMap = new HashMap<String, ISavedData>();
+	public ISavedData[] data = new ISavedData[2];
+	private String[] dataKey = new String[] {"separation", "link"};
+	
 	private int dimension;
 	
 	private static final String DATA = "data";
 	private static final String DEBUG = "debug";
+	private static final String DIMENSION = "dim";
 	
 	public static final int METHODAPPEND = 1;
 	public static final int METHODREMOVE = 2;
@@ -85,24 +91,31 @@ public class WorldSavedDataSC extends WorldSavedData {
 	}
 	
 	private void init() {
-		setData(DATALINKINFO, new WorldLinkInfo());
-		setData(DATASEPARATION, new WorldSeparationInfo());
+		//setData(DATALINKINFO, new WorldLinkInfo());
+		//setData(DATASEPARATION, new WorldSeparationInfo());
+		data[DATASEPARATION] = new WorldSeparationInfo();
+		data[DATALINKINFO] = new WorldLinkInfo();
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		dataMap.clear();
+		//dataMap.clear();
 		init();
 		
 		debugString = nbttagcompound.getString(DEBUG);
 		
 		NBTTagCompound list = nbttagcompound.getCompoundTag(DATA);
-		for (Entry<String, ISavedData> i : dataMap.entrySet()) {
-			if (list.hasKey(i.getKey()))
-				i.getValue().readFromNBT(list.getCompoundTag(i.getKey()));
+		//for (Entry<String, ISavedData> i : dataMap.entrySet()) {
+		//	if (list.hasKey(i.getKey()))
+		//		i.getValue().readFromNBT(list.getCompoundTag(i.getKey()));
+		//}
+		for (int i = 0; i < data.length; ++i) {
+			if (list.hasKey(dataKey[i])) {
+				data[i].readFromNBT(list.getCompoundTag(dataKey[i]));
+			}
 		}
 		
-		dimension = nbttagcompound.getInteger(DATADIMENSION);
+		dimension = nbttagcompound.getInteger(DIMENSION);
 	}
 
 	@Override
@@ -111,29 +124,37 @@ public class WorldSavedDataSC extends WorldSavedData {
 		
 		NBTTagCompound list = new NBTTagCompound();
 		NBTTagCompound item;
-		for (Entry<String, ISavedData> i : dataMap.entrySet()) {
+		//for (Entry<String, ISavedData> i : dataMap.entrySet()) {
+		//	item = new NBTTagCompound();
+		//	i.getValue().writeToNBT(item);
+		//	list.setCompoundTag(i.getKey(), item);
+		//}
+		for (int i = 0; i < data.length; ++i) {
 			item = new NBTTagCompound();
-			i.getValue().writeToNBT(item);
-			list.setCompoundTag(i.getKey(), item);
+			data[i].writeToNBT(item);
+			list.setCompoundTag(dataKey[i], item);
 		}
 		nbttagcompound.setCompoundTag(DATA, list);
 		
-		nbttagcompound.setInteger(DATADIMENSION, dimension);
+		nbttagcompound.setInteger(DIMENSION, dimension);
 	}
 	
-	public void setData(String key, ISavedData data) {
-		dataMap.put(key, data);
-	}
+	//public void setData(String key, ISavedData data) {
+	//	dataMap.put(key, data);
+	//}
 	
-	public ISavedData getData(String key) {
-		return dataMap.get(key);
-	}
+	//public ISavedData getData(String key) {
+	//	return dataMap.get(key);
+	//}
 	
 	@Override
 	public boolean isDirty() {
 		boolean r = false;
-		for (ISavedData i : dataMap.values()) {
-			r = r || i.isDirty();
+		//for (ISavedData i : dataMap.values()) {
+		//	r = r || i.isDirty();
+		//}
+		for (int i = 0; i < data.length; ++i) {
+			r = r || data[i].isDirty();
 		}
 		return r;
 	}
@@ -159,9 +180,10 @@ public class WorldSavedDataSC extends WorldSavedData {
 		}
 	}
 	
-	public void onDataChanged(String id, int method, int dataId, NBTTagCompound data) {
+	//public void onDataChanged(String id, int method, int dataId, NBTTagCompound data) {
+	public void onDataChanged(int id, int method, int dataId, NBTTagCompound data) {
 		NBTTagCompound packetNBT = new NBTTagCompound();
-		packetNBT.setString(PACKETDATAID, id);
+		packetNBT.setInteger(PACKETDATAID, id);
 		packetNBT.setIntArray(PACKETHEAD, new int[]{method, dataId});
 		packetNBT.setTag(PACKETDATA, data);
 		PacketDispatcher.sendPacketToAllPlayers(
@@ -183,9 +205,10 @@ public class WorldSavedDataSC extends WorldSavedData {
 	}
 	
 	public static void onReceivedData(int dimension, NBTTagCompound data) {
-		String id = data.getString(PACKETDATAID);
+		int id = data.getInteger(PACKETDATAID);
 		int[] head = data.getIntArray(PACKETHEAD);
 		NBTTagCompound nbt = data.getCompoundTag(PACKETDATA);
-		worldDataMap.get(dimension).dataMap.get(id).onPacketRecieved(head[0], head[1], nbt);
+		//worldDataMap.get(dimension).dataMap.get(id).onPacketRecieved(head[0], head[1], nbt);
+		worldDataMap.get(dimension).data[id].onPacketRecieved(head[0], head[1], nbt);
 	}
 }

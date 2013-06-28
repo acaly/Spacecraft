@@ -41,8 +41,9 @@ public class TeleportManager {
 	}
 	
 	public static void teleport(EntityPlayerMP player, World worldFrom, int x, int y, int z) {
-		WorldSavedDataSC data = WorldSavedDataSC.forWorld(worldFrom);
-		WorldLinkInfo link = (WorldLinkInfo) data.getData("link");
+		//WorldSavedDataSC data = WorldSavedDataSC.forWorld(worldFrom);
+		//WorldLinkInfo link = (WorldLinkInfo) data.getData("link");
+		WorldLinkInfo link = WorldLinkInfo.forWorld(worldFrom);
 		TeleporterInfo teleporter = link.getTeleporter(x, y, z);
 		if (teleporter == null) return;
 		if (teleporter.getType().available(worldFrom, player, teleporter.type, x, y, z)) {

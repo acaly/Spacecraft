@@ -19,8 +19,9 @@ public class SpaceManager {
 	
 	public static TeleporterInfo createDebugSpaceAndTeleporter() {
 		World world = getSpecialWorldForServer();
-		WorldSeparationInfo info = ((WorldSeparationInfo)WorldSavedDataSC.forWorld(world)
-				.getData(WorldSavedDataSC.DATASEPARATION));
+		//WorldSeparationInfo info = ((WorldSeparationInfo)WorldSavedDataSC.forWorld(world)
+		//		.getData(WorldSavedDataSC.DATASEPARATION));
+		WorldSeparationInfo info = WorldSeparationInfo.forWorld(world);
 		WorldSeparation sep = info.append(0, 1, 1, "anyone");
 		TeleporterInfo tele = new TeleporterInfo();
 		tele.dimension = world.provider.dimensionId;
@@ -30,5 +31,9 @@ public class SpaceManager {
 		tele.y = 2;
 		tele.z = (sep.zPos << 4) + 2;
 		return tele;
+	}
+	
+	public static boolean onCreateNewSpace(String owner, int xSize, int zSize) {
+		return xSize == 1 && zSize == 1;
 	}
 }

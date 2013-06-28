@@ -39,11 +39,11 @@ public class WorldLinkInfo implements ISavedData {
 	}
 	
 	public static WorldLinkInfo forWorld(World world) {
-		return (WorldLinkInfo) WorldSavedDataSC.forWorld(world).getData(WorldSavedDataSC.DATALINKINFO);
+		return (WorldLinkInfo) WorldSavedDataSC.forWorld(world).data[WorldSavedDataSC.DATALINKINFO];
 	}
 	
 	public static WorldLinkInfo forChunkCache(ChunkCache chunk) {
-		return (WorldLinkInfo) WorldSavedDataSC.forChunkCache(chunk).getData(WorldSavedDataSC.DATALINKINFO);
+		return (WorldLinkInfo) WorldSavedDataSC.forChunkCache(chunk).data[WorldSavedDataSC.DATALINKINFO];
 	}
 
 	@Override
@@ -107,7 +107,8 @@ public class WorldLinkInfo implements ISavedData {
 	
 	public static void addToWorld(World world, int x, int y, int z, TeleporterInfo info, Class block) {
 		WorldSavedDataSC worldData =  WorldSavedDataSC.forWorld(world);
-		WorldLinkInfo linkInfo = (WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO);
+		//WorldLinkInfo linkInfo = (WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO);
+		WorldLinkInfo linkInfo = WorldLinkInfo.forWorld(world);
 		linkInfo.append(x, y, z, info);
 		if (!world.isRemote) {
 			info.type = getTeleporterTypeFromBlock(block);
@@ -126,7 +127,8 @@ public class WorldLinkInfo implements ISavedData {
 			world.setBlockToAir(x, y, z);
 		}
 		WorldSavedDataSC worldData = WorldSavedDataSC.forWorld(world);
-		WorldLinkInfo linkInfo = (WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO);
+		//WorldLinkInfo linkInfo = (WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO);
+		WorldLinkInfo linkInfo = WorldLinkInfo.forWorld(world);
 		linkInfo.remove(x, y, z);
 		if (!world.isRemote) {
 			NBTTagCompound data = new NBTTagCompound();
@@ -180,14 +182,16 @@ public class WorldLinkInfo implements ISavedData {
 	public static class ChunkEventHandler {
 		@ForgeSubscribe
 		public void onChunkWatched(ChunkWatchEvent.Watch event) {
-			WorldSavedDataSC worldData = WorldSavedDataSC.forWorld(event.player.worldObj);
-			((WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO)).onWorldChunkWatched(event);
+			//WorldSavedDataSC worldData = WorldSavedDataSC.forWorld(event.player.worldObj);
+			//((WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO)).onWorldChunkWatched(event);
+			WorldLinkInfo.forWorld(event.player.worldObj).onWorldChunkWatched(event);
 		}
 		
 		@ForgeSubscribe
 		public void onChunkUnwatched(ChunkWatchEvent.UnWatch event) {
-			WorldSavedDataSC worldData = WorldSavedDataSC.forWorld(event.player.worldObj);
-			((WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO)).onWorldChunkUnwatched(event);
+			//WorldSavedDataSC worldData = WorldSavedDataSC.forWorld(event.player.worldObj);
+			//((WorldLinkInfo) worldData.getData(WorldSavedDataSC.DATALINKINFO)).onWorldChunkUnwatched(event);
+			WorldLinkInfo.forWorld(event.player.worldObj).onWorldChunkUnwatched(event);
 		}
 	}
 }
