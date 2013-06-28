@@ -2,9 +2,9 @@ package spacecraft.core.block.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import spacecraft.core.block.common.GuiButtonBase;
+import spacecraft.core.block.common.GuiContainerBase;
 import spacecraft.core.block.tile.TileEntityTeleporter;
-import spacecraft.core.gui.GuiButtonBase;
-import spacecraft.core.gui.GuiContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;

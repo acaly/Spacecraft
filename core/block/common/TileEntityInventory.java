@@ -1,4 +1,4 @@
-package spacecraft.core.gui;
+package spacecraft.core.block.common;
 
 import ic2.api.tile.IWrenchable;
 import net.minecraft.entity.player.EntityPlayer;

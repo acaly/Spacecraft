@@ -3,10 +3,10 @@ package spacecraft.core.block.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
+import spacecraft.core.block.common.ContainerBase;
+import spacecraft.core.block.common.GuiButtonBase;
+import spacecraft.core.block.common.GuiContainerBase;
 import spacecraft.core.block.tile.TileEntityMonitor;
-import spacecraft.core.gui.ContainerBase;
-import spacecraft.core.gui.GuiButtonBase;
-import spacecraft.core.gui.GuiContainerBase;
 
 public class GuiMonitor extends GuiContainerBase {
 	private static final String BACKGROUND = "Monitor";

@@ -3,9 +3,9 @@ package spacecraft.core.block.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.world.World;
+import spacecraft.core.block.common.ContainerBase;
 import spacecraft.core.block.tile.TileEntityMonitor;
 import spacecraft.core.block.tile.TileEntityTeleporter;
-import spacecraft.core.gui.ContainerBase;
 import spacecraft.core.utility.PacketContainerEvent;
 
 public class ContainerTeleporter extends ContainerBase<TileEntityTeleporter> {

@@ -1,4 +1,4 @@
-package spacecraft.core.gui;
+package spacecraft.core.block.common;
 
 import java.util.Iterator;
 

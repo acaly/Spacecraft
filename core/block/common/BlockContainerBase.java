@@ -1,4 +1,4 @@
-package spacecraft.core.block;
+package spacecraft.core.block.common;
 
 import ic2.api.tile.IWrenchable;
 import spacecraft.core.mod_SpaceCraft;

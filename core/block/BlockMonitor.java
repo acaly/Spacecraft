@@ -1,5 +1,6 @@
 package spacecraft.core.block;
 
+import spacecraft.core.block.common.BlockContainerBase;
 import spacecraft.core.block.tile.TileEntityMonitor;
 import spacecraft.core.utility.GuiHandler;
 import net.minecraft.block.material.Material;

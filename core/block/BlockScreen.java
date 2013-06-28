@@ -2,6 +2,7 @@ package spacecraft.core.block;
 
 import java.util.Random;
 
+import spacecraft.core.block.common.BlockContainerBase;
 import spacecraft.core.block.tile.TileEntityScreen;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RenderRegistryHelper;

@@ -2,7 +2,7 @@ package spacecraft.core.block.tile;
 
 import ic2.api.Direction;
 import spacecraft.core.block.BlockPortalSC;
-import spacecraft.core.gui.TileEntityInventory;
+import spacecraft.core.block.common.TileEntityInventory;
 import spacecraft.core.item.ItemLocator;
 import spacecraft.core.world.TeleporterInfo;
 import spacecraft.core.world.WorldLinkInfo;

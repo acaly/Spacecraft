@@ -1,6 +1,6 @@
 package spacecraft.core.utility;
 
-import spacecraft.core.gui.ContainerBase;
+import spacecraft.core.block.common.ContainerBase;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
