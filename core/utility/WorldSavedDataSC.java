@@ -25,8 +25,6 @@ import net.minecraft.world.storage.MapStorage;
 
 public class WorldSavedDataSC extends WorldSavedData {
 	public static final String dataId = "spacecraft.worlddata";
-	//public static final String DATALINKINFO = "link";
-	//public static final String DATASEPARATION = "separation";
 	public static final int DATASEPARATION = 0;
 	public static final int DATALINKINFO = 1;
 	
@@ -35,7 +33,7 @@ public class WorldSavedDataSC extends WorldSavedData {
 	public static final String PACKETDATA = "data";
 
 	public String debugString = "";
-	//private Map<String, ISavedData> dataMap = new HashMap<String, ISavedData>();
+
 	public ISavedData[] data = new ISavedData[2];
 	private String[] dataKey = new String[] {"separation", "link"};
 	
@@ -71,7 +69,6 @@ public class WorldSavedDataSC extends WorldSavedData {
 	public static WorldSavedDataSC forWorld(World world) {
 		if (world == null) return null;
 		if (world.isRemote) {
-			//return null;
 			WorldSavedDataSC r = worldDataMap.get(world.provider.dimensionId);
 			if (r == null) {
 				r = new WorldSavedDataSC();
@@ -91,24 +88,18 @@ public class WorldSavedDataSC extends WorldSavedData {
 	}
 	
 	private void init() {
-		//setData(DATALINKINFO, new WorldLinkInfo());
-		//setData(DATASEPARATION, new WorldSeparationInfo());
+
 		data[DATASEPARATION] = new WorldSeparationInfo();
 		data[DATALINKINFO] = new WorldLinkInfo();
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		//dataMap.clear();
 		init();
 		
 		debugString = nbttagcompound.getString(DEBUG);
 		
 		NBTTagCompound list = nbttagcompound.getCompoundTag(DATA);
-		//for (Entry<String, ISavedData> i : dataMap.entrySet()) {
-		//	if (list.hasKey(i.getKey()))
-		//		i.getValue().readFromNBT(list.getCompoundTag(i.getKey()));
-		//}
 		for (int i = 0; i < data.length; ++i) {
 			if (list.hasKey(dataKey[i])) {
 				data[i].readFromNBT(list.getCompoundTag(dataKey[i]));
@@ -124,11 +115,6 @@ public class WorldSavedDataSC extends WorldSavedData {
 		
 		NBTTagCompound list = new NBTTagCompound();
 		NBTTagCompound item;
-		//for (Entry<String, ISavedData> i : dataMap.entrySet()) {
-		//	item = new NBTTagCompound();
-		//	i.getValue().writeToNBT(item);
-		//	list.setCompoundTag(i.getKey(), item);
-		//}
 		for (int i = 0; i < data.length; ++i) {
 			item = new NBTTagCompound();
 			data[i].writeToNBT(item);
@@ -139,20 +125,9 @@ public class WorldSavedDataSC extends WorldSavedData {
 		nbttagcompound.setInteger(DIMENSION, dimension);
 	}
 	
-	//public void setData(String key, ISavedData data) {
-	//	dataMap.put(key, data);
-	//}
-	
-	//public ISavedData getData(String key) {
-	//	return dataMap.get(key);
-	//}
-	
 	@Override
 	public boolean isDirty() {
 		boolean r = false;
-		//for (ISavedData i : dataMap.values()) {
-		//	r = r || i.isDirty();
-		//}
 		for (int i = 0; i < data.length; ++i) {
 			r = r || data[i].isDirty();
 		}
@@ -180,7 +155,6 @@ public class WorldSavedDataSC extends WorldSavedData {
 		}
 	}
 	
-	//public void onDataChanged(String id, int method, int dataId, NBTTagCompound data) {
 	public void onDataChanged(int id, int method, int dataId, NBTTagCompound data) {
 		NBTTagCompound packetNBT = new NBTTagCompound();
 		packetNBT.setInteger(PACKETDATAID, id);
@@ -208,7 +182,6 @@ public class WorldSavedDataSC extends WorldSavedData {
 		int id = data.getInteger(PACKETDATAID);
 		int[] head = data.getIntArray(PACKETHEAD);
 		NBTTagCompound nbt = data.getCompoundTag(PACKETDATA);
-		//worldDataMap.get(dimension).dataMap.get(id).onPacketRecieved(head[0], head[1], nbt);
 		worldDataMap.get(dimension).data[id].onPacketRecieved(head[0], head[1], nbt);
 	}
 }

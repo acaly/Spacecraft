@@ -19,8 +19,6 @@ public class SpaceManager {
 	
 	public static TeleporterInfo createDebugSpaceAndTeleporter() {
 		World world = getSpecialWorldForServer();
-		//WorldSeparationInfo info = ((WorldSeparationInfo)WorldSavedDataSC.forWorld(world)
-		//		.getData(WorldSavedDataSC.DATASEPARATION));
 		WorldSeparationInfo info = WorldSeparationInfo.forWorld(world);
 		WorldSeparation sep = info.append(0, 1, 1, "anyone");
 		TeleporterInfo tele = new TeleporterInfo();
