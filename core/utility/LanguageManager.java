@@ -61,11 +61,14 @@ public final class LanguageManager {
 		//Item
 		table.setProperty(forClass(ItemDebugText.class), "测试物品");
 		table.setProperty(forClass(ItemLocator.class), "定位仪");
+		table.setProperty(forClass(ItemLicense.class), "许可");
+		table.setProperty(forClass(ItemTeleportCrystal.class), "传送水晶");
 		//Block
 		table.setProperty(forClass(BlockPortalSC.class), "传送方块");
 		table.setProperty(forClass(BlockTeleporter.class), "传送器");
 		table.setProperty(forClass(BlockScreen.class), "屏幕");
 		table.setProperty(forClass(BlockMonitor.class), "显示器");
+		table.setProperty(forClass(BlockSpaceWorkbench.class), "空间工作台");
 		//inventory
 		table.setProperty(TileEntityTeleporter.INVENTORY, "传送器");
 		//CreativeTab

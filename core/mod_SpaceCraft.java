@@ -3,6 +3,7 @@ package spacecraft.core;
 import java.io.File;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.src.ModLoader;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,6 +51,7 @@ public class mod_SpaceCraft {
 		RegistryHelper.INSTANCE.createItemsAndBlocks();
 		
 		MinecraftForge.EVENT_BUS.register(new WorldLinkInfo.ChunkEventHandler());
+		
 	}
 
 	@Mod.PreInit
@@ -62,6 +64,10 @@ public class mod_SpaceCraft {
 		RegistryHelper.setBlockDefId("Monitor", BlockMonitor.class, TileEntityMonitor.class);
 		RegistryHelper.setBlockDefId("SpaceWorkbench", BlockSpaceWorkbench.class);
 		RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
+		
+		//for organic mod
+		//RegistryHelper.setBlockDefId("Microscope", BlockMicroscope.class);
+		//RegistryHelper.setItemDefId("Tube", ItemTube.class);
 		
 		ConfigManager.init(event.getSuggestedConfigurationFile());
 		RegistryHelper.readFromConfig();

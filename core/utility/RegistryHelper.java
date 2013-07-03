@@ -185,6 +185,14 @@ public final class RegistryHelper {
 		return Item.itemsList[256 + getId(c)];
 	}
 	
+	public static int getBlockId(Class c) {
+		return getId(c);
+	}
+	
+	public static int getItemId(Class c) {
+		return getId(c) + 256;
+	}
+	
 	public static CreativeTabs creativeTab = new CreativeTabs(CREATIVEPAGENAME) {
 		@Override
 		public Item getTabIconItem() {

@@ -18,30 +18,33 @@ public class ContainerSpaceWorkbench extends ContainerBase {
 	private static final int EVENTPICKUPRESULT = 1;
 	
 	private InventoryBasic inventory = new InventoryBasic(INVENTORY, false, 1);
-	private InventoryCrafting material = new InventoryCrafting(this, 1, 1);
+	private InventoryCrafting material = new InventoryCrafting(this, 1, 3);
 	
 	public ContainerSpaceWorkbench(World world, EntityPlayer player, int x, int y, int z) {
 		super(world, player, x, y, z);
 		
 		this.addPlayerSlots(player);
-		this.addSlotToContainer(new Slot(material, 0, 44, 36));
-		this.addSlotToContainer(new SlotCraftingSingle(inventory, 0, 116, 36, this, EVENTPICKUPRESULT));
+		this.addSlotToContainer(new Slot(material, 0, 31, 41));
+		this.addSlotToContainer(new Slot(material, 1, 56, 41));
+		this.addSlotToContainer(new Slot(material, 2, 91, 23));
+		this.addSlotToContainer(new SlotCraftingSingle(inventory, 0, 128, 41, this, EVENTPICKUPRESULT));
 	}
 	
 	private void updateResult() {
-		ItemStack itemMat = material.getStackInSlot(0);
-		if (!SpaceManager.onCraftingOnSpaceWorkbench(player.username, itemMat)) {
+		if (!SpaceManager.onCraftingOnSpaceWorkbench(player.username, material)) {
 			return;
 		}
-		ItemStack result = SpaceWorkbenchRecipe.getResult(itemMat);
+		ItemStack result = SpaceWorkbenchRecipe.getResult(material);
 		inventory.setInventorySlotContents(0, result);
-		this.getSlot(36 + 1).putStack(result);
+		this.getSlot(36 + 3).putStack(result);
 	}
 
 	@Override
 	public void onGuiEvent(int param) {
 		if (param == EVENTPICKUPRESULT) {
 			this.getSlot(36).decrStackSize(1);
+			this.getSlot(36 + 1).decrStackSize(1);
+			this.getSlot(36 + 2).decrStackSize(1);
 			updateResult();
 			this.detectAndSendChanges();
 		}
@@ -57,6 +60,14 @@ public class ContainerSpaceWorkbench extends ContainerBase {
 		super.onCraftGuiClosed(par1EntityPlayer);
 		if (!this.world.isRemote) {
 			ItemStack item = material.getStackInSlot(0);
+			if (item != null) {
+				par1EntityPlayer.dropPlayerItem(item);
+			}
+			item = material.getStackInSlot(1);
+			if (item != null) {
+				par1EntityPlayer.dropPlayerItem(item);
+			}
+			item = material.getStackInSlot(2);
 			if (item != null) {
 				par1EntityPlayer.dropPlayerItem(item);
 			}
