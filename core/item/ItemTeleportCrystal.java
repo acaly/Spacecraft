@@ -8,6 +8,7 @@ import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.world.TeleportManager;
 import spacecraft.core.world.TeleporterInfo;
 import spacecraft.core.world.WorldLinkInfo;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -121,4 +122,7 @@ public class ItemTeleportCrystal extends ItemBase {
 		par3List.add(trans.translateKeyFormat(LANG_COUNT, getCount(par1ItemStack)));
 		par3List.add(trans.translateKeyFormat(LANG_TIME, (float)getTime(par1ItemStack) / 1000));
 	}
+
+	@Override
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {}
 }

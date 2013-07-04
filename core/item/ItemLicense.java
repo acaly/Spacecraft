@@ -5,6 +5,7 @@ import java.util.List;
 
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.SpaceWorkbenchRecipe;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +28,8 @@ public class ItemLicense extends ItemBase {
 	
 	public static final String LANG_LICENCE_COUNT = "item.license.inf.count";
 	public static final String LANG_LICENCE_TYPE = "item.license.inf.type";
+	
+	private static final String ROOT_ITEM = "type=root\ncount=1";
 	
 	public static final String LANG_LICENCE_TYPE(String type) {
 		return "item.license.dis.type." + type;
@@ -107,5 +110,12 @@ public class ItemLicense extends ItemBase {
 		par3List.add(trans.translateKeyFormat(LANG_LICENCE_COUNT, getCount(par1ItemStack)));
 		String type = trans.translateKey(LANG_LICENCE_TYPE(getType(par1ItemStack.stackTagCompound)));
 		par3List.add(trans.translateKeyFormat(LANG_LICENCE_TYPE, type));
+	}
+	
+	@Override
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+		ItemStack root = new ItemStack(par1, 1, 0);
+		root.stackTagCompound = getLicense(ROOT_ITEM);
+		par3List.add(root);
 	}
 }
