@@ -105,12 +105,13 @@ public class WorldLinkInfo implements ISavedData {
 		}
 	}
 	
+	//info.type must be set before calling this method
 	public static void addToWorld(World world, int x, int y, int z, TeleporterInfo info, Class block) {
 		WorldSavedDataSC worldData =  WorldSavedDataSC.forWorld(world);
 		WorldLinkInfo linkInfo = WorldLinkInfo.forWorld(world);
 		linkInfo.append(x, y, z, info);
 		if (!world.isRemote) {
-			info.type = getTeleporterTypeFromBlock(block);
+			//info.type = getTeleporterTypeFromBlock(block);
 			NBTTagCompound data = new NBTTagCompound();
 			data.setIntArray(COORD, new int[]{x, y, z});
 			data.setTag(LINK, info.writeToNBT());

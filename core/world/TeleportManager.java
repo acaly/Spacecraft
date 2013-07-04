@@ -18,6 +18,7 @@ public class TeleportManager {
 	public static final int NONE = 0;
 	public static final int TELEPORT = 1;
 	public static final int MONITOR = 2;
+	public static final int TELEPORTCRYSTAL = 3;
 	
 	static {
 		INSTANCE.teleporterTypes.put(TELEPORT, new ITeleporterType(){
@@ -30,6 +31,15 @@ public class TeleportManager {
 			}
 		});
 		INSTANCE.teleporterTypes.put(MONITOR, new ITeleporterType(){
+			public boolean available(World worldFrom, EntityPlayerMP player, int type, int x, int y, int z) {
+				return true;
+			}
+			@Override
+			public boolean needCheck() {
+				return true;
+			}
+		});
+		INSTANCE.teleporterTypes.put(TELEPORTCRYSTAL, new ITeleporterType(){
 			public boolean available(World worldFrom, EntityPlayerMP player, int type, int x, int y, int z) {
 				return true;
 			}

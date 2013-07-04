@@ -4,6 +4,7 @@ import ic2.api.Direction;
 import spacecraft.core.block.BlockPortalSC;
 import spacecraft.core.block.common.TileEntityInventory;
 import spacecraft.core.item.ItemLocator;
+import spacecraft.core.world.TeleportManager;
 import spacecraft.core.world.TeleporterInfo;
 import spacecraft.core.world.WorldLinkInfo;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,6 +30,7 @@ public class TileEntityTeleporter extends TileEntityInventory {
 				if (this.getStackInSlot(0) == null) return;
 				info = ItemLocator.getTeleporterInfo(this.getStackInSlot(0));
 				if (info == null) return;
+				info.type = TeleportManager.TELEPORT;
 				WorldLinkInfo.addToWorld(worldObj, xCoord, yCoord + 1, zCoord, info, BlockPortalSC.class);
 				setWrenchEnabled(false);
 			} else {

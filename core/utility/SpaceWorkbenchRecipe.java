@@ -3,7 +3,9 @@ package spacecraft.core.utility;
 import java.util.ArrayList;
 import java.util.List;
 
+import spacecraft.core.item.ItemLicense;
 import spacecraft.core.item.ItemLocator;
+import spacecraft.core.item.ItemTeleportCrystal;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -19,12 +21,16 @@ public class SpaceWorkbenchRecipe {
 			this.material2 = material2;
 			this.result = result;
 		}
+		public boolean match(IInventory material) {
+			ItemStack a = material.getStackInSlot(0), b = material.getStackInSlot(1);
+			return a != null && this.material.isItemEqual(a) &&
+					b != null && this.material2.isItemEqual(b);
+		}
 		public ItemStack getResult(ItemStack material, ItemStack material2) {
-			if (ItemStack.areItemStacksEqual(material, this.material) &&
-					ItemStack.areItemStacksEqual(material2, this.material2)) {
-				return result.copy();
-			}
-			return null;
+			return result.copy();
+		}
+		public ItemStack getResult(IInventory material) {
+			return getResult(material.getStackInSlot(0), material.getStackInSlot(1));
 		}
 	}
 	
@@ -32,6 +38,21 @@ public class SpaceWorkbenchRecipe {
 	static {
 		addRecipe(new ItemStack(Item.enderPearl), new ItemStack(Item.redstone),
 				new ItemStack(RegistryHelper.getItem(ItemLocator.class)));
+		
+		recipes.add(new Recipe(
+				new ItemStack(RegistryHelper.getItem(ItemLocator.class)),
+				new ItemStack(Item.diamond),
+				new ItemStack(RegistryHelper.getItem(ItemTeleportCrystal.class)))
+				{
+					@Override
+					public ItemStack getResult(IInventory material) {
+						ItemStack r = super.getResult(material);
+						ItemLocator.setTeleportInfo(r, ItemLocator.getTeleporterInfo(material.getStackInSlot(0)));
+						ItemLicense.setupTeleportCrystal(material.getStackInSlot(2), r);
+						return r;
+					}
+				}
+				);
 	}
 	
 	public static void addRecipe(ItemStack material, ItemStack material2, ItemStack result) {
@@ -41,7 +62,9 @@ public class SpaceWorkbenchRecipe {
 	public static ItemStack getResult(IInventory material) {
 		ItemStack r;
 		for (Recipe i : recipes) {
-			r = i.getResult(material.getStackInSlot(0), material.getStackInSlot(1));
+			if (!i.match(material))
+				continue;
+			r = i.getResult(material);
 			if (r != null) 
 				return r;
 		}

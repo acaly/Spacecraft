@@ -1,6 +1,7 @@
 package spacecraft.core.item;
 
 import spacecraft.core.utility.NetworkHelper;
+import spacecraft.core.world.TeleportManager;
 import spacecraft.core.world.TeleporterInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -65,7 +66,7 @@ public class ItemLocator extends ItemBase {
 		TeleporterInfo info = new TeleporterInfo();
 		info.dimension = par2World.provider.dimensionId;
 		info.owner = par3EntityPlayer.username;
-		info.type = 0;
+		info.type = TeleportManager.NONE;
 		info.x = var13;
 		info.y = var14;
 		info.z = var15;
@@ -80,5 +81,15 @@ public class ItemLocator extends ItemBase {
 			return null;
 		}
 		return TeleporterInfo.readFromNBT(tag.getCompoundTag(LOCATION));
+	}
+	
+	public static void setTeleportInfo(ItemStack itemStack, TeleporterInfo info) {
+		if (info == null) return;
+		NBTTagCompound tag = itemStack.stackTagCompound;
+		if (tag == null) {
+			tag = new NBTTagCompound();
+			itemStack.stackTagCompound = tag;
+		}
+		tag.setCompoundTag(LOCATION, info.writeToNBT());
 	}
 }

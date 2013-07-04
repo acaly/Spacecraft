@@ -58,11 +58,14 @@ public class mod_SpaceCraft {
 	public void preInit(FMLPreInitializationEvent event) {
 		RegistryHelper.setItemDefId("DebugText", ItemDebugText.class);
 		RegistryHelper.setItemDefId("Locator", ItemLocator.class);
+		RegistryHelper.setItemDefId("TeleportCrystal", ItemTeleportCrystal.class);
+		
 		RegistryHelper.setBlockDefId("PortalSC", BlockPortalSC.class, TileEntityPortalSC.class);
 		RegistryHelper.setBlockDefId("TeleporterSC", BlockTeleporter.class, TileEntityTeleporter.class);
 		RegistryHelper.setBlockDefId("Screen", BlockScreen.class, TileEntityScreen.class);
 		RegistryHelper.setBlockDefId("Monitor", BlockMonitor.class, TileEntityMonitor.class);
 		RegistryHelper.setBlockDefId("SpaceWorkbench", BlockSpaceWorkbench.class);
+		
 		RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
 		
 		//for organic mod
