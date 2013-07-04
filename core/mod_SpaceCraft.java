@@ -56,9 +56,12 @@ public class mod_SpaceCraft {
 
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent event) {
+		ConfigManager.init(event.getSuggestedConfigurationFile());
+		
 		RegistryHelper.setItemDefId("DebugText", ItemDebugText.class);
 		RegistryHelper.setItemDefId("Locator", ItemLocator.class);
 		RegistryHelper.setItemDefId("TeleportCrystal", ItemTeleportCrystal.class);
+		RegistryHelper.setItemDefId("License", ItemLicense.class);
 		
 		RegistryHelper.setBlockDefId("PortalSC", BlockPortalSC.class, TileEntityPortalSC.class);
 		RegistryHelper.setBlockDefId("TeleporterSC", BlockTeleporter.class, TileEntityTeleporter.class);
@@ -68,12 +71,8 @@ public class mod_SpaceCraft {
 		
 		RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
 		
-		//for organic mod
-		//RegistryHelper.setBlockDefId("Microscope", BlockMicroscope.class);
-		//RegistryHelper.setItemDefId("Tube", ItemTube.class);
-		
-		ConfigManager.init(event.getSuggestedConfigurationFile());
 		RegistryHelper.readFromConfig();
+		
 		ConfigManager.SaveConfig();
 		
 		LanguageManager.init(new File(event.getModConfigurationDirectory().getPath(), "spacecraft.lang"));

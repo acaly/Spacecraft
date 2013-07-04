@@ -10,6 +10,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -27,7 +28,8 @@ public class ContainerSpaceWorkbench extends ContainerBase {
 		this.addSlotToContainer(new Slot(material, 0, 31, 41));
 		this.addSlotToContainer(new Slot(material, 1, 56, 41));
 		this.addSlotToContainer(new Slot(material, 2, 91, 23));
-		this.addSlotToContainer(new SlotCraftingSingle(inventory, 0, 128, 41, this, EVENTPICKUPRESULT));
+		//this.addSlotToContainer(new SlotCraftingSingle(inventory, 0, 128, 41, this, EVENTPICKUPRESULT));
+		this.addSlotToContainer(new SlotCraftingSingle(player, material, inventory, 0, 128, 41));
 	}
 	
 	private void updateResult() {

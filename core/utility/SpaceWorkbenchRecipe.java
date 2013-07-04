@@ -30,29 +30,23 @@ public class SpaceWorkbenchRecipe {
 			return result.copy();
 		}
 		public ItemStack getResult(IInventory material) {
-			return getResult(material.getStackInSlot(0), material.getStackInSlot(1));
+			return ItemLicense.getLicensed(material.getStackInSlot(2), 
+					getResult(material.getStackInSlot(0), material.getStackInSlot(1)),
+					material.getStackInSlot(0));
 		}
 	}
 	
 	public static List<Recipe> recipes = new ArrayList();
 	static {
-		addRecipe(new ItemStack(Item.enderPearl), new ItemStack(Item.redstone),
+		addRecipe(new ItemStack(Item.enderPearl),
+				new ItemStack(Item.redstone),
 				new ItemStack(RegistryHelper.getItem(ItemLocator.class)));
-		
-		recipes.add(new Recipe(
-				new ItemStack(RegistryHelper.getItem(ItemLocator.class)),
+		addRecipe(new ItemStack(RegistryHelper.getItem(ItemLocator.class)),
 				new ItemStack(Item.diamond),
-				new ItemStack(RegistryHelper.getItem(ItemTeleportCrystal.class)))
-				{
-					@Override
-					public ItemStack getResult(IInventory material) {
-						ItemStack r = super.getResult(material);
-						ItemLocator.setTeleportInfo(r, ItemLocator.getTeleporterInfo(material.getStackInSlot(0)));
-						ItemLicense.setupTeleportCrystal(material.getStackInSlot(2), r);
-						return r;
-					}
-				}
-				);
+				new ItemStack(RegistryHelper.getItem(ItemTeleportCrystal.class)));
+		addRecipe(new ItemStack(Item.writtenBook),
+				new ItemStack(Item.enderPearl),
+				new ItemStack(RegistryHelper.getItem(ItemLicense.class)));
 	}
 	
 	public static void addRecipe(ItemStack material, ItemStack material2, ItemStack result) {
