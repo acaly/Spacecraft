@@ -1,6 +1,8 @@
 package spacecraft.core.utility;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import spacecraft.core.item.ItemLicense;
@@ -14,36 +16,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class SpaceWorkbenchRecipe {
+	
+	private static final String PROPERTY_NEED = "CraftingLicense";
 
-	//TODO more flexible
-	//TODO load from config
-	public static ArrayList<String> needLicense = new ArrayList();
-	private static final String NEED_CRYSTAL = "crystal";
-	private static final String NEED_LOCATOR = "locator";
-	private static final String NEED_LICENSE = "license";
-
-	static {
-		needLicense.add(NEED_CRYSTAL);
-		//needLicense.add(NEED_LICENSE);
-		needLicense.add(NEED_LOCATOR);
-	}
-
-	public static boolean checkLicenseCount(NBTTagCompound nbt, String type) {
-		if (nbt == null) {
-			if (SpaceWorkbenchRecipe.needLicense.contains(type)) {
-				return false;
-			}
-		} else {
-			if (SpaceWorkbenchRecipe.needLicense.contains(type)) {
-				if (!ItemLicense.decreaseCount(nbt, true)) return false;
-			}
-		}
-		return true;
-	}
+	public static final String NEED_CRYSTAL = "crystal";
+	public static final String NEED_LOCATOR = "locator";
+	public static final String NEED_LICENSE = "license";
 	
 	public static class Recipe {
-		public ItemStack material, material2;
-		public ItemStack result;
+		public ItemStack material, material2, result;
 		public String need;
 		public Recipe(String need, ItemStack material, ItemStack material2, ItemStack result) {
 			this.material = material;
@@ -51,14 +32,17 @@ public class SpaceWorkbenchRecipe {
 			this.result = result;
 			this.need = need;
 		}
+		
 		public boolean match(IInventory material) {
 			ItemStack a = material.getStackInSlot(0), b = material.getStackInSlot(1);
 			return a != null && this.material.isItemEqual(a) &&
 					b != null && this.material2.isItemEqual(b);
 		}
+		
 		public ItemStack getResult(ItemStack material, ItemStack material2) {
 			return result.copy();
 		}
+		
 		public ItemStack getResult(IInventory material) {
 			ItemStack r = getResult(material.getStackInSlot(0), material.getStackInSlot(1));
 			ItemStack itemLicense = material.getStackInSlot(2);
@@ -67,7 +51,9 @@ public class SpaceWorkbenchRecipe {
 			setupResult(r, license, material.getStackInSlot(0));
 			return r;
 		}
+		
 		public void setupResult(ItemStack r, NBTTagCompound license, ItemStack material1){}
+		
 		public boolean onLicenseUsed(ItemStack license) {
 			if (!needLicense.contains(need)) return true;
 			if (ItemLicense.decreaseCount(license.stackTagCompound, false)) {
@@ -78,9 +64,16 @@ public class SpaceWorkbenchRecipe {
 			return false;
 		}
 	}
-	
+
 	public static List<Recipe> recipes = new ArrayList();
-	static {
+	public static List<String> needLicense;
+	
+	public static void readConfig() {
+		String str = ConfigManager.GetGeneralProperties(PROPERTY_NEED, "crystal,locator");
+		needLicense = Arrays.asList(str.split(","));
+	}
+
+	public static void initRecipes() {
 		recipes.add(new Recipe(NEED_LOCATOR, new ItemStack(Item.enderPearl),
 				new ItemStack(Item.redstone),
 				new ItemStack(RegistryHelper.getItem(ItemLocator.class))));
@@ -96,9 +89,13 @@ public class SpaceWorkbenchRecipe {
 				} else {
 					if (license.hasKey(ItemLicense.CRYSTAL_COUNT)) {
 						ItemTeleportCrystal.setCount(r, license.getInteger(ItemLicense.CRYSTAL_COUNT));
+					} else {
+						ItemTeleportCrystal.setCount(r, 1);
 					}
 					if (license.hasKey(ItemLicense.CRYSTAL_TIME)) {
 						ItemTeleportCrystal.setTime(r, license.getInteger(ItemLicense.CRYSTAL_TIME));
+					} else {
+						ItemTeleportCrystal.setTime(r, 3000);
 					}
 				}
 			}
@@ -113,16 +110,25 @@ public class SpaceWorkbenchRecipe {
 			}
 		});
 	}
+
+	public static boolean checkLicenseCount(NBTTagCompound nbt, String type) {
+		if (nbt == null) {
+			if (SpaceWorkbenchRecipe.needLicense.contains(type)) {
+				return false;
+			}
+		} else {
+			if (SpaceWorkbenchRecipe.needLicense.contains(type)) {
+				if (!ItemLicense.getTypeAvailable(nbt, type)) return false;
+				if (!ItemLicense.decreaseCount(nbt, true)) return false;
+			}
+		}
+		return true;
+	}
 	
 	public static Recipe getResult(IInventory material) {
-		//ItemStack r;
 		for (Recipe i : recipes) {
 			if (i.match(material))
-			//	continue;
 				return i;
-			//r = i.getResult(material);
-			//if (r != null) 
-			//	return r;
 		}
 		return null;
 	}

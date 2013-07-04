@@ -1,18 +1,24 @@
 package spacecraft.core.item;
 
+import java.util.List;
+
 import spacecraft.core.utility.NetworkHelper;
 import spacecraft.core.world.TeleportManager;
 import spacecraft.core.world.TeleporterInfo;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 
 public class ItemLocator extends ItemBase {
 	public static final String LOCATION = "location";
+	public static final String LANG_LOCATION = "item.locator.inf.location";
 
 	public ItemLocator() {
 		super(ItemLocator.class);
@@ -91,5 +97,14 @@ public class ItemLocator extends ItemBase {
 			itemStack.stackTagCompound = tag;
 		}
 		tag.setCompoundTag(LOCATION, info.writeToNBT());
+	}
+
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+		TeleporterInfo info = getTeleporterInfo(par1ItemStack);
+		if (info == null) return;
+		par3List.add(StringTranslate.getInstance().translateKeyFormat(
+				LANG_LOCATION, WorldProvider.getProviderForDimension(info.dimension).getDimensionName(),
+				info.x, info.y, info.z));
 	}
 }

@@ -20,6 +20,7 @@ import spacecraft.core.utility.NetworkHelper;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RegistryHelper.RegistryType;
 import spacecraft.core.utility.RenderRegistryHelper;
+import spacecraft.core.utility.SpaceWorkbenchRecipe;
 import spacecraft.core.world.WorldLinkInfo;
 import spacecraft.core.world.WorldProviderSC;
 import cpw.mods.fml.common.Mod;
@@ -37,6 +38,21 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class mod_SpaceCraft {
 	public static mod_SpaceCraft INSTANCE;
 	
+	private void initRegistry() {
+		RegistryHelper.setItemDefId("DebugText", ItemDebugText.class);
+		RegistryHelper.setItemDefId("Locator", ItemLocator.class);
+		RegistryHelper.setItemDefId("TeleportCrystal", ItemTeleportCrystal.class);
+		RegistryHelper.setItemDefId("License", ItemLicense.class);
+		
+		RegistryHelper.setBlockDefId("PortalSC", BlockPortalSC.class, TileEntityPortalSC.class);
+		RegistryHelper.setBlockDefId("TeleporterSC", BlockTeleporter.class, TileEntityTeleporter.class);
+		RegistryHelper.setBlockDefId("Screen", BlockScreen.class, TileEntityScreen.class);
+		RegistryHelper.setBlockDefId("Monitor", BlockMonitor.class, TileEntityMonitor.class);
+		RegistryHelper.setBlockDefId("SpaceWorkbench", BlockSpaceWorkbench.class);
+		
+		RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
+	}
+	
 	@Mod.Init
 	public void load(FMLInitializationEvent evt) {
 		INSTANCE = this;
@@ -52,29 +68,19 @@ public class mod_SpaceCraft {
 		
 		MinecraftForge.EVENT_BUS.register(new WorldLinkInfo.ChunkEventHandler());
 		
+		SpaceWorkbenchRecipe.initRecipes();
 	}
 
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent event) {
+		//config
 		ConfigManager.init(event.getSuggestedConfigurationFile());
-		
-		RegistryHelper.setItemDefId("DebugText", ItemDebugText.class);
-		RegistryHelper.setItemDefId("Locator", ItemLocator.class);
-		RegistryHelper.setItemDefId("TeleportCrystal", ItemTeleportCrystal.class);
-		RegistryHelper.setItemDefId("License", ItemLicense.class);
-		
-		RegistryHelper.setBlockDefId("PortalSC", BlockPortalSC.class, TileEntityPortalSC.class);
-		RegistryHelper.setBlockDefId("TeleporterSC", BlockTeleporter.class, TileEntityTeleporter.class);
-		RegistryHelper.setBlockDefId("Screen", BlockScreen.class, TileEntityScreen.class);
-		RegistryHelper.setBlockDefId("Monitor", BlockMonitor.class, TileEntityMonitor.class);
-		RegistryHelper.setBlockDefId("SpaceWorkbench", BlockSpaceWorkbench.class);
-		
-		RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
-		
+		initRegistry();
 		RegistryHelper.readFromConfig();
-		
+		SpaceWorkbenchRecipe.readConfig();
 		ConfigManager.SaveConfig();
 		
+		//lang
 		LanguageManager.init(new File(event.getModConfigurationDirectory().getPath(), "spacecraft.lang"));
 	}
 

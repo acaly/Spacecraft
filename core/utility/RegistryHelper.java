@@ -61,28 +61,23 @@ public final class RegistryHelper {
 	}
 	
 	public static void readFromConfig() {
-		try {
-			RegInfo info;
-			//block
-			info = INSTANCE.regInfo.get(RegistryType.Block);
-			for (Entry<String, Integer> i : info.idMap.entrySet()) {
-				i.setValue(ConfigManager.GetBlockID(i.getKey(), i.getValue()));
-			}
-			
-			//item
-			info = INSTANCE.regInfo.get(RegistryType.Item);
-			for (Entry<String, Integer> i : info.idMap.entrySet()) {
-				i.setValue(ConfigManager.GetItemID(i.getKey(), i.getValue()));
-			}
-			
-			//dimension
-			info = INSTANCE.regInfo.get(RegistryType.Dimension);
-			for (Entry<String, Integer> i : info.idMap.entrySet()) {
-				i.setValue(ConfigManager.GetGeneralProperties(DIMENSIONPREFIX + i.getKey(), i.getValue()));
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		RegInfo info;
+		//block
+		info = INSTANCE.regInfo.get(RegistryType.Block);
+		for (Entry<String, Integer> i : info.idMap.entrySet()) {
+			i.setValue(ConfigManager.GetBlockID(i.getKey(), i.getValue()));
+		}
+		
+		//item
+		info = INSTANCE.regInfo.get(RegistryType.Item);
+		for (Entry<String, Integer> i : info.idMap.entrySet()) {
+			i.setValue(ConfigManager.GetItemID(i.getKey(), i.getValue()));
+		}
+		
+		//dimension
+		info = INSTANCE.regInfo.get(RegistryType.Dimension);
+		for (Entry<String, Integer> i : info.idMap.entrySet()) {
+			i.setValue(ConfigManager.GetGeneralProperties(DIMENSIONPREFIX + i.getKey(), i.getValue()));
 		}
 	}
 	

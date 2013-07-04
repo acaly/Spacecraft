@@ -1,70 +1,41 @@
 package spacecraft.core.item;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.SpaceWorkbenchRecipe;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.StringTranslate;
 
 public class ItemLicense extends ItemBase {
-	//private static final String TYPE = "type";
+	private static final String TYPE = "type";
 	private static final String COUNT = "count";
 	
 	public static final String CRYSTAL_COUNT = "cry_count";
 	public static final String CRYSTAL_TIME = "cry_time";
+
+	public static final String TYPE_ROOT = "root";
+	public static final String TYPE_NULL = "null";
+	public static final String TYPE_CRYSTAL = SpaceWorkbenchRecipe.NEED_CRYSTAL;
+	public static final String TYPE_LOCATOR = SpaceWorkbenchRecipe.NEED_LOCATOR;
+	public static final String TYPE_LICENSE = SpaceWorkbenchRecipe.NEED_LICENSE;
+	
+	public static final String LANG_LICENCE_COUNT = "item.license.inf.count";
+	public static final String LANG_LICENCE_TYPE = "item.license.inf.type";
+	
+	public static final String LANG_LICENCE_TYPE(String type) {
+		return "item.license.dis.type." + type;
+	}
 	
 	public ItemLicense() {
 		super(ItemLicense.class);
+		this.setMaxStackSize(1);
 	}
-	/*
-	public static ItemStack getLicensed(NBTTagCompound license, ItemStack r, ItemStack material1) {
-		if (r.itemID == RegistryHelper.getItemId(ItemLocator.class)) {
-			if (!checkLicenseCount(license, NEEDLOCATOR)) return null;
-			return setupLocator(license, r);
-		} else
-		if (r.itemID == RegistryHelper.getItemId(ItemTeleportCrystal.class)) {
-			if (!checkLicenseCount(license, NEEDCRYSTAL)) return null;
-			ItemLocator.setTeleportInfo(r, ItemLocator.getTeleporterInfo(material1));
-			return setupTeleportCrystal(license, r);
-		} else
-		if (r.itemID == RegistryHelper.getItemId(ItemLicense.class)) {
-			setLicenseInfo(material1, r);
-			if (!checkLicenseCount(license, NEEDLICENSE)) return null;
-			return setupLicense(license, r);
-		}
-		return null;
-	}*/
-	
-	//-----------------------setup part-----------------------
-	//setup result according to license
-	/*
-	public static ItemStack setupLicense(NBTTagCompound license, ItemStack r) {
-		return r;
-	}
-	
-	public static ItemStack setupLocator(NBTTagCompound license, ItemStack locator) {
-		return locator;
-	}
-	
-	public static ItemStack setupTeleportCrystal(NBTTagCompound license, ItemStack crystal) {
-		if (license == null) {
-			ItemTeleportCrystal.setCount(crystal, 1);
-			ItemTeleportCrystal.setTime(crystal, 3000);
-		} else {
-			if (license.hasKey(CRYSTAL_COUNT)) {
-				ItemTeleportCrystal.setCount(crystal, license.getInteger(CRYSTAL_COUNT));
-			}
-			if (license.hasKey(CRYSTAL_TIME)) {
-				ItemTeleportCrystal.setTime(crystal, license.getInteger(CRYSTAL_TIME));
-			}
-		}
-		return crystal;
-	}
-	*/
-	//-----------------------helper part-----------------------
 	
 	public static ItemStack setLicenseInfo(ItemStack book, ItemStack r) {
 		if (book.itemID != Item.writtenBook.itemID) return null;
@@ -92,17 +63,29 @@ public class ItemLicense extends ItemBase {
 		return nbt.getInteger(COUNT);
 	}
 	
+	public static String getType(NBTTagCompound nbt) {
+		if (nbt == null || !nbt.hasKey(TYPE)) {
+			return TYPE_NULL;
+		}
+		return nbt.getString(TYPE);
+	}
+	
+	public static boolean getTypeAvailable(NBTTagCompound nbt, String type2) {
+		String type = getType(nbt);
+		return type.equals(TYPE_ROOT) || type.equals(type2);
+	}
+	
 	private static NBTTagCompound getLicense(String book) {
 		if (book.length() == 0) return null;
 		NBTTagCompound r = new NBTTagCompound();
-		int last_i = 0, i = 0, len = book.length();
+		int last_i = -1, i = 0, len = book.length();
 		int equ;
 		String line;
 		String key, value;
-		i = book.indexOf('\n', last_i);
+		i = book.indexOf('\n', 0);
 		while ((last_i) < len) {
 			if (i == -1) i = len;
-			line = book.substring(last_i, i);
+			line = book.substring(last_i + 1, i);
 			if ((equ = line.indexOf('=')) < line.length()) {
 				key = line.substring(0, equ);
 				value = line.substring(equ + 1);
@@ -113,7 +96,16 @@ public class ItemLicense extends ItemBase {
 				}
 			} else continue;
 			last_i = i;
+			i = book.indexOf('\n', last_i + 1);
 		}
 		return r;
+	}
+
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+		StringTranslate trans = StringTranslate.getInstance();
+		par3List.add(trans.translateKeyFormat(LANG_LICENCE_COUNT, getCount(par1ItemStack)));
+		String type = trans.translateKey(LANG_LICENCE_TYPE(getType(par1ItemStack.stackTagCompound)));
+		par3List.add(trans.translateKeyFormat(LANG_LICENCE_TYPE, type));
 	}
 }

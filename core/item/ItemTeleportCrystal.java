@@ -1,5 +1,7 @@
 package spacecraft.core.item;
 
+import java.util.List;
+
 import spacecraft.core.block.BlockPortalSC;
 import spacecraft.core.block.tile.TileEntityPortalSC;
 import spacecraft.core.utility.RegistryHelper;
@@ -11,14 +13,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 
 public class ItemTeleportCrystal extends ItemBase {
 	private static final String COUNT = "count";
 	private static final String TIME = "time";
+	
+	public static final String LANG_LOCATION = "item.telecrystal.inf.location";
+	public static final String LANG_COUNT = "item.telecrystal.inf.count";
+	public static final String LANG_TIME = "item.telecrystal.inf.time";
 
 	public ItemTeleportCrystal() {
 		super(ItemTeleportCrystal.class);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
@@ -29,8 +38,7 @@ public class ItemTeleportCrystal extends ItemBase {
 		double var5 = par3EntityPlayer.prevPosX + (par3EntityPlayer.posX - par3EntityPlayer.prevPosX) * (double)var4;
 		double var7 = par3EntityPlayer.prevPosY + (par3EntityPlayer.posY - par3EntityPlayer.prevPosY) * (double)var4 + 1.62D - (double)par3EntityPlayer.yOffset;
 		double var9 = par3EntityPlayer.prevPosZ + (par3EntityPlayer.posZ - par3EntityPlayer.prevPosZ) * (double)var4;
-		//boolean var11 = this.isFull == 0;
-		MovingObjectPosition var12 = this.getMovingObjectPositionFromPlayer(par2World, par3EntityPlayer, false);//var11);
+		MovingObjectPosition var12 = this.getMovingObjectPositionFromPlayer(par2World, par3EntityPlayer, false);
 		if (var12 == null) {
 			return par1ItemStack;
 		}
@@ -66,7 +74,8 @@ public class ItemTeleportCrystal extends ItemBase {
 		TileEntityPortalSC tile = (TileEntityPortalSC) par2World.getBlockTileEntity(var13, var14, var15);
 		tile.countLeft = getCount(par1ItemStack);
 		tile.setTimeLeft(getTime(par1ItemStack));
-		return par1ItemStack;
+		par1ItemStack.stackSize--;
+		return null;
 	}
 	
 	public static void setCount(ItemStack itemStack, int value) {
@@ -90,14 +99,26 @@ public class ItemTeleportCrystal extends ItemBase {
 	private static int getCount(ItemStack itemStack) {
 		NBTTagCompound nbt = itemStack.stackTagCompound;
 		if (nbt == null || !nbt.hasKey(COUNT))
-			return 1;
+			return 0;
 		return nbt.getInteger(COUNT);
 	}
 	
 	private static int getTime(ItemStack itemStack) {
 		NBTTagCompound nbt = itemStack.stackTagCompound;
 		if (nbt == null || !nbt.hasKey(TIME))
-			return 1;
+			return 0;
 		return nbt.getInteger(TIME);
+	}
+	
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+		StringTranslate trans = StringTranslate.getInstance();
+		TeleporterInfo info = ItemLocator.getTeleporterInfo(par1ItemStack);
+		if (info == null) return;
+		par3List.add(trans.translateKeyFormat(LANG_LOCATION,
+				WorldProvider.getProviderForDimension(info.dimension).getDimensionName(),
+				info.x, info.y, info.z));
+		par3List.add(trans.translateKeyFormat(LANG_COUNT, getCount(par1ItemStack)));
+		par3List.add(trans.translateKeyFormat(LANG_TIME, (float)getTime(par1ItemStack) / 1000));
 	}
 }

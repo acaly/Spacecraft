@@ -61,7 +61,7 @@ public final class LanguageManager {
 		//Item
 		table.setProperty(forClass(ItemDebugText.class), "测试物品");
 		table.setProperty(forClass(ItemLocator.class), "定位仪");
-		table.setProperty(forClass(ItemLicense.class), "许可");
+		table.setProperty(forClass(ItemLicense.class), "许可证");
 		table.setProperty(forClass(ItemTeleportCrystal.class), "传送水晶");
 		//Block
 		table.setProperty(forClass(BlockPortalSC.class), "传送方块");
@@ -77,5 +77,20 @@ public final class LanguageManager {
 		table.setProperty(WorldProviderSC.DIMENSION, "异空间");
 		//printed text
 		table.setProperty(TeleportManager.MSG, "You're not allowed to use this teleporter!");
+		//item.license.inf
+		table.setProperty(ItemLicense.LANG_LICENCE_COUNT, "剩余次数：%1$s");
+		table.setProperty(ItemLicense.LANG_LICENCE_TYPE, "允许操作：%1$s");
+		table.setProperty(ItemLicense.LANG_LICENCE_TYPE(ItemLicense.TYPE_ROOT), "全部");
+		table.setProperty(ItemLicense.LANG_LICENCE_TYPE(ItemLicense.TYPE_NULL), "无");
+		table.setProperty(ItemLicense.LANG_LICENCE_TYPE(ItemLicense.TYPE_CRYSTAL), "制作传送水晶");
+		table.setProperty(ItemLicense.LANG_LICENCE_TYPE(ItemLicense.TYPE_LOCATOR), "制作定位器");
+		table.setProperty(ItemLicense.LANG_LICENCE_TYPE(ItemLicense.TYPE_LICENSE), "制作许可");
+		//item.locator.inf
+		table.setProperty(ItemLocator.LANG_LOCATION, "目标地点：%1$s (%2$s, %3$s, %4$s)");
+		//item.telecrystal.inf
+		table.setProperty(ItemTeleportCrystal.LANG_LOCATION, "目标地点：%1$s (%2$s, %3$s, %4$s)");
+		table.setProperty(ItemTeleportCrystal.LANG_COUNT, "最大传送人数：%1$s");
+		table.setProperty(ItemTeleportCrystal.LANG_TIME, "持续时间：%1$s s");
+		
 	}
 }

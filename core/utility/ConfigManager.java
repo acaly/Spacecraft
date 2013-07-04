@@ -37,30 +37,30 @@ public final class ConfigManager {
 		INSTANCE = new ConfigManager(ConfigFile);
 	}
 	
-	public static String GetGeneralProperties(String PropertyName, String DefaultValue) throws Exception {
+	public static String GetGeneralProperties(String PropertyName, String DefaultValue) {
 		if (INSTANCE == null) {
-			throw new Exception("Not initialized!");
+			throw new RuntimeException("Not initialized!");
 		}
 		return INSTANCE.config.get("general", PropertyName, DefaultValue).getString();
 	}
 	
-	public static int GetGeneralProperties(String PropertyName, int DefaultValue) throws Exception {
+	public static int GetGeneralProperties(String PropertyName, int DefaultValue) {
 		if (INSTANCE == null) {
-			throw new Exception("Not initialized!");
+			throw new RuntimeException("Not initialized!");
 		}
 		return INSTANCE.config.get("general", PropertyName, DefaultValue).getInt();
 	}
 	
-	public static int GetItemID(String ItemName, int DefaultValue) throws Exception {
+	public static int GetItemID(String ItemName, int DefaultValue) {
 		if (INSTANCE == null) {
-			throw new Exception("Not initialized!");
+			throw new RuntimeException("Not initialized!");
 		}
 		return INSTANCE.config.getItem("item", "ID." + ItemName, DefaultValue).getInt() - 256;
 	}
 	
-	public static int GetBlockID(String BlockName, int DefaultID) throws Exception {
+	public static int GetBlockID(String BlockName, int DefaultID) {
 		if (INSTANCE == null) {
-			throw new Exception("Not initialized!");
+			throw new RuntimeException("Not initialized!");
 		}
 		return INSTANCE.config.getBlock("ID." + BlockName, DefaultID).getInt();
 	}
