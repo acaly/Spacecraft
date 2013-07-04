@@ -21,6 +21,8 @@ public class ContainerSpaceWorkbench extends ContainerBase {
 	private InventoryBasic inventory = new InventoryBasic(INVENTORY, false, 1);
 	private InventoryCrafting material = new InventoryCrafting(this, 1, 3);
 	
+	public SpaceWorkbenchRecipe.Recipe currentRecipe;
+	
 	public ContainerSpaceWorkbench(World world, EntityPlayer player, int x, int y, int z) {
 		super(world, player, x, y, z);
 		
@@ -28,28 +30,17 @@ public class ContainerSpaceWorkbench extends ContainerBase {
 		this.addSlotToContainer(new Slot(material, 0, 31, 41));
 		this.addSlotToContainer(new Slot(material, 1, 56, 41));
 		this.addSlotToContainer(new Slot(material, 2, 91, 23));
-		//this.addSlotToContainer(new SlotCraftingSingle(inventory, 0, 128, 41, this, EVENTPICKUPRESULT));
-		this.addSlotToContainer(new SlotCraftingSingle(player, material, inventory, 0, 128, 41));
+		this.addSlotToContainer(new SlotCraftingSingle(this, player, material, inventory, 0, 128, 41));
 	}
 	
 	private void updateResult() {
 		if (!SpaceManager.onCraftingOnSpaceWorkbench(player.username, material)) {
 			return;
 		}
-		ItemStack result = SpaceWorkbenchRecipe.getResult(material);
+		currentRecipe = SpaceWorkbenchRecipe.getResult(material);
+		ItemStack result = currentRecipe != null ? currentRecipe.getResult(material) : null;
 		inventory.setInventorySlotContents(0, result);
 		this.getSlot(36 + 3).putStack(result);
-	}
-
-	@Override
-	public void onGuiEvent(int param) {
-		if (param == EVENTPICKUPRESULT) {
-			this.getSlot(36).decrStackSize(1);
-			this.getSlot(36 + 1).decrStackSize(1);
-			this.getSlot(36 + 2).decrStackSize(1);
-			updateResult();
-			this.detectAndSendChanges();
-		}
 	}
 	
 	@Override
@@ -75,4 +66,7 @@ public class ContainerSpaceWorkbench extends ContainerBase {
 			}
 		}
 	}
+
+	@Override
+	public void onGuiEvent(int param) {}
 }
