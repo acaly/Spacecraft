@@ -20,10 +20,10 @@ public class TileEntityPortalSC extends TileEntity {
 	private HashMap<EntityPlayerMP, Integer> time = new HashMap();
 	
 	private static final String COUNTLEFT = "countleft";
-	private static final String TIMEEND = "timeend";
+	private static final String TIMELEFT = "timeleft";
 	
 	public int countLeft;
-	public long timeEnd;
+	public long timeLeft = -1;
 	
 	public void setPlayer(EntityPlayerMP player) {
 		int last = time.containsKey(player) ? time.get(player) : 0;
@@ -51,25 +51,26 @@ public class TileEntityPortalSC extends TileEntity {
 			}
 		}
 		
-		if (timeEnd < System.currentTimeMillis() || countLeft <= 0) {
-			System.out.println(timeEnd + ", " + System.currentTimeMillis());
+		if (timeLeft < 0) return;
+		--timeLeft;
+		if (timeLeft == 0 || countLeft <= 0) {
 			WorldLinkInfo.removeFromWorld(worldObj, xCoord, yCoord, zCoord, false);
 		}
 	}
 	
 	public void setTimeLeft(long timeLeft) {
-		this.timeEnd = timeLeft + System.currentTimeMillis();
+		this.timeLeft = timeLeft;
 	}
 	
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
 		countLeft = par1NBTTagCompound.getInteger(COUNTLEFT);
-		timeEnd = par1NBTTagCompound.getLong(TIMEEND) + System.currentTimeMillis();
+		timeLeft = par1NBTTagCompound.getLong(TIMELEFT);
 	}
 	
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger(COUNTLEFT, countLeft);
-		par1NBTTagCompound.setLong(TIMEEND, timeEnd - System.currentTimeMillis());
+		par1NBTTagCompound.setLong(TIMELEFT, timeLeft - System.currentTimeMillis());
 	}
 }

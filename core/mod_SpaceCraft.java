@@ -14,6 +14,7 @@ import spacecraft.core.render.RenderOffsetSimple;
 import spacecraft.core.render.RenderOffsetSpecial;
 import spacecraft.core.utility.ConfigManager;
 import spacecraft.core.utility.ConnectionHandlerWorldData;
+import spacecraft.core.utility.EventHandler;
 import spacecraft.core.utility.GuiHandler;
 import spacecraft.core.utility.LanguageManager;
 import spacecraft.core.utility.NetworkHelper;
@@ -66,7 +67,7 @@ public class mod_SpaceCraft {
 
 		RegistryHelper.INSTANCE.createItemsAndBlocks();
 		
-		MinecraftForge.EVENT_BUS.register(new WorldLinkInfo.ChunkEventHandler());
+		MinecraftForge.EVENT_BUS.register(new EventHandler());
 		
 		SpaceWorkbenchRecipe.initRecipes();
 	}

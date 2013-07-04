@@ -76,7 +76,7 @@ public class ItemTeleportCrystal extends ItemBase {
 		tile.countLeft = getCount(par1ItemStack);
 		tile.setTimeLeft(getTime(par1ItemStack));
 		par1ItemStack.stackSize--;
-		return null;
+		return par1ItemStack;
 	}
 	
 	public static void setCount(ItemStack itemStack, int value) {
@@ -120,7 +120,7 @@ public class ItemTeleportCrystal extends ItemBase {
 				WorldProvider.getProviderForDimension(info.dimension).getDimensionName(),
 				info.x, info.y, info.z));
 		par3List.add(trans.translateKeyFormat(LANG_COUNT, getCount(par1ItemStack)));
-		par3List.add(trans.translateKeyFormat(LANG_TIME, (float)getTime(par1ItemStack) / 1000));
+		par3List.add(trans.translateKeyFormat(LANG_TIME, (float)getTime(par1ItemStack) / 20));
 	}
 
 	@Override

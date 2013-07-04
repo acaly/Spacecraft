@@ -177,16 +177,4 @@ public class WorldLinkInfo implements ISavedData {
 			}
 		}
 	}
-	
-	public static class ChunkEventHandler {
-		@ForgeSubscribe
-		public void onChunkWatched(ChunkWatchEvent.Watch event) {
-			WorldLinkInfo.forWorld(event.player.worldObj).onWorldChunkWatched(event);
-		}
-		
-		@ForgeSubscribe
-		public void onChunkUnwatched(ChunkWatchEvent.UnWatch event) {
-			WorldLinkInfo.forWorld(event.player.worldObj).onWorldChunkUnwatched(event);
-		}
-	}
 }

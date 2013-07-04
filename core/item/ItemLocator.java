@@ -50,24 +50,22 @@ public class ItemLocator extends ItemBase {
 		int var13 = var12.blockX;
 		int var14 = var12.blockY;
 		int var15 = var12.blockZ;
-
-		if (!par2World.canMineBlock(par3EntityPlayer, var13, var14, var15))
-			return;
-		if (var12.sideHit == 0)
-			--var14;
-		if (var12.sideHit == 1)
-			++var14;
-		if (var12.sideHit == 2)
-			--var15;
-		if (var12.sideHit == 3)
-			++var15;
-		if (var12.sideHit == 4)
-			--var13;
-		if (var12.sideHit == 5)
-			++var13;
-
-		if (!par3EntityPlayer.canPlayerEdit(var13, var14, var15, var12.sideHit, par1ItemStack))
-			return;
+		
+		if (!par3EntityPlayer.isSneaking()) {
+		
+			if (var12.sideHit == 0)
+				--var14;
+			if (var12.sideHit == 1)
+				++var14;
+			if (var12.sideHit == 2)
+				--var15;
+			if (var12.sideHit == 3)
+				++var15;
+			if (var12.sideHit == 4)
+				--var13;
+			if (var12.sideHit == 5)
+				++var13;
+		}
 		
 		TeleporterInfo info = new TeleporterInfo();
 		info.dimension = par2World.provider.dimensionId;
