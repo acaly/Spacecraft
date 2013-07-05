@@ -69,6 +69,8 @@ public final class LanguageManager {
 		table.setProperty(forClass(BlockScreen.class), "屏幕");
 		table.setProperty(forClass(BlockMonitor.class), "显示器");
 		table.setProperty(forClass(BlockSpaceWorkbench.class), "空间工作台");
+		table.setProperty(forClass(BlockLinkMaintainer.class), "连接主机");
+		table.setProperty(forClass(BlockLinkInventory.class), "物品传递");
 		//inventory
 		table.setProperty(TileEntityTeleporter.INVENTORY, "传送器");
 		//CreativeTab

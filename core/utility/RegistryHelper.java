@@ -21,6 +21,8 @@ public final class RegistryHelper {
 	private static final String DIMENSIONPREFIX = "ID.Dimension.";
 	private static final String CREATIVEPAGENAME = "SpaceCraft";
 	public static final String CREATIVEPAGENAME_UNL = "itemGroup." + CREATIVEPAGENAME;
+
+	public static final String TEXTUREPATH = "spacecraft";
 	
 	static {
 		INSTANCE = new RegistryHelper();

@@ -1,16 +1,25 @@
 package spacecraft.core.block.common;
 
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.tile.IWrenchable;
 import spacecraft.core.mod_SpaceCraft;
+import spacecraft.core.utility.BlockTextureStitched;
 import spacecraft.core.utility.GuiHandler;
 import spacecraft.core.utility.RegistryHelper;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.TextureStitched;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class BlockContainerBase extends BlockContainer {
@@ -49,9 +58,42 @@ public abstract class BlockContainerBase extends BlockContainer {
 			int id = openGui(par1World, var10, par5EntityPlayer);
 			if (id > 0) {
 				par5EntityPlayer.openGui(mod_SpaceCraft.INSTANCE, id, par1World, par2, par3, par4);
+				return true;
 			}
-			return true;
+			return false;
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister iconRegister) {
+		String name = RegistryHelper.getName(this.getClass());
+		String texturePath;
+		TextureStitched texture;
+		try {
+			for (int i = 0; i < 6; ++i) {
+				texturePath = RegistryHelper.TEXTUREPATH + ":" + name + "." + Integer.toString(i);
+				texture = new BlockTextureStitched(texturePath);
+				((TextureMap)iconRegister).setTextureEntry(texturePath, texture);
+				iconList[i] = texture;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getIcon(int par1, int par2) {
+		return iconList[par1];
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5) {
+		return iconList[par5];
+	}
+	
+	private Icon iconList[] = new Icon[6];
 }
