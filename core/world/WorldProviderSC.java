@@ -2,6 +2,8 @@ package spacecraft.core.world;
 
 import spacecraft.core.utility.LanguageManager;
 import spacecraft.core.utility.RegistryHelper;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
@@ -13,6 +15,10 @@ public class WorldProviderSC extends WorldProvider {
 	public void registerWorldChunkManager() {
 		this.worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.beach, 0.8F, 0.0F);
 		this.dimensionId = RegistryHelper.getId(WorldProviderSC.class);
+	}
+	
+	public static World getWorld() {
+		return MinecraftServer.getServer().worldServerForDimension(RegistryHelper.getId(WorldProviderSC.class));
 	}
 
 	@Override

@@ -17,7 +17,6 @@ public class WorldSeparation {
 	private static final String OWNER = "owner";
 	
 	public int makeId() {
-		//TODO fix this method
 		return xPos;
 	}
 	
@@ -40,5 +39,15 @@ public class WorldSeparation {
 		r.zPos = data[4];
 		r.owner = compound.getString(OWNER);
 		return r;
+	}
+	
+	//TODO setup center machine
+	public void initWorldSeparation() {
+		
+	}
+	
+	//TODO
+	public TeleporterInfo createCenteredTeleporter() {
+		return null;
 	}
 }

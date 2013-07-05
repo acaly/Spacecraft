@@ -14,10 +14,8 @@ public class TeleporterInfo {
 	public int x, y, z;		//target
 	public String owner;
 	
-	public boolean available;
-	
 	private static final String DATA = "data";
-	private static final String OWNER = "owner_";//owner will be put against data...
+	private static final String OWNER = "owner_";//owner will be put against data...?
 	
 	public void placeEntity(Entity entity, World world) {
 		int x = this.x, y = this.y, z = this.z;

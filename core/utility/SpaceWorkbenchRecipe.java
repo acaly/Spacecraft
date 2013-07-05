@@ -8,12 +8,18 @@ import java.util.List;
 import spacecraft.core.item.ItemLicense;
 import spacecraft.core.item.ItemLocator;
 import spacecraft.core.item.ItemTeleportCrystal;
+import spacecraft.core.world.TeleporterInfo;
+import spacecraft.core.world.WorldProviderSC;
+import spacecraft.core.world.WorldSeparation;
+import spacecraft.core.world.WorldSeparationInfo;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 
 public class SpaceWorkbenchRecipe {
 	
@@ -22,6 +28,7 @@ public class SpaceWorkbenchRecipe {
 	public static final String NEED_CRYSTAL = "crystal";
 	public static final String NEED_LOCATOR = "locator";
 	public static final String NEED_LICENSE = "license";
+	public static final String NEED_SPACE = "space";
 	
 	public static class Recipe {
 		public ItemStack material, material2, result;
@@ -52,6 +59,7 @@ public class SpaceWorkbenchRecipe {
 			return r;
 		}
 		
+		//TODO send player info to recipe
 		public void setupResult(ItemStack r, NBTTagCompound license, ItemStack material1){}
 		
 		public boolean onLicenseUsed(ItemStack license) {
@@ -70,7 +78,8 @@ public class SpaceWorkbenchRecipe {
 	
 	public static void readConfig() {
 		String str = ConfigManager.GetGeneralProperties(PROPERTY_NEED, "crystal,locator");
-		needLicense = Arrays.asList(str.split(","));
+		needLicense = new ArrayList(Arrays.asList(str.split(",")));
+		needLicense.add(NEED_SPACE);
 	}
 
 	public static void initRecipes() {
@@ -107,6 +116,26 @@ public class SpaceWorkbenchRecipe {
 				new ItemStack(RegistryHelper.getItem(ItemLicense.class))){
 			public void setupResult(ItemStack r, NBTTagCompound license, ItemStack material1) {
 				ItemLicense.setLicenseInfo(material1, r);
+			}
+		});
+		
+		recipes.add(new Recipe(NEED_SPACE, new ItemStack(Item.enderPearl),
+				new ItemStack(Item.redstone),
+				new ItemStack(RegistryHelper.getItem(ItemLocator.class))){
+			public void setupResult(ItemStack r, NBTTagCompound license, ItemStack material1) {
+				if (license == null || !license.hasKey(ItemLicense.OWNER)
+						|| !license.hasKey(ItemLicense.SPACE_XSIZE) || !license.hasKey(ItemLicense.SPACE_ZSIZE)) {
+					return;
+				}
+				int xSize, zSize;
+				xSize = license.getInteger(ItemLicense.SPACE_XSIZE);
+				zSize = license.getInteger(ItemLicense.SPACE_ZSIZE);
+				String owner = license.getString(ItemLicense.OWNER);
+				WorldSeparation sep = WorldSeparationInfo.forWorld(WorldProviderSC.getWorld())
+						.append(0, xSize, zSize, owner);
+				sep.initWorldSeparation();
+				TeleporterInfo info = sep.createCenteredTeleporter();
+				ItemLocator.setTeleportInfo(r, info);
 			}
 		});
 	}

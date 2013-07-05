@@ -17,14 +17,20 @@ public class ItemLicense extends ItemBase {
 	private static final String TYPE = "type";
 	private static final String COUNT = "count";
 	
+	public static final String OWNER = "owner";
+	
 	public static final String CRYSTAL_COUNT = "cry_count";
 	public static final String CRYSTAL_TIME = "cry_time";
+	public static final String SPACE_XSIZE = "spc_x";
+	public static final String SPACE_ZSIZE = "spc_z";
+	
 
 	public static final String TYPE_ROOT = "root";
 	public static final String TYPE_NULL = "null";
 	public static final String TYPE_CRYSTAL = SpaceWorkbenchRecipe.NEED_CRYSTAL;
 	public static final String TYPE_LOCATOR = SpaceWorkbenchRecipe.NEED_LOCATOR;
 	public static final String TYPE_LICENSE = SpaceWorkbenchRecipe.NEED_LICENSE;
+	public static final String TYPE_SPACE = SpaceWorkbenchRecipe.NEED_SPACE;
 	
 	public static final String LANG_LICENCE_COUNT = "item.license.inf.count";
 	public static final String LANG_LICENCE_TYPE = "item.license.inf.type";
@@ -75,7 +81,7 @@ public class ItemLicense extends ItemBase {
 	
 	public static boolean getTypeAvailable(NBTTagCompound nbt, String type2) {
 		String type = getType(nbt);
-		return type.equals(TYPE_ROOT) || type.equals(type2);
+		return (type.equals(TYPE_ROOT) && !type.equals(TYPE_SPACE)) || type.equals(type2);
 	}
 	
 	private static NBTTagCompound getLicense(String book) {
