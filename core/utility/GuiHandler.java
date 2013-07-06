@@ -9,6 +9,7 @@ public class GuiHandler implements IGuiHandler {
 	public static final int BLOCKTELEPORTER = 10;
 	public static final int BLOCKMONITOR = 11;
 	public static final int BLOCKSPACEWORKBENCH = 12;
+	public static final int BLOCKLINKMAINTAINER = 13;
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -19,6 +20,8 @@ public class GuiHandler implements IGuiHandler {
 			return new ContainerMonitor(world, player, x, y, z);
 		case BLOCKSPACEWORKBENCH:
 			return new ContainerSpaceWorkbench(world, player, x, y, z);
+		case BLOCKLINKMAINTAINER:
+			return new ContainerLinkMaintainer(world, player, x, y, z);
 		}
 		return null;
 	}
@@ -32,6 +35,8 @@ public class GuiHandler implements IGuiHandler {
 			return new GuiMonitor(world, player, x, y, z);
 		case BLOCKSPACEWORKBENCH:
 			return new GuiSpaceWorkbench(world, player, x, y, z);
+		case BLOCKLINKMAINTAINER:
+			return new GuiLinkMaintainer(world, player, x, y, z);
 		}
 		return null;
 	}

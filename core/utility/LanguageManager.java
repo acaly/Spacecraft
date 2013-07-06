@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 
 import spacecraft.core.block.*;
+import spacecraft.core.block.tile.TileEntityLinkMaintainer;
 import spacecraft.core.block.tile.TileEntityTeleporter;
 import spacecraft.core.item.*;
 import spacecraft.core.world.TeleportManager;
@@ -93,6 +94,10 @@ public final class LanguageManager {
 		table.setProperty(ItemTeleportCrystal.LANG_LOCATION, "目标地点：%1$s (%2$s, %3$s, %4$s)");
 		table.setProperty(ItemTeleportCrystal.LANG_COUNT, "最大传送人数：%1$s");
 		table.setProperty(ItemTeleportCrystal.LANG_TIME, "持续时间：%1$s s");
+		//tile.linkmaintainer.inf
+		table.setProperty(TileEntityLinkMaintainer.LANG_LINKSTATUS[0], "未连接");
+		table.setProperty(TileEntityLinkMaintainer.LANG_LINKSTATUS[1], "正在连接");
+		table.setProperty(TileEntityLinkMaintainer.LANG_LINKSTATUS[2], "已连接");
 		
 	}
 }

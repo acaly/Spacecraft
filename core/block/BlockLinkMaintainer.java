@@ -4,6 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import spacecraft.core.block.common.BlockContainerBase;
+import spacecraft.core.block.tile.TileEntityLinkMaintainer;
+import spacecraft.core.utility.GuiHandler;
 
 public class BlockLinkMaintainer extends BlockContainerBase {
 
@@ -13,12 +15,12 @@ public class BlockLinkMaintainer extends BlockContainerBase {
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return null;
+		return new TileEntityLinkMaintainer();
 	}
 
 	@Override
 	protected int openGui(World par1World, TileEntity tile, EntityPlayer player) {
-		return 0;
+		return GuiHandler.BLOCKLINKMAINTAINER;
 	}
 
 }

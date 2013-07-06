@@ -45,8 +45,9 @@ public abstract class TileEntityWatchable extends TileEntityInventory {
 	//TODO store aim in a map
 	protected static final void unwatch(TeleporterInfo info, TileEntityWatchable from) {
 		List coords = Arrays.asList(info.dimension, info.x, info.y, info.z);
-		if (watchMap.containsKey(coords)) return;
+		//if (watchMap.containsKey(coords)) return;
 		ArrayList<TileEntityWatchable> watchers = watchMap.get(coords);
+		if (watchers == null) return;
 		watchers.remove(from);
 		
 		TileEntityWatchable aim;
@@ -62,7 +63,7 @@ public abstract class TileEntityWatchable extends TileEntityInventory {
 	
 	
 	
-	private TeleporterInfo watching;
+	protected TeleporterInfo watching;
 	protected void setWatch(TeleporterInfo info) {
 		if (watching != null) unwatch(watching, this);
 		if (info != null) watch(info, this);
@@ -88,7 +89,7 @@ public abstract class TileEntityWatchable extends TileEntityInventory {
 	protected boolean loaded;
 	
 	protected boolean watchAvailable;
-	protected TileEntityWatchable aim;
+	public TileEntityWatchable aim;	//protected won't be accessable in linkmanager?!
 	
 	@Override
 	public void updateEntity() {
@@ -107,7 +108,7 @@ public abstract class TileEntityWatchable extends TileEntityInventory {
 		super.invalidate();
 	}
 	
-	private final void onWatchLoad() {
+	protected void onWatchLoad() {
 		if (watching != null) {
 			aim = watch(watching, this);
 			watchAvailable = (aim != null);
@@ -115,17 +116,19 @@ public abstract class TileEntityWatchable extends TileEntityInventory {
 		//validate watchers
 		ArrayList<TileEntityWatchable> watchers = watchMap.get(Arrays.asList(
 				worldObj.provider.dimensionId, xCoord, yCoord, zCoord));
+		if (watchers == null) return;
 		for (TileEntityWatchable i : watchers) {
 			i.onWatchValidate(this);
 		}
 	}
 	
-	private final void onWatchUnload() {
+	protected void onWatchUnload() {
 		if (watching != null)
 			unwatch(watching, this);
 		//invalidate watchers
 		ArrayList<TileEntityWatchable> watchers = watchMap.get(Arrays.asList(
 				worldObj.provider.dimensionId, xCoord, yCoord, zCoord));
+		if (watchers == null) return;
 		for (TileEntityWatchable i : watchers) {
 			i.onWatchInvalidate();
 		}

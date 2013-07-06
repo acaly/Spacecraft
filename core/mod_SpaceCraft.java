@@ -50,7 +50,7 @@ public class mod_SpaceCraft {
 		RegistryHelper.setBlockDefId("Screen", BlockScreen.class, TileEntityScreen.class);
 		RegistryHelper.setBlockDefId("Monitor", BlockMonitor.class, TileEntityMonitor.class);
 		RegistryHelper.setBlockDefId("SpaceWorkbench", BlockSpaceWorkbench.class);
-		RegistryHelper.setBlockDefId("LinkMaintainer", BlockLinkMaintainer.class);
+		RegistryHelper.setBlockDefId("LinkMaintainer", BlockLinkMaintainer.class, TileEntityLinkMaintainer.class);
 		RegistryHelper.setBlockDefId("LinkInventory", BlockLinkInventory.class);
 		
 		RegistryHelper.setDimensionDefId("SpecialSpace", WorldProviderSC.class);
