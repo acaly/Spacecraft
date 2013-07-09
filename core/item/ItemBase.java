@@ -1,7 +1,10 @@
 package spacecraft.core.item;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import spacecraft.core.utility.RegistryHelper;
 import spacecraft.core.utility.RegistryHelper.RegistryType;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,4 +31,11 @@ public abstract class ItemBase extends Item {
 		}
 		return r;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerIcons(IconRegister par1IconRegister) {
+		itemIcon = par1IconRegister.registerIcon(RegistryHelper.TEXTUREPATH + RegistryHelper.getName(this.getClass()));
+	}
+	
 }

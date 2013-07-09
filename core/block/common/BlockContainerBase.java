@@ -72,7 +72,7 @@ public abstract class BlockContainerBase extends BlockContainer {
 		TextureStitched texture;
 		try {
 			for (int i = 0; i < 6; ++i) {
-				texturePath = RegistryHelper.TEXTUREPATH + ":" + name + "." + Integer.toString(i);
+				texturePath = RegistryHelper.TEXTUREPATH + name + "." + Integer.toString(i);
 				texture = new BlockTextureStitched(texturePath);
 				((TextureMap)iconRegister).setTextureEntry(texturePath, texture);
 				iconList[i] = texture;

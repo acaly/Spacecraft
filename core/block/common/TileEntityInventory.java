@@ -8,6 +8,8 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
@@ -16,6 +18,10 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	private static final String SLOT = "slot";
 	private static final String FACING = "facing";
 	private static final String VARS = "vars";
+
+	private static final int ACTIONTYPE = 11;	//used in Packet132TileEntityData
+	private static final String NBT_ID = "id";
+	private static final String NBT_DATA = "data";
 	
 	protected InventoryBasic inventory;
 	protected int[] availableSide;
@@ -208,5 +214,39 @@ public abstract class TileEntityInventory extends TileEntity implements IInvento
 	
 	public int getVar(int id) {
 		return vars[id];
+	}
+	
+	//sync data
+	public static final int SNYCDATALEN = 4;
+	public SyncDataTileEntity[] syncData = new SyncDataTileEntity[SNYCDATALEN];
+	
+	public void onSyncDataUpdate(int id) {}
+
+	//client side received
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+		super.onDataPacket(net, pkt);
+		if (!worldObj.isRemote || pkt.actionType != ACTIONTYPE) return;
+		
+		NBTTagCompound nbt = pkt.customParam1;
+		int id = nbt.getInteger(NBT_ID);
+		if (id >= 0 && id < SNYCDATALEN) {
+			if (syncData[id] == null)
+				throw new RuntimeException();
+			syncData[id].readFromNBT(nbt.getCompoundTag(NBT_DATA));
+			onSyncDataUpdate(id);
+		} else {
+			throw new RuntimeException();
+		}
+	}
+	
+	//get a packet to be sent to client, after changes are detected.
+	public Packet132TileEntityData getDataPacket(int id) {
+		NBTTagCompound nbt = new NBTTagCompound();
+		NBTTagCompound data = new NBTTagCompound();
+		syncData[id].writeToNBT(nbt);
+		nbt.setInteger(NBT_ID, id);
+		nbt.setCompoundTag(NBT_DATA, data);
+		return new Packet132TileEntityData(xCoord, yCoord, zCoord, ACTIONTYPE, nbt);
 	}
 }
